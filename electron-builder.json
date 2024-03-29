@@ -1,0 +1,40 @@
+{
+  "appId": "com.browse.buddy.charleslana",
+  "asar": true,
+  "productName": "Browse-Buddy",
+  "copyright": "Copyright © 2024 ${author}",
+  "directories": {
+    "buildResources": "assets",
+    "output": "release/${version}"
+  },
+  "files": ["dist"],
+  "extraResources": [".env", "resources/**/*"],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "icon": "src/assets/images/icon-256x256.ico"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  },
+  "mac": {
+    "target": ["dmg"],
+    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+  },
+  "linux": {
+    "target": ["AppImage"],
+    "artifactName": "${productName}-Linux-${version}.${ext}",
+    "icon": "src/assets/images/icon-256x256.png"
+  },
+  "portable": {
+    "artifactName": "${productName}-Portable-${version}.${ext}"
+  }
+}

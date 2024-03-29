@@ -1,0 +1,21 @@
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.break-words {
+  word-break: break-word;
+}
+
+.modal-card-head,
+.modal-card-foot {
+  border-radius: 0;
+}
+
+#show-actions .card {
+  cursor: grab;
+}
