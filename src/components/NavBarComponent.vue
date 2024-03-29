@@ -63,7 +63,7 @@
 import images from '@/data/imageData';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faMoon, faSun, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
-import { ThemeMode } from '@/electron/type/ThemeMode';
+import { ThemeModeType } from '@/electron/types/ThemeModeType';
 import { ref } from 'vue';
 
 const isMenuOpen = ref(false);
@@ -72,9 +72,10 @@ function toggleMenu(): void {
   isMenuOpen.value = !isMenuOpen.value;
 }
 
-function changeTheme(theme: ThemeMode): void {
+function changeTheme(theme: ThemeModeType): void {
   window.electronAPI.changeTheme(theme);
 }
 </script>
 
 <style scoped></style>
+@/electron/types/ThemeMode

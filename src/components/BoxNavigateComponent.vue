@@ -29,7 +29,7 @@
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button is-success" :disabled="!isValidUrl(inputUrl)" @click="saveModal">
+          <button class="button is-success" :disabled="!isValidUrl(inputUrl)" @click="saveURL">
             Salvar
           </button>
           <button class="button" @click="closeModal">Cancelar</button>
@@ -43,24 +43,28 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faRoute } from '@fortawesome/free-solid-svg-icons';
 import { ref } from 'vue';
+import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 
 const emit = defineEmits(['input-filled']);
 
 const isActive = ref(false);
 const inputUrl = ref('');
+const store = useRunTestStore();
 
 function openModal(): void {
   isActive.value = true;
 }
 
-function saveModal(): void {
+function saveURL(): void {
   isActive.value = false;
   checkInput();
+  store.saveUrl(inputUrl.value);
 }
 
 function closeModal(): void {
   if (!isValidUrl(inputUrl.value)) {
     inputUrl.value = '';
+    store.saveUrl('');
   }
   checkInput();
   isActive.value = false;
@@ -72,7 +76,7 @@ function isValidUrl(url: string): boolean {
 }
 
 function checkInput(): void {
-  if (inputUrl.value.trim() === '') {
+  if (inputUrl.value.trim() !== '') {
     emit('input-filled', true);
     return;
   }

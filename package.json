@@ -69,6 +69,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "bulma": "^1.0.0",
+    "electron-store": "^8.2.0",
+    "floating-vue": "^5.2.2",
     "puppeteer": "^22.6.1",
     "vue": "^3.4.21",
     "vue-draggable-next": "^2.2.1",
