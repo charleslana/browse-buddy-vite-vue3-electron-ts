@@ -2,6 +2,7 @@ import path from 'path';
 import { app, BrowserWindow, globalShortcut, Menu } from 'electron';
 import { getAppIconPath } from './icon';
 import { getMenu } from './menu';
+import { handleRunTest } from './runTest';
 import { handleThemeMode } from './theme';
 
 const isDev = process.env.npm_lifecycle_event === 'app:dev' ? true : false;
@@ -36,6 +37,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
   handleThemeMode();
+  handleRunTest();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

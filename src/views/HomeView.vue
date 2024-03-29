@@ -15,17 +15,19 @@
         </div>
         <NotificationSuccessComponent />
         <NotificationErrorComponent :message="notificationErrorMessage" />
-        <TestNavigateComponent @input-filled="handleInputFilled" />
-        <TestActionsComponent :disabled="isInputFilled" />
+        <BoxNavigateComponent @input-filled="handleInputFilled" />
+        <BoxActionsComponent :disabled="!isInputFilled" />
         <nav class="level">
           <div class="level-left">
             <p class="level-item">
-              <button class="button is-link" disabled>Executar</button>
+              <button class="button is-link" :disabled="!isInputFilled" @click="executeRunTest">
+                Executar
+              </button>
             </p>
           </div>
           <div class="level-right">
             <p class="level-item">
-              <button class="button is-success" disabled>Salvar teste</button>
+              <button class="button is-success" :disabled="!isInputFilled">Salvar teste</button>
             </p>
           </div>
         </nav>
@@ -40,15 +42,31 @@ import NavBarComponent from '@/components/NavBarComponent.vue';
 import SettingsComponent from '@/components/SettingsComponent.vue';
 import NotificationSuccessComponent from '@/components/NotificationSuccessComponent.vue';
 import NotificationErrorComponent from '@/components/NotificationErrorComponent.vue';
-import TestNavigateComponent from '@/components/TestNavigateComponent.vue';
-import TestActionsComponent from '@/components/TestActionsComponent.vue';
-import { ref } from 'vue';
+import BoxNavigateComponent from '@/components/BoxNavigateComponent.vue';
+import BoxActionsComponent from '@/components/BoxActionsComponent.vue';
+import { onMounted, ref } from 'vue';
+import { runTestStore as useRunTestStore } from '@/store/runTestStore';
+
+onMounted(() => {
+  listenResult();
+});
 
 const notificationErrorMessage = ref('error');
-const isInputFilled = ref(true);
+const isInputFilled = ref(false);
+const store = useRunTestStore();
 
-function handleInputFilled(value: boolean) {
+function handleInputFilled(value: boolean): void {
   isInputFilled.value = value;
+}
+
+function executeRunTest(): void {
+  window.electronAPI.runTest(JSON.stringify(store.runTest));
+}
+
+function listenResult(): void {
+  window.electronAPI.listenForResult((result: string) => {
+    console.log(result);
+  });
 }
 </script>
 

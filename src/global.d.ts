@@ -6,6 +6,8 @@ declare global {
   interface Window {
     electronAPI: {
       changeTheme: (theme: ThemeMode) => void;
+      runTest: (runTestJSON: string) => void;
+      listenForResult: (callback: (result: string) => void) => void;
     };
   }
 }
