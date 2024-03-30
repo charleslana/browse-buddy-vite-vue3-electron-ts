@@ -1,5 +1,7 @@
+import { ActionType } from '../types/ActionType';
+
 export interface INavigationResult {
-  action: 'navigate' | 'wait-click' | 'click' | 'fill' | 'type' | 'end';
+  action: ActionType;
   title: string;
   message: string;
   screenshot?: string;
