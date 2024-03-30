@@ -1,8 +1,9 @@
+import { ActionBoxType } from '../types/ActionBoxType';
 import { SelectOptionType } from '../types/SelectOptionType';
 
 export interface IAction {
   id: string;
-  action: 'wait-click' | 'click' | 'fill' | 'type';
+  action: ActionBoxType;
   elementType: SelectOptionType;
   element: string;
   text?: string;

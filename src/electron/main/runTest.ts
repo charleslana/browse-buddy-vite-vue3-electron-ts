@@ -26,6 +26,7 @@ export function handleRunTest(): void {
 }
 
 async function runTestFunction(runTest: IRunTest): Promise<INavigationResult[]> {
+  core.pageSingleton.setHeadless(runTest.isHeadless);
   await navigate(runTest);
   await handleActions(runTest.actions, runTest.isSaveEveryScreenshot);
   await closeBrowser(runTest.isSaveLastScreenshot);
@@ -50,6 +51,9 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
       case 'wait-click':
         await handleWaitClick(action, isSaveEveryScreenshot);
         break;
+      case 'click':
+        await handleClick(action, isSaveEveryScreenshot);
+        break;
       default:
         break;
     }
@@ -65,6 +69,18 @@ async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean)
     message: `Aguardar e clicar no elemento: ${element} com sucesso`,
     screenshot: waitForClick.screenshot,
     duration: parseFloat(waitForClick.duration.toFixed(2)),
+  });
+}
+
+async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const click = await core.click(element, action.id, isSaveEveryScreenshot);
+  navigationResults.push({
+    action: 'click',
+    title: 'Clicar',
+    message: `Clicar no elemento: ${element} com sucesso`,
+    screenshot: click.screenshot,
+    duration: parseFloat(click.duration.toFixed(2)),
   });
 }
 

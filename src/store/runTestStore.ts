@@ -8,6 +8,7 @@ export const runTestStore = defineStore('runTest', {
       url: '',
       isSaveLastScreenshot: true,
       isSaveEveryScreenshot: true,
+      isHeadless: false,
       actions: [],
     },
   }),
@@ -23,6 +24,9 @@ export const runTestStore = defineStore('runTest', {
     },
     setIsSaveEveryScreenshot(value: boolean): void {
       this.runTest.isSaveEveryScreenshot = value;
+    },
+    setIsSaveHeadless(value: boolean): void {
+      this.runTest.isHeadless = value;
     },
     setActions(actions: IAction[]): void {
       this.runTest.actions = actions;

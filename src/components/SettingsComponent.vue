@@ -9,6 +9,10 @@
       <input type="checkbox" v-model="saveEveryScreenshot" @change="updateSaveEveryScreenshot" />
       Salvar tela de captura a cada ação
     </label>
+    <label class="checkbox mb-4">
+      <input type="checkbox" v-model="saveHeadless" @change="updateSaveHeadless" />
+      Modo sem cabeça (Ativado não irá mostrar o processo do teste em tempo real)
+    </label>
   </div>
 </template>
 
@@ -18,6 +22,7 @@ import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 
 const saveLastScreenshot = ref(true);
 const saveEveryScreenshot = ref(true);
+const saveHeadless = ref(true);
 const store = useRunTestStore();
 
 watch(saveLastScreenshot, newValue => {
@@ -28,12 +33,20 @@ watch(saveEveryScreenshot, newValue => {
   store.setIsSaveEveryScreenshot(newValue);
 });
 
+watch(saveHeadless, newValue => {
+  store.setIsSaveHeadless(newValue);
+});
+
 function updateSaveLastScreenshot(): void {
   store.setIsSaveLastScreenshot(saveLastScreenshot.value);
 }
 
 function updateSaveEveryScreenshot(): void {
   store.setIsSaveEveryScreenshot(saveEveryScreenshot.value);
+}
+
+function updateSaveHeadless(): void {
+  store.setIsSaveHeadless(saveHeadless.value);
 }
 </script>
 

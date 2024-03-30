@@ -4,9 +4,8 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
-          <span class="mr-4"><FontAwesomeIcon :icon="faClock" /></span>
           <span class="mr-4"><FontAwesomeIcon :icon="faComputerMouse" /></span>
-          <span>Esperar e Clicar</span>
+          <span>Clicar</span>
         </p>
         <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
@@ -43,7 +42,7 @@ import { IAction } from '@/electron/interface/IAction';
 import { SelectOptionType } from '@/electron/types/SelectOptionType';
 import { generateUUID } from '@/electron/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faComputerMouse, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faComputerMouse } from '@fortawesome/free-solid-svg-icons';
 
 onMounted(() => {
   if (props.action) {
@@ -81,7 +80,7 @@ function saveAction(): void {
   }
   store.addAction({
     id: generateUUID(),
-    action: 'wait-click',
+    action: 'click',
     elementType: selectedType.value,
     element: elementText.value,
   });
