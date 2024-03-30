@@ -8,7 +8,7 @@
       <span class="icon">
         <FontAwesomeIcon :icon="faPlus" />
       </span>
-      <span>Selecione ação</span>
+      <span>Adicionar ações</span>
     </button>
     <div class="py-4">
       <VueDraggableNext :list="store.runTest.actions" @change="handleChangeAction">
@@ -21,7 +21,7 @@
             >
               <p class="card-header-title">Esperar e Clicar</p>
               <a class="card-header-icon">
-                <FontAwesomeIcon :icon="faAngleDown" />
+                <FontAwesomeIcon :icon="isCardVisible(action.id) ? faAngleUp : faAngleDown" />
               </a>
             </header>
             <div class="card-content" :class="{ 'is-hidden': !isCardVisible(action.id) }">
@@ -129,6 +129,7 @@ import {
   faCircleInfo,
   faKeyboard,
   faAngleDown,
+  faAngleUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 import IBoxAction from '@/interface/IBoxAction';

@@ -43,6 +43,7 @@
       <Loading
         v-model:active="isLoading"
         :is-full-page="true"
+        :lock-scroll="true"
         background-color="#000"
         color="#fff"
       />
@@ -60,10 +61,12 @@ import BoxActionsComponent from '@/components/BoxActionsComponent.vue';
 import { ref } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import Loading from 'vue-loading-overlay';
+import { navigationResultStore as useNavigationResultStore } from '@/store/navigationResultStore';
 
 const notificationErrorMessage = ref('error');
 const isInputFilled = ref(false);
-const store = useRunTestStore();
+const runTestStore = useRunTestStore();
+const navigationResultStore = useNavigationResultStore();
 const isLoading = ref(false);
 const isNotificationSuccess = ref(false);
 const isNotificationError = ref(false);
@@ -77,7 +80,7 @@ function executeRunTest(): void {
   isNotificationSuccess.value = false;
   isNotificationError.value = false;
   isLoading.value = true;
-  window.electronAPI?.runTest(JSON.stringify(store.runTest));
+  window.electronAPI?.runTest(JSON.stringify(runTestStore.runTest));
 }
 
 function handleNotificationSuccess(): void {
@@ -93,6 +96,7 @@ function listenResult(): void {
     ?.listenForResult()
     .then(result => {
       console.log('Resultado:', result);
+      navigationResultStore.save(result);
       isNotificationSuccess.value = true;
     })
     .catch((error: Error) => {
@@ -102,7 +106,12 @@ function listenResult(): void {
     })
     .finally(() => {
       isLoading.value = false;
+      scrollToTop();
     });
+}
+
+function scrollToTop(): void {
+  window.scrollTo(0, 0);
 }
 </script>
 
