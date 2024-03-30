@@ -57,7 +57,7 @@ import NotificationSuccessComponent from '@/components/NotificationSuccessCompon
 import NotificationErrorComponent from '@/components/NotificationErrorComponent.vue';
 import BoxNavigateComponent from '@/components/BoxNavigateComponent.vue';
 import BoxActionsComponent from '@/components/BoxActionsComponent.vue';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import Loading from 'vue-loading-overlay';
 
