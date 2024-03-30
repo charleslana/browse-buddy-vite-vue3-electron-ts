@@ -78,4 +78,3 @@ function changeTheme(theme: ThemeModeType): void {
 </script>
 
 <style scoped></style>
-@/electron/types/ThemeMode

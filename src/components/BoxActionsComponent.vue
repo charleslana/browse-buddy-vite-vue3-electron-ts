@@ -14,22 +14,23 @@
       <VueDraggableNext :list="store.runTest.actions" @change="handleChangeAction">
         <transition-group type="transition" name="flip-list">
           <div class="card is-fullwidth" v-for="action in store.runTest.actions" :key="action.id">
-            <header
-              class="card-header card-toggle is-clickable"
-              v-if="action.action === 'wait-click'"
-              @click="toggleCard(action.id)"
-            >
-              <p class="card-header-title">Esperar e Clicar</p>
+            <header class="card-header card-toggle is-clickable" @click="toggleCard(action.id)">
+              <p class="card-header-title">
+                <span class="mr-2"><FontAwesomeIcon :icon="faFlag" /></span>
+                {{ getTitleBoxAction(action.action) }}
+              </p>
               <a class="card-header-icon">
                 <FontAwesomeIcon :icon="isCardVisible(action.id) ? faAngleUp : faAngleDown" />
               </a>
             </header>
             <div class="card-content" :class="{ 'is-hidden': !isCardVisible(action.id) }">
-              <div class="content break-words">{{ `${action.elementType}${action.element}` }}</div>
+              <div class="content break-words">
+                {{ `${action.elementType}${action.element}` }}
+              </div>
               <footer class="buttons">
                 <button
                   class="button card-footer-item is-primary"
-                  @click="updateWaitClickAction(action)"
+                  @click="handleActionUpdate(action)"
                 >
                   Editar
                 </button>
@@ -111,6 +112,12 @@
     @save-action="handleWaitClickSaveAction"
     v-if="waitClickIsActive"
   />
+  <ModalClickComponent
+    :action="clickMode"
+    @close-modal="handleClickCloseModal"
+    @save-action="handleClickSaveAction"
+    v-if="clickIsActive"
+  />
   <ModalConfirmComponent
     v-if="isConfirmModalActive"
     @confirm-modal="confirmDeleteAction"
@@ -130,6 +137,7 @@ import {
   faKeyboard,
   faAngleDown,
   faAngleUp,
+  faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 import IBoxAction from '@/interface/IBoxAction';
@@ -139,6 +147,8 @@ import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import { IAction } from '@/electron/interface/IAction';
 import { VueDraggableNext } from 'vue-draggable-next';
 import ModalConfirmComponent from '@/components/ModalConfirmComponent.vue';
+import ModalClickComponent from '@/components/ModalClickComponent.vue';
+import { ActionBoxType } from '@/electron/types/ActionBoxType';
 
 defineProps({
   disabled: {
@@ -153,6 +163,8 @@ const currentCategory = ref<ActionCategoryType>('all');
 const searchTerm = ref('');
 const waitClickMode = ref<IAction | undefined>(undefined);
 const waitClickIsActive = ref(false);
+const clickIsActive = ref(false);
+const clickMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const openCards = ref<string[]>([]);
 const isConfirmModalActive = ref(false);
@@ -204,6 +216,33 @@ function handleActionClick(action: IBoxAction): void {
     case 'wait-click':
       waitClickIsActive.value = true;
       break;
+    case 'click':
+      clickIsActive.value = true;
+      break;
+    default:
+      break;
+  }
+}
+
+function getTitleBoxAction(action: ActionBoxType): string {
+  switch (action) {
+    case 'wait-click':
+      return 'Esperar e Clicar';
+    case 'click':
+      return 'Clicar';
+    default:
+      return '';
+  }
+}
+
+function handleActionUpdate(action: IAction): void {
+  switch (action.action) {
+    case 'wait-click':
+      updateWaitClickAction(action);
+      break;
+    case 'click':
+      updateClickAction(action);
+      break;
     default:
       break;
   }
@@ -221,6 +260,20 @@ function handleWaitClickSaveAction(): void {
 function updateWaitClickAction(action: IAction): void {
   waitClickMode.value = action;
   waitClickIsActive.value = true;
+}
+
+function handleClickCloseModal(): void {
+  clickIsActive.value = false;
+}
+
+function handleClickSaveAction(): void {
+  clickIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateClickAction(action: IAction): void {
+  clickMode.value = action;
+  clickIsActive.value = true;
 }
 
 function toggleCard(actionId: string): void {

@@ -4,7 +4,8 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
-          <span><i class="fa-solid fa-computer-mouse"></i></span>
+          <span class="mr-4"><FontAwesomeIcon :icon="faClock" /></span>
+          <span class="mr-4"><FontAwesomeIcon :icon="faComputerMouse" /></span>
           <span>Esperar e Clicar</span>
         </p>
         <button class="delete" aria-label="close" @click="closeModal"></button>
@@ -21,9 +22,7 @@
           </div>
         </div>
         <div class="field">
-          <label class="label"
-            >Apenas coloque o texto nos tipos id ou classe, o tipo já sera atribuído</label
-          >
+          <label class="label">O texto do seletor do elemento</label>
           <input class="input is-medium" type="text" placeholder="elemento" v-model="elementText" />
         </div>
       </section>
@@ -43,6 +42,8 @@ import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import { IAction } from '@/electron/interface/IAction';
 import { SelectOptionType } from '@/electron/types/SelectOptionType';
 import { generateUUID } from '@/electron/utils/utils';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faComputerMouse, faClock } from '@fortawesome/free-solid-svg-icons';
 
 onMounted(() => {
   if (props.action) {
@@ -88,4 +89,3 @@ function saveAction(): void {
 </script>
 
 <style scoped></style>
-@/electron/utils/utils

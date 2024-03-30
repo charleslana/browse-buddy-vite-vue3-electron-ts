@@ -14,7 +14,8 @@ class CoreError extends Error {
 }
 
 export class Core {
-  private pageSingleton = PageSingleton.getInstance();
+  public pageSingleton = PageSingleton.getInstance();
+
   private _page: Page | null = null;
 
   public async navigate(url: string, saveScreenshot?: boolean): Promise<IExecutionResult> {
@@ -121,11 +122,27 @@ export class Core {
     }
   }
 
-  public async click(element: ElementHandle<Element> | null | undefined): Promise<void> {
+  public async click(
+    selector: string,
+    id?: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
+    logger.warn(`Tentando clicar no elemento com seletor ${selector} ...`);
+    const startTime = Date.now();
     try {
-      await element?.click();
-    } catch (error) {
-      throw new CoreError(`Erro ao clicar no elemento: ${error}`);
+      await this.getPage().click(selector);
+      logger.info(`Sucesso ao clicar no elemento com seletor ${selector}`);
+      let screenshot: string | undefined;
+      if (saveScreenshot) {
+        screenshot = await this.screenshot(`click-${id}`);
+      }
+      const endTime = Date.now();
+      const duration = (endTime - startTime) / 1000;
+      return { screenshot, duration };
+    } catch (e) {
+      const error = e as unknown as PuppeteerError;
+      logger.error(`Erro ao clicar no elemento com seletor ${selector}: ${error}`);
+      throw new CoreError(`Erro ao clicar no elemento com seletor ${selector}: ${error.message}`);
     }
   }
 
