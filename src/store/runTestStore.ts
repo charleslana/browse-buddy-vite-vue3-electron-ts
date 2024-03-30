@@ -8,7 +8,7 @@ export const runTestStore = defineStore('runTest', {
       url: '',
       isSaveLastScreenshot: true,
       isSaveEveryScreenshot: true,
-      isHeadless: false,
+      isHeadless: true,
       actions: [],
     },
   }),
