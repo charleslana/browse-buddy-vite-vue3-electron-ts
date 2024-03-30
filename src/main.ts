@@ -5,6 +5,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import 'bulma/css/bulma.css';
 import 'floating-vue/dist/style.css';
+import 'vue-loading-overlay/dist/css/index.css';
 
 const app = createApp(App);
 

@@ -8,7 +8,7 @@
     "output": "release/${version}"
   },
   "files": ["dist"],
-  "extraResources": [".env", "resources/**/*"],
+  "extraResources": [".env"],
   "win": {
     "target": [
       {
@@ -17,7 +17,13 @@
       }
     ],
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
-    "icon": "src/assets/images/icon-256x256.ico"
+    "icon": "src/assets/images/icon-256x256.ico",
+    "extraResources": [
+      {
+        "from": "resources/chrome-win",
+        "to": "resources/chrome-win"
+      }
+    ]
   },
   "nsis": {
     "oneClick": false,
@@ -32,7 +38,13 @@
   "linux": {
     "target": ["AppImage"],
     "artifactName": "${productName}-Linux-${version}.${ext}",
-    "icon": "src/assets/images/icon-256x256.png"
+    "icon": "src/assets/images/icon-256x256.png",
+    "extraResources": [
+      {
+        "from": "resources/chrome-linux",
+        "to": "resources/chrome-linux"
+      }
+    ]
   },
   "portable": {
     "artifactName": "${productName}-Portable-${version}.${ext}"

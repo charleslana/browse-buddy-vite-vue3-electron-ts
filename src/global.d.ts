@@ -1,13 +1,15 @@
+import { INavigationResult } from './electron/interface/INavigationResult';
+
 export {};
 
 declare global {
   import { ThemeMode } from '@/electron/type/ThemeMode';
 
   interface Window {
-    electronAPI: {
+    electronAPI?: {
       changeTheme: (theme: ThemeMode) => void;
       runTest: (runTestJSON: string) => void;
-      listenForResult: (callback: (result: string) => void) => void;
+      listenForResult: () => Promise<INavigationResult[]>;
     };
   }
 }

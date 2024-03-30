@@ -73,7 +73,7 @@ function toggleMenu(): void {
 }
 
 function changeTheme(theme: ThemeModeType): void {
-  window.electronAPI.changeTheme(theme);
+  window.electronAPI?.changeTheme(theme);
 }
 </script>
 
