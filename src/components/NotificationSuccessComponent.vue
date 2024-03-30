@@ -1,5 +1,5 @@
 <template>
-  <div class="notification is-success is-light" :class="{ 'is-hidden': isHidden }">
+  <div class="notification is-success is-light">
     <button class="delete" @click="closeNotification"></button>
     <div class="buttons">
       <p>O teste foi executado com sucesso.</p>
@@ -9,12 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-
-const isHidden = ref(true);
+const emit = defineEmits(['close']);
 
 function closeNotification(): void {
-  isHidden.value = true;
+  emit('close');
 }
 </script>
 

@@ -13,8 +13,15 @@
             </div>
           </div>
         </div>
-        <NotificationSuccessComponent />
-        <NotificationErrorComponent :message="notificationErrorMessage" />
+        <NotificationSuccessComponent
+          @close="handleNotificationSuccess"
+          v-if="isNotificationSuccess"
+        />
+        <NotificationErrorComponent
+          :message="notificationErrorMessage"
+          @close="handleNotificationError"
+          v-if="isNotificationError"
+        />
         <BoxNavigateComponent @input-filled="handleInputFilled" />
         <BoxActionsComponent :disabled="!isInputFilled" />
         <nav class="level">
@@ -33,6 +40,12 @@
         </nav>
       </div>
       <SettingsComponent />
+      <Loading
+        v-model:active="isLoading"
+        :is-full-page="true"
+        background-color="#000"
+        color="#fff"
+      />
     </div>
   </div>
 </template>
@@ -46,27 +59,50 @@ import BoxNavigateComponent from '@/components/BoxNavigateComponent.vue';
 import BoxActionsComponent from '@/components/BoxActionsComponent.vue';
 import { onMounted, ref } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
-
-onMounted(() => {
-  listenResult();
-});
+import Loading from 'vue-loading-overlay';
 
 const notificationErrorMessage = ref('error');
 const isInputFilled = ref(false);
 const store = useRunTestStore();
+const isLoading = ref(false);
+const isNotificationSuccess = ref(false);
+const isNotificationError = ref(false);
 
 function handleInputFilled(value: boolean): void {
   isInputFilled.value = value;
 }
 
 function executeRunTest(): void {
-  window.electronAPI.runTest(JSON.stringify(store.runTest));
+  listenResult();
+  isNotificationSuccess.value = false;
+  isNotificationError.value = false;
+  isLoading.value = true;
+  window.electronAPI?.runTest(JSON.stringify(store.runTest));
+}
+
+function handleNotificationSuccess(): void {
+  isNotificationSuccess.value = false;
+}
+
+function handleNotificationError(): void {
+  isNotificationError.value = false;
 }
 
 function listenResult(): void {
-  window.electronAPI.listenForResult((result: string) => {
-    console.log(result);
-  });
+  window.electronAPI
+    ?.listenForResult()
+    .then(result => {
+      console.log('Resultado:', result);
+      isNotificationSuccess.value = true;
+    })
+    .catch((error: Error) => {
+      console.error('Erro:', error.message);
+      notificationErrorMessage.value = error.message;
+      isNotificationError.value = true;
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
 }
 </script>
 

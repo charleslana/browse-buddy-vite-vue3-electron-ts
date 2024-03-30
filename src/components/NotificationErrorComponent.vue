@@ -1,5 +1,5 @@
 <template>
-  <div class="notification is-danger is-light" :class="{ 'is-hidden': isHidden }">
+  <div class="notification is-danger is-light">
     <button class="delete" @click="closeNotification"></button>
     <p>{{ message }}</p>
   </div>
@@ -13,12 +13,10 @@ defineProps({
   },
 });
 
-import { ref } from 'vue';
-
-const isHidden = ref(true);
+const emit = defineEmits(['close']);
 
 function closeNotification(): void {
-  isHidden.value = true;
+  emit('close');
 }
 </script>
 

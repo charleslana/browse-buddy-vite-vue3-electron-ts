@@ -40,9 +40,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
-import { generateUUID } from '@/utils/utils';
 import { IAction } from '@/electron/interface/IAction';
 import { SelectOptionType } from '@/electron/types/SelectOptionType';
+import { generateUUID } from '@/electron/utils/utils';
 
 onMounted(() => {
   if (props.action) {
@@ -88,3 +88,4 @@ function saveAction(): void {
 </script>
 
 <style scoped></style>
+@/electron/utils/utils
