@@ -1,0 +1,49 @@
+.control.has-floating-label {
+  position: relative;
+
+  .label.is-floating-label {
+    font-weight: normal;
+    position: absolute;
+    line-height: 1;
+  }
+
+  .input.is-medium {
+    height: 3.75rem;
+    transition-duration: 0.2s;
+    &:placeholder-shown + .label.is-floating-label {
+      color: rgba($color: #ffffff, $alpha: 0.5);
+      display: block;
+      top: 1.375rem;
+      left: 0.75rem;
+      z-index: 0;
+    }
+
+    &:hover + .label.is-floating-label {
+      z-index: 2;
+    }
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      padding-top: 1.5rem;
+
+      & + .label.is-floating-label {
+        color: rgba($color: #ffffff, $alpha: 0.5);
+        top: 0.5rem;
+        left: 0.75rem;
+        z-index: 11;
+      }
+    }
+  }
+}
+
+.field.has-addons .control.has-floating-label .input {
+  position: static;
+}
+
+.with-floating-label {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}

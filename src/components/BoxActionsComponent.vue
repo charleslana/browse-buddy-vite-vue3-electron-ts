@@ -40,6 +40,12 @@
                 <button class="button card-footer-item is-danger" @click="deleteAction(action.id)">
                   Excluir
                 </button>
+                <button class="button card-footer-item" @click="duplicateAction(action)">
+                  <span class="icon is-left">
+                    <FontAwesomeIcon :icon="faCopy" />
+                  </span>
+                  <span>Duplicar</span>
+                </button>
               </footer>
             </div>
           </div>
@@ -160,6 +166,7 @@ import {
   faAngleUp,
   faFlag,
   faEraser,
+  faCopy,
 } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 import IBoxAction from '@/interface/IBoxAction';
@@ -174,6 +181,7 @@ import { ActionBoxType } from '@/electron/types/ActionBoxType';
 import ModalFillComponent from '@/components/ModalFillComponent.vue';
 import ModalTypeComponent from '@/components/ModalTypeComponent.vue';
 import ModalClearComponent from '@/components/ModalClearComponent.vue';
+import { generateUUID } from '@/electron/utils/utils';
 
 defineProps({
   disabled: {
@@ -409,6 +417,14 @@ function confirmDeleteAction(): void {
 
 function closeConfirmModal(): void {
   isConfirmModalActive.value = false;
+}
+
+function duplicateAction(action: IAction): void {
+  const index = store.runTest.actions.findIndex(a => a.id === action.id);
+  if (index !== -1) {
+    const duplicatedAction = { ...action, id: generateUUID() };
+    store.runTest.actions.splice(index + 1, 0, duplicatedAction);
+  }
 }
 </script>
 
