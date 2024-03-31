@@ -16,8 +16,11 @@
                 <FontAwesomeIcon :icon="getIcon(result.action)" />
               </div>
               <div class="timeline-content">
-                <p class="heading">{{ result.title }}</p>
-                <p>{{ result.message }}</p>
+                <p class="heading">
+                  {{ result.title }}
+                  <span><FontAwesomeIcon :icon="faCheck" class="has-text-success ml-2" /></span>
+                </p>
+                <p v-html="formatBreakLines(result.message)"></p>
               </div>
               <div class="timeline-content" v-if="result.screenshot">
                 <figure class="image is-128x128">
@@ -57,11 +60,13 @@ import {
   faComputerMouse,
   faHourglassEnd,
   IconDefinition,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { navigationResultStore as useNavigationResultStore } from '@/store/navigationResultStore';
 import { computed, onMounted, ref } from 'vue';
 import { ActionType } from '@/electron/types/ActionType';
 import ModalImageComponent from '@/components/ModalImageComponent.vue';
+import { formatBreakLines } from '@/utils/utils';
 
 onMounted(() => {
   window.scrollTo(0, 0);

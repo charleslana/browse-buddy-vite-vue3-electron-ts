@@ -39,7 +39,7 @@ async function navigate(runTest: IRunTest) {
   navigationResults.push({
     action: 'navigate',
     title: 'Navegar para',
-    message: `Navegação para url: ${runTest.url} com sucesso`,
+    message: `Navegação para url: ${runTest.url}`,
     screenshot: navigate.screenshot,
     duration: parseFloat(navigate.duration.toFixed(2)),
   });
@@ -60,6 +60,9 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
       case 'type':
         await handleType(action, isSaveEveryScreenshot);
         break;
+      case 'clear':
+        await handleClear(action, isSaveEveryScreenshot);
+        break;
       default:
         break;
     }
@@ -72,7 +75,7 @@ async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean)
   navigationResults.push({
     action: 'wait-click',
     title: 'Esperar e Clicar',
-    message: `Aguardar e clicar no elemento: ${element} com sucesso`,
+    message: `Aguardar e clicar no elemento: ${element}`,
     screenshot: waitForClick.screenshot,
     duration: parseFloat(waitForClick.duration.toFixed(2)),
   });
@@ -84,7 +87,7 @@ async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Pr
   navigationResults.push({
     action: 'click',
     title: 'Clicar',
-    message: `Clicar no elemento: ${element} com sucesso`,
+    message: `Clicar no elemento: ${element}`,
     screenshot: click.screenshot,
     duration: parseFloat(click.duration.toFixed(2)),
   });
@@ -96,7 +99,7 @@ async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Pro
   navigationResults.push({
     action: 'fill',
     title: 'Preencher',
-    message: `Preencher o texto: ${action.text} com o elemento: ${element} com sucesso`,
+    message: `Preencher o texto: ${action.text}\nCom o elemento: ${element}`,
     screenshot: fill.screenshot,
     duration: parseFloat(fill.duration.toFixed(2)),
   });
@@ -108,7 +111,19 @@ async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Pro
   navigationResults.push({
     action: 'type',
     title: 'Digitar',
-    message: `Digitar o texto: ${action.text} com o elemento: ${element} com sucesso`,
+    message: `Digitar o texto: ${action.text}\nCom o elemento: ${element}`,
+    screenshot: type.screenshot,
+    duration: parseFloat(type.duration.toFixed(2)),
+  });
+}
+
+async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const type = await core.clear(element, action.id, isSaveEveryScreenshot);
+  navigationResults.push({
+    action: 'clear',
+    title: 'Limpar',
+    message: `Limpar o texto com o elemento: ${element}`,
     screenshot: type.screenshot,
     duration: parseFloat(type.duration.toFixed(2)),
   });

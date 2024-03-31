@@ -133,6 +133,12 @@
     @save-action="handleTypeSaveAction"
     v-if="typeIsActive"
   />
+  <ModalClearComponent
+    :action="clearMode"
+    @close-modal="handleClearCloseModal"
+    @save-action="handleClearSaveAction"
+    v-if="clearIsActive"
+  />
   <ModalConfirmComponent
     v-if="isConfirmModalActive"
     @confirm-modal="confirmDeleteAction"
@@ -153,6 +159,7 @@ import {
   faAngleDown,
   faAngleUp,
   faFlag,
+  faEraser,
 } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 import IBoxAction from '@/interface/IBoxAction';
@@ -166,6 +173,7 @@ import ModalClickComponent from '@/components/ModalClickComponent.vue';
 import { ActionBoxType } from '@/electron/types/ActionBoxType';
 import ModalFillComponent from '@/components/ModalFillComponent.vue';
 import ModalTypeComponent from '@/components/ModalTypeComponent.vue';
+import ModalClearComponent from '@/components/ModalClearComponent.vue';
 
 defineProps({
   disabled: {
@@ -183,9 +191,11 @@ const waitClickIsActive = ref(false);
 const clickIsActive = ref(false);
 const fillIsActive = ref(false);
 const typeIsActive = ref(false);
+const clearIsActive = ref(false);
 const clickMode = ref<IAction | undefined>(undefined);
 const fillMode = ref<IAction | undefined>(undefined);
 const typeMode = ref<IAction | undefined>(undefined);
+const clearMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const openCards = ref<string[]>([]);
 const isConfirmModalActive = ref(false);
@@ -207,6 +217,7 @@ const actions: IBoxAction[] = [
     tooltip: 'Preenche o valor do campo ao invés de digitar',
   },
   { label: 'Digitar', icons: [faKeyboard], category: 'fill', type: 'type' },
+  { label: 'Limpar', icons: [faEraser], category: 'fill', type: 'clear' },
 ];
 
 function openModal(): void {
@@ -249,6 +260,9 @@ function handleActionClick(action: IBoxAction): void {
     case 'type':
       typeIsActive.value = true;
       break;
+    case 'clear':
+      clearIsActive.value = true;
+      break;
     default:
       break;
   }
@@ -264,6 +278,8 @@ function getTitleBoxAction(action: ActionBoxType): string {
       return 'Preencher';
     case 'type':
       return 'Digitar';
+    case 'clear':
+      return 'Limpar';
     default:
       return '';
   }
@@ -282,6 +298,9 @@ function handleActionUpdate(action: IAction): void {
       break;
     case 'type':
       updateTypeAction(action);
+      break;
+    case 'clear':
+      updateClearAction(action);
       break;
     default:
       break;
@@ -342,6 +361,20 @@ function handleTypeSaveAction(): void {
 function updateTypeAction(action: IAction): void {
   typeMode.value = action;
   typeIsActive.value = true;
+}
+
+function handleClearCloseModal(): void {
+  clearIsActive.value = false;
+}
+
+function handleClearSaveAction(): void {
+  clearIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateClearAction(action: IAction): void {
+  clearMode.value = action;
+  clearIsActive.value = true;
 }
 
 function toggleCard(actionId: string): void {
