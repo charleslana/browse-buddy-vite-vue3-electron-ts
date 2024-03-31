@@ -27,6 +27,9 @@
               <div class="content break-words">
                 {{ `${action.elementType}${action.element}` }}
               </div>
+              <div class="content break-words" v-if="action.text">
+                {{ `${action.text}` }}
+              </div>
               <footer class="buttons">
                 <button
                   class="button card-footer-item is-primary"
@@ -118,6 +121,18 @@
     @save-action="handleClickSaveAction"
     v-if="clickIsActive"
   />
+  <ModalFillComponent
+    :action="fillMode"
+    @close-modal="handleFillCloseModal"
+    @save-action="handleFillSaveAction"
+    v-if="fillIsActive"
+  />
+  <ModalTypeComponent
+    :action="typeMode"
+    @close-modal="handleTypeCloseModal"
+    @save-action="handleTypeSaveAction"
+    v-if="typeIsActive"
+  />
   <ModalConfirmComponent
     v-if="isConfirmModalActive"
     @confirm-modal="confirmDeleteAction"
@@ -149,6 +164,8 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import ModalConfirmComponent from '@/components/ModalConfirmComponent.vue';
 import ModalClickComponent from '@/components/ModalClickComponent.vue';
 import { ActionBoxType } from '@/electron/types/ActionBoxType';
+import ModalFillComponent from '@/components/ModalFillComponent.vue';
+import ModalTypeComponent from '@/components/ModalTypeComponent.vue';
 
 defineProps({
   disabled: {
@@ -164,7 +181,11 @@ const searchTerm = ref('');
 const waitClickMode = ref<IAction | undefined>(undefined);
 const waitClickIsActive = ref(false);
 const clickIsActive = ref(false);
+const fillIsActive = ref(false);
+const typeIsActive = ref(false);
 const clickMode = ref<IAction | undefined>(undefined);
+const fillMode = ref<IAction | undefined>(undefined);
+const typeMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const openCards = ref<string[]>([]);
 const isConfirmModalActive = ref(false);
@@ -190,6 +211,9 @@ const actions: IBoxAction[] = [
 
 function openModal(): void {
   waitClickMode.value = undefined;
+  clickMode.value = undefined;
+  fillMode.value = undefined;
+  typeMode.value = undefined;
   isActive.value = true;
 }
 
@@ -219,6 +243,12 @@ function handleActionClick(action: IBoxAction): void {
     case 'click':
       clickIsActive.value = true;
       break;
+    case 'fill':
+      fillIsActive.value = true;
+      break;
+    case 'type':
+      typeIsActive.value = true;
+      break;
     default:
       break;
   }
@@ -230,6 +260,10 @@ function getTitleBoxAction(action: ActionBoxType): string {
       return 'Esperar e Clicar';
     case 'click':
       return 'Clicar';
+    case 'fill':
+      return 'Preencher';
+    case 'type':
+      return 'Digitar';
     default:
       return '';
   }
@@ -242,6 +276,12 @@ function handleActionUpdate(action: IAction): void {
       break;
     case 'click':
       updateClickAction(action);
+      break;
+    case 'fill':
+      updateFillAction(action);
+      break;
+    case 'type':
+      updateTypeAction(action);
       break;
     default:
       break;
@@ -274,6 +314,34 @@ function handleClickSaveAction(): void {
 function updateClickAction(action: IAction): void {
   clickMode.value = action;
   clickIsActive.value = true;
+}
+
+function handleFillCloseModal(): void {
+  fillIsActive.value = false;
+}
+
+function handleFillSaveAction(): void {
+  fillIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateFillAction(action: IAction): void {
+  fillMode.value = action;
+  fillIsActive.value = true;
+}
+
+function handleTypeCloseModal(): void {
+  typeIsActive.value = false;
+}
+
+function handleTypeSaveAction(): void {
+  typeIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateTypeAction(action: IAction): void {
+  typeMode.value = action;
+  typeIsActive.value = true;
 }
 
 function toggleCard(actionId: string): void {

@@ -54,6 +54,12 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
       case 'click':
         await handleClick(action, isSaveEveryScreenshot);
         break;
+      case 'fill':
+        await handleFill(action, isSaveEveryScreenshot);
+        break;
+      case 'type':
+        await handleType(action, isSaveEveryScreenshot);
+        break;
       default:
         break;
     }
@@ -81,6 +87,30 @@ async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Pr
     message: `Clicar no elemento: ${element} com sucesso`,
     screenshot: click.screenshot,
     duration: parseFloat(click.duration.toFixed(2)),
+  });
+}
+
+async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const fill = await core.fill(element, action.text!, action.id, isSaveEveryScreenshot);
+  navigationResults.push({
+    action: 'fill',
+    title: 'Preencher',
+    message: `Preencher o texto: ${action.text} com o elemento: ${element} com sucesso`,
+    screenshot: fill.screenshot,
+    duration: parseFloat(fill.duration.toFixed(2)),
+  });
+}
+
+async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const type = await core.type(element, action.text!, action.id, isSaveEveryScreenshot);
+  navigationResults.push({
+    action: 'type',
+    title: 'Digitar',
+    message: `Digitar o texto: ${action.text} com o elemento: ${element} com sucesso`,
+    screenshot: type.screenshot,
+    duration: parseFloat(type.duration.toFixed(2)),
   });
 }
 
