@@ -5,6 +5,7 @@ import { IRunTest } from '@/electron/interface/IRunTest';
 export const runTestStore = defineStore('runTest', {
   state: (): { runTest: IRunTest } => ({
     runTest: {
+      name: 'Teste de Exemplo',
       url: '',
       isSaveLastScreenshot: true,
       isSaveEveryScreenshot: true,

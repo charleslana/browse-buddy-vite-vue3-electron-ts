@@ -2,6 +2,7 @@ import path from 'path';
 import { app, BrowserWindow, globalShortcut, Menu } from 'electron';
 import { getAppIconPath } from './icon';
 import { getMenu } from './menu';
+import { handleOpenTestFile, handleSaveTestToFile } from './dialog';
 import { handleRunTest } from './runTest';
 import { handleThemeMode } from './theme';
 
@@ -38,6 +39,8 @@ function createWindow() {
 app.whenReady().then(() => {
   handleThemeMode();
   handleRunTest();
+  handleSaveTestToFile();
+  handleOpenTestFile();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

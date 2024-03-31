@@ -21,7 +21,7 @@
           Informe uma url válida.
         </div>
         <input
-          v-model="inputUrl"
+          v-model.trim="inputUrl"
           class="input is-medium"
           type="text"
           placeholder="https://example.com"
@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faRoute } from '@fortawesome/free-solid-svg-icons';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 
 const emit = defineEmits(['input-filled']);
@@ -50,6 +50,19 @@ const emit = defineEmits(['input-filled']);
 const isActive = ref(false);
 const inputUrl = ref('');
 const store = useRunTestStore();
+
+watch(
+  () => store.runTest.url,
+  newValue => {
+    if (newValue && newValue !== '') {
+      inputUrl.value = newValue;
+      emit('input-filled', true);
+      return;
+    }
+    inputUrl.value = '';
+    emit('input-filled', false);
+  }
+);
 
 function openModal(): void {
   isActive.value = true;
