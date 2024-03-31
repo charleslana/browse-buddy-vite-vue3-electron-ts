@@ -24,7 +24,7 @@
         />
         <BoxNavigateComponent @input-filled="handleInputFilled" />
         <BoxActionsComponent :disabled="!isInputFilled" />
-        <nav class="level">
+        <nav class="level mb-5">
           <div class="level-left">
             <p class="level-item">
               <button class="button is-link" :disabled="!isInputFilled" @click="executeRunTest">

@@ -1,1 +1,1 @@
-export type ActionBoxType = 'wait-click' | 'click' | 'fill' | 'type';
+export type ActionBoxType = 'wait-click' | 'click' | 'fill' | 'type' | 'clear';

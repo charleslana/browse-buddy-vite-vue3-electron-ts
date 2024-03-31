@@ -1,1 +1,1 @@
-export type ActionType = 'navigate' | 'wait-click' | 'click' | 'fill' | 'type' | 'end';
+export type ActionType = 'navigate' | 'wait-click' | 'click' | 'fill' | 'type' | 'end' | 'clear';
