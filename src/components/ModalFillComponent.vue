@@ -4,9 +4,8 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
-          <span class="mr-4"><FontAwesomeIcon :icon="faClock" /></span>
-          <span class="mr-4"><FontAwesomeIcon :icon="faComputerMouse" /></span>
-          <span>Esperar e Clicar</span>
+          <span class="mr-4"><FontAwesomeIcon :icon="faFill" /></span>
+          <span>Preencher</span>
         </p>
         <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
@@ -37,6 +36,12 @@
             v-model.trim="elementText"
           />
         </div>
+        <div class="field">
+          <label class="label"
+            >O texto a preencher (suporta contenteditable, seletores e inputs)</label
+          >
+          <input class="input is-medium" type="text" placeholder="texto" v-model.trim="text" />
+        </div>
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
@@ -57,12 +62,13 @@ import { IAction } from '@/electron/interface/IAction';
 import { SelectOptionType } from '@/electron/types/SelectOptionType';
 import { generateUUID } from '@/electron/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faComputerMouse, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faFill } from '@fortawesome/free-solid-svg-icons';
 
 onMounted(() => {
   if (props.action) {
     selectedType.value = props.action.elementType;
     elementText.value = props.action.element;
+    text.value = props.action.text!;
   }
 });
 
@@ -76,6 +82,7 @@ const emit = defineEmits(['close-modal', 'save-action']);
 
 const selectedType = ref<SelectOptionType>('#');
 const elementText = ref<string>('');
+const text = ref<string>('');
 const store = useRunTestStore();
 
 const selectOptions: { value: SelectOptionType; text: string }[] = [
@@ -85,7 +92,7 @@ const selectOptions: { value: SelectOptionType; text: string }[] = [
 ];
 
 const isSaveButtonDisabled = computed(() => {
-  return elementText.value === '';
+  return elementText.value === '' || text.value === '';
 });
 
 function closeModal(): void {
@@ -100,14 +107,16 @@ function saveAction(): void {
       action: props.action.action,
       elementType: selectedType.value,
       element: elementText.value,
+      text: text.value,
     });
     return;
   }
   store.addAction({
     id: generateUUID(),
-    action: 'wait-click',
+    action: 'fill',
     elementType: selectedType.value,
     element: elementText.value,
+    text: text.value,
   });
 }
 </script>

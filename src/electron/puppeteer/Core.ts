@@ -68,6 +68,84 @@ export class Core {
     }
   }
 
+  public async click(
+    selector: string,
+    id?: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
+    logger.warn(`Tentando clicar no elemento com seletor ${selector} ...`);
+    const startTime = Date.now();
+    try {
+      await this.getPage().click(selector);
+      logger.info(`Sucesso ao clicar no elemento com seletor ${selector}`);
+      let screenshot: string | undefined;
+      if (saveScreenshot) {
+        screenshot = await this.screenshot(`click-${id}`);
+      }
+      const endTime = Date.now();
+      const duration = (endTime - startTime) / 1000;
+      return { screenshot, duration };
+    } catch (e) {
+      const error = e as unknown as PuppeteerError;
+      logger.error(`Erro ao clicar no elemento com seletor ${selector}: ${error}`);
+      throw new CoreError(`Erro ao clicar no elemento com seletor ${selector}: ${error.message}`);
+    }
+  }
+
+  public async fill(
+    selector: string,
+    text: string,
+    id?: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
+    logger.warn(`Tentando preencher o texto ${text} no seletor ${selector} ...`);
+    const startTime = Date.now();
+    try {
+      await this.getPage().locator(selector).fill(text);
+      logger.info(`Sucesso ao preencher o texto ${text} no seletor ${selector} ${selector}`);
+      let screenshot: string | undefined;
+      if (saveScreenshot) {
+        screenshot = await this.screenshot(`fill-${id}`);
+      }
+      const endTime = Date.now();
+      const duration = (endTime - startTime) / 1000;
+      return { screenshot, duration };
+    } catch (e) {
+      const error = e as unknown as PuppeteerError;
+      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${error}`);
+      throw new CoreError(
+        `Erro ao preencher o texto ${text} no seletor ${selector}: ${error.message}`
+      );
+    }
+  }
+
+  public async type(
+    selector: string,
+    text: string,
+    id?: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
+    logger.warn(`Tentando digitar o texto ${text} no seletor ${selector} ...`);
+    const startTime = Date.now();
+    try {
+      await this.getPage().type(selector, text);
+      logger.info(`Sucesso ao digitar o texto ${text} no seletor ${selector} ${selector}`);
+      let screenshot: string | undefined;
+      if (saveScreenshot) {
+        screenshot = await this.screenshot(`type-${id}`);
+      }
+      const endTime = Date.now();
+      const duration = (endTime - startTime) / 1000;
+      return { screenshot, duration };
+    } catch (e) {
+      const error = e as unknown as PuppeteerError;
+      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${error}`);
+      throw new CoreError(
+        `Erro ao preencher o texto ${text} no seletor ${selector}: ${error.message}`
+      );
+    }
+  }
+
   public async getTitle(): Promise<string> {
     try {
       const title = await this.getPage().title();
@@ -119,30 +197,6 @@ export class Core {
       return finalRequest.response()?.ok();
     } catch (error) {
       throw new CoreError(`Erro ao aguardar requisição URL: ${url}, ${error}`);
-    }
-  }
-
-  public async click(
-    selector: string,
-    id?: string,
-    saveScreenshot?: boolean
-  ): Promise<IExecutionResult> {
-    logger.warn(`Tentando clicar no elemento com seletor ${selector} ...`);
-    const startTime = Date.now();
-    try {
-      await this.getPage().click(selector);
-      logger.info(`Sucesso ao clicar no elemento com seletor ${selector}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`click-${id}`);
-      }
-      const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
-    } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao clicar no elemento com seletor ${selector}: ${error}`);
-      throw new CoreError(`Erro ao clicar no elemento com seletor ${selector}: ${error.message}`);
     }
   }
 

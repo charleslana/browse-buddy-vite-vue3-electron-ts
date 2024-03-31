@@ -14,20 +14,27 @@
           <label class="label">Selecione o Tipo</label>
           <div class="select">
             <select v-model="selectedType">
-              <option value="#">Tipo #id</option>
-              <option value=".">Tipo .classe</option>
-              <option value="xpath/">Tipo //xPath</option>
+              <option v-for="(option, index) in selectOptions" :key="index" :value="option.value">
+                {{ option.text }}
+              </option>
             </select>
           </div>
         </div>
         <div class="field">
           <label class="label">O texto do seletor do elemento</label>
-          <input class="input is-medium" type="text" placeholder="elemento" v-model="elementText" />
+          <input
+            class="input is-medium"
+            type="text"
+            placeholder="elemento"
+            v-model.trim="elementText"
+          />
         </div>
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button is-success" @click="saveAction">Salvar</button>
+          <button class="button is-success" @click="saveAction" :disabled="isSaveButtonDisabled">
+            Salvar
+          </button>
           <button class="button" @click="closeModal">Voltar</button>
         </div>
       </footer>
@@ -36,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import { IAction } from '@/electron/interface/IAction';
 import { SelectOptionType } from '@/electron/types/SelectOptionType';
@@ -62,6 +69,16 @@ const emit = defineEmits(['close-modal', 'save-action']);
 const selectedType = ref<SelectOptionType>('#');
 const elementText = ref<string>('');
 const store = useRunTestStore();
+
+const selectOptions: { value: SelectOptionType; text: string }[] = [
+  { value: '#', text: 'Tipo #id' },
+  { value: '.', text: 'Tipo .classe' },
+  { value: 'xpath/', text: 'Tipo //xPath' },
+];
+
+const isSaveButtonDisabled = computed(() => {
+  return elementText.value === '';
+});
 
 function closeModal(): void {
   emit('close-modal');
