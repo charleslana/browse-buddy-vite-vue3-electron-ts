@@ -34,7 +34,6 @@ watch(saveEveryScreenshot, newValue => {
 });
 
 watch(saveHeadless, newValue => {
-  console.log('watch normal');
   store.setIsSaveHeadless(newValue);
 });
 
@@ -45,7 +44,6 @@ watch(
     () => store.runTest.isHeadless,
   ],
   ([saveLastScreenshotValue, saveEveryScreenshotValue, headlessValue]) => {
-    console.log('watch store');
     saveLastScreenshot.value = saveLastScreenshotValue;
     saveEveryScreenshot.value = saveEveryScreenshotValue;
     saveHeadless.value = headlessValue;
