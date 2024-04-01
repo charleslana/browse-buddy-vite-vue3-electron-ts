@@ -4,6 +4,7 @@ import { IAction } from '../interface/IAction';
 import { INavigationResult } from '../interface/INavigationResult';
 import { ipcMain } from 'electron';
 import { IRunTest } from '../interface/IRunTest';
+import { PageSingleton } from '../puppeteer/PageSingleton';
 
 const core = new Core();
 
@@ -11,8 +12,9 @@ const navigationResults: INavigationResult[] = [];
 
 export function handleRunTest(): void {
   ipcMain.handle('execute-run-test', async (event, runTestJSON: string) => {
+    const runTest: IRunTest = JSON.parse(runTestJSON);
     try {
-      const runTest: IRunTest = JSON.parse(runTestJSON);
+      PageSingleton.setHeadless(runTest.isHeadless);
       const result = await runTestFunction(runTest);
       event.sender.send('execute-run-test-result', result);
       return result;
@@ -21,15 +23,15 @@ export function handleRunTest(): void {
       throw error;
     } finally {
       navigationResults.length = 0;
+      await core.closeBrowser();
     }
   });
 }
 
 async function runTestFunction(runTest: IRunTest): Promise<INavigationResult[]> {
-  core.pageSingleton.setHeadless(runTest.isHeadless);
   await navigate(runTest);
   await handleActions(runTest.actions, runTest.isSaveEveryScreenshot);
-  await closeBrowser(runTest.isSaveLastScreenshot);
+  await finish(runTest.isSaveLastScreenshot);
   const resultsToReturn = navigationResults.slice();
   return resultsToReturn;
 }
@@ -129,7 +131,7 @@ async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Pr
   });
 }
 
-async function closeBrowser(isSaveLastScreenshot: boolean): Promise<void> {
+async function finish(isSaveLastScreenshot: boolean): Promise<void> {
   let screenshot: string | undefined;
   if (isSaveLastScreenshot) {
     screenshot = await core.screenshot(`close-${generateUUID()}`);
@@ -140,5 +142,4 @@ async function closeBrowser(isSaveLastScreenshot: boolean): Promise<void> {
     message: `Fim da execução`,
     screenshot: screenshot,
   });
-  await core.closeBrowser();
 }

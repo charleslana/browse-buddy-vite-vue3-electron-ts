@@ -10,12 +10,13 @@ dotenv.config({
 });
 
 export class PageSingleton {
+  private constructor() {}
+
   private static instance: PageSingleton;
+  private static headless = true;
+
   private page: Page | null = null;
   private browser: Browser | null = null;
-  private headless: boolean = process.env.HEADLESS === 'true';
-
-  private constructor() {}
 
   public static getInstance(): PageSingleton {
     if (!PageSingleton.instance) {
@@ -24,11 +25,15 @@ export class PageSingleton {
     return PageSingleton.instance;
   }
 
+  public static setHeadless(headless: boolean): void {
+    this.headless = headless;
+  }
+
   public async getPage(): Promise<Page> {
     if (!this.page) {
       this.browser = await puppeteer.launch({
         executablePath: this.getExecutablePath(),
-        headless: this.headless,
+        headless: PageSingleton.headless,
         defaultViewport: null,
         args: ['--no-sandbox'],
       });
@@ -39,10 +44,6 @@ export class PageSingleton {
       await this.page.setViewport({ width: 1920, height: 1080 });
     }
     return this.page;
-  }
-
-  public setHeadless(headless: boolean): void {
-    this.headless = headless;
   }
 
   public async closeBrowser(): Promise<void> {

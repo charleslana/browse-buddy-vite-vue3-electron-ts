@@ -20,22 +20,10 @@
 import { ref, watch } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 
-const saveLastScreenshot = ref(true);
-const saveEveryScreenshot = ref(true);
-const saveHeadless = ref(true);
 const store = useRunTestStore();
-
-watch(saveLastScreenshot, newValue => {
-  store.setIsSaveLastScreenshot(newValue);
-});
-
-watch(saveEveryScreenshot, newValue => {
-  store.setIsSaveEveryScreenshot(newValue);
-});
-
-watch(saveHeadless, newValue => {
-  store.setIsSaveHeadless(newValue);
-});
+const saveLastScreenshot = ref(store.runTest.isSaveLastScreenshot);
+const saveEveryScreenshot = ref(store.runTest.isSaveEveryScreenshot);
+const saveHeadless = ref(store.runTest.isHeadless);
 
 watch(
   [
@@ -43,10 +31,10 @@ watch(
     () => store.runTest.isSaveEveryScreenshot,
     () => store.runTest.isHeadless,
   ],
-  ([saveLastScreenshotValue, saveEveryScreenshotValue, headlessValue]) => {
+  ([saveLastScreenshotValue, saveEveryScreenshotValue, saveHeadlessValue]) => {
     saveLastScreenshot.value = saveLastScreenshotValue;
     saveEveryScreenshot.value = saveEveryScreenshotValue;
-    saveHeadless.value = headlessValue;
+    saveHeadless.value = saveHeadlessValue;
   }
 );
 
