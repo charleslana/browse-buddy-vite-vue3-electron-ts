@@ -7,4 +7,5 @@ export interface IAction {
   elementType: SelectOptionType;
   element: string;
   text?: string;
+  disabled?: boolean;
 }

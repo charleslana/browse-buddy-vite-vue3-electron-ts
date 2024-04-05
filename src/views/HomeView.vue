@@ -139,7 +139,7 @@ function executeRunTest(): void {
   isNotificationSuccess.value = false;
   isNotificationError.value = false;
   isLoading.value = true;
-  window.electronAPI?.runTest(JSON.stringify(runTestStore.runTest));
+  window.electronAPI?.runTest(JSON.stringify(runTestStore.filterEnabledActions()));
 }
 
 function handleNotificationSuccess(): void {

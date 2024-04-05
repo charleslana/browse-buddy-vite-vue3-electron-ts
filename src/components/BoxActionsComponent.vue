@@ -1,7 +1,9 @@
 <template>
   <div class="box">
     <div class="is-size-4 has-text-weight-bold mb-2">
-      <span class="mr-2"><FontAwesomeIcon :icon="faComputerMouse" /></span>
+      <span class="mr-2">
+        <FontAwesomeIcon :icon="faComputerMouse" />
+      </span>
       <span>Ações</span>
     </div>
     <button class="button is-info" :disabled="disabled" @click="openModal">
@@ -13,15 +15,31 @@
     <div class="py-4">
       <VueDraggableNext :list="store.runTest.actions" @change="handleChangeAction">
         <transition-group type="transition" name="flip-list">
-          <div class="card is-fullwidth" v-for="action in store.runTest.actions" :key="action.id">
+          <div
+            class="card is-fullwidth"
+            v-for="action in store.runTest.actions"
+            :key="action.id"
+            :class="{ 'disabled-card': action.disabled }"
+          >
             <header class="card-header card-toggle is-clickable" @click="toggleCard(action.id)">
               <p class="card-header-title">
-                <span class="mr-2"><FontAwesomeIcon :icon="faFlag" /></span>
+                <span class="mr-2">
+                  <FontAwesomeIcon :icon="faFlag" />
+                </span>
                 {{ getTitleBoxAction(action.action) }}
               </p>
-              <a class="card-header-icon">
-                <FontAwesomeIcon :icon="isCardVisible(action.id) ? faAngleUp : faAngleDown" />
-              </a>
+              <div class="is-flex">
+                <a
+                  class="card-header-icon"
+                  @click.stop="toggleActionStatus(action.id)"
+                  v-tooltip="action.disabled ? 'Ativar' : 'Desativar'"
+                >
+                  <FontAwesomeIcon :icon="action.disabled ? faEyeSlash : faEye" />
+                </a>
+                <a class="card-header-icon">
+                  <FontAwesomeIcon :icon="isCardVisible(action.id) ? faAngleUp : faAngleDown" />
+                </a>
+              </div>
             </header>
             <div class="card-content" :class="{ 'is-hidden': !isCardVisible(action.id) }">
               <div class="content break-words">
@@ -96,7 +114,7 @@
             @mouseleave="activeAction = ''"
             @click="handleActionClick(action)"
           >
-            <span class="panel-icon" v-for="icon in action.icons">
+            <span class="panel-icon" v-for="(icon, index) in action.icons" :key="index">
               <FontAwesomeIcon :icon="icon" />
             </span>
             <span class="buttons">
@@ -167,6 +185,8 @@ import {
   faFlag,
   faEraser,
   faCopy,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 import IBoxAction from '@/interface/IBoxAction';
@@ -426,6 +446,10 @@ function duplicateAction(action: IAction): void {
     store.runTest.actions.splice(index + 1, 0, duplicatedAction);
   }
 }
+
+function toggleActionStatus(id: string): void {
+  store.toggleActionStatus(id);
+}
 </script>
 
 <style scoped>
@@ -439,5 +463,9 @@ function duplicateAction(action: IAction): void {
 
 .card {
   cursor: move;
+}
+
+.disabled-card {
+  opacity: 0.5;
 }
 </style>

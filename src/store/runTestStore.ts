@@ -44,5 +44,15 @@ export const runTestStore = defineStore('runTest', {
         this.runTest.actions[index] = updatedAction;
       }
     },
+    filterEnabledActions(): IRunTest {
+      const enabledActions = this.runTest.actions.filter(action => action.disabled !== true);
+      return { ...this.runTest, actions: enabledActions };
+    },
+    toggleActionStatus(actionId: string): void {
+      const index = this.runTest.actions.findIndex(action => action.id === actionId);
+      if (index !== -1) {
+        this.runTest.actions[index].disabled = !this.runTest.actions[index].disabled;
+      }
+    },
   },
 });
