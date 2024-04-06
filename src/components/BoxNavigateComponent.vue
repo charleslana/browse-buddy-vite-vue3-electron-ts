@@ -17,15 +17,21 @@
         <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
       <section class="modal-card-body">
-        <div class="notification is-danger is-light" v-if="!isValidUrl(inputUrl)">
-          Informe uma url válida.
+        <div class="is-pulled-right">
+          <button class="button is-small mb-5">Usar url's cadastradas</button>
         </div>
-        <input
-          v-model.trim="inputUrl"
-          class="input is-medium"
-          type="text"
-          placeholder="https://example.com"
-        />
+        <div class="field">
+          <div class="control">
+            <input
+              v-model.trim="inputUrl"
+              class="input is-medium"
+              :class="{ 'is-danger': !isValidUrl(inputUrl) }"
+              type="text"
+              placeholder="https://example.com"
+            />
+          </div>
+          <p class="help is-danger" v-if="!isValidUrl(inputUrl)">Informe uma url válida</p>
+        </div>
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
