@@ -7,14 +7,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveFile: (dataJSON: string) => ipcRenderer.invoke('dialog:save-file', dataJSON),
   changeTheme: (theme: ThemeModeType) => ipcRenderer.invoke('theme-mode:change', theme),
   runTest: (runTestJSON: string) => ipcRenderer.invoke('execute-run-test', runTestJSON),
-  listenForResult: (): Promise<INavigationResult[]> => {
-    return new Promise((resolve, reject) => {
-      ipcRenderer.on('execute-run-test-result', (_event, result: INavigationResult[]) => {
-        resolve(result);
-      });
-      ipcRenderer.on('execute-run-test-error', (_event, error: Error) => {
-        reject(error);
-      });
-    });
-  },
+  listenForResult: listenForResult,
+  getUrls: (): Promise<string[]> => ipcRenderer.invoke('urls:get'),
+  addUrl: (url: string): Promise<void> => ipcRenderer.invoke('urls:add', url),
+  deleteUrl: (url: string): Promise<void> => ipcRenderer.invoke('urls:delete', url),
 });
+
+function listenForResult(): Promise<INavigationResult[]> {
+  return new Promise((resolve, reject) => {
+    ipcRenderer.on('execute-run-test-result', (_event, result: INavigationResult[]) => {
+      resolve(result);
+    });
+    ipcRenderer.on('execute-run-test-error', (_event, error: Error) => {
+      reject(error);
+    });
+  });
+}

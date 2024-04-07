@@ -5,6 +5,7 @@ import { getMenu } from './menu';
 import { handleOpenTestFile, handleSaveTestToFile } from './dialog';
 import { handleRunTest } from './runTest';
 import { handleThemeMode } from './theme';
+import { handleUrlActions } from './url';
 
 const isDev = process.env.npm_lifecycle_event === 'app:dev' ? true : false;
 
@@ -41,6 +42,7 @@ app.whenReady().then(() => {
   handleRunTest();
   handleSaveTestToFile();
   handleOpenTestFile();
+  handleUrlActions();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

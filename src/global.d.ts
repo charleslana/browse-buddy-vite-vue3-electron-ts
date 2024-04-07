@@ -11,6 +11,9 @@ declare global {
       changeTheme: (theme: ThemeMode) => void;
       runTest: (runTestJSON: string) => void;
       listenForResult: () => Promise<INavigationResult[]>;
+      getUrls: () => Promise<string[]>;
+      addUrl: (url: string) => Promise<void>;
+      deleteUrl: (url: string) => Promise<void>;
     };
   }
 }
