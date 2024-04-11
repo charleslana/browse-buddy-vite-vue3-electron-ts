@@ -37,11 +37,13 @@
                   <FontAwesomeIcon :icon="action.disabled ? faEyeSlash : faEye" />
                 </a>
                 <a class="card-header-icon">
-                  <FontAwesomeIcon :icon="isCardVisible(action.id) ? faAngleUp : faAngleDown" />
+                  <FontAwesomeIcon
+                    :icon="isCardVisible(action.isVisible) ? faAngleUp : faAngleDown"
+                  />
                 </a>
               </div>
             </header>
-            <div class="card-content" :class="{ 'is-hidden': !isCardVisible(action.id) }">
+            <div class="card-content" :class="{ 'is-hidden': !isCardVisible(action.isVisible) }">
               <div class="content break-words">
                 {{ `${action.elementType}${action.element}` }}
               </div>
@@ -225,7 +227,6 @@ const fillMode = ref<IAction | undefined>(undefined);
 const typeMode = ref<IAction | undefined>(undefined);
 const clearMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
-const openCards = ref<string[]>([]);
 const isConfirmModalActive = ref(false);
 const actionIdToDelete = ref<string>('');
 
@@ -406,15 +407,14 @@ function updateClearAction(action: IAction): void {
 }
 
 function toggleCard(actionId: string): void {
-  if (openCards.value.includes(actionId)) {
-    openCards.value = openCards.value.filter(id => id !== actionId);
-  } else {
-    openCards.value.push(actionId);
-  }
+  store.toggleActionVisible(actionId);
 }
 
-function isCardVisible(actionId: string): boolean {
-  return openCards.value.includes(actionId);
+function isCardVisible(isVisible?: boolean): boolean {
+  if (isVisible === undefined) {
+    return true;
+  }
+  return isVisible;
 }
 
 function handleChangeAction(event: { newIndex: number; oldIndex: number }): void {

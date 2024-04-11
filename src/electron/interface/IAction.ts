@@ -8,4 +8,5 @@ export interface IAction {
   element: string;
   text?: string;
   disabled?: boolean;
+  isVisible?: boolean;
 }
