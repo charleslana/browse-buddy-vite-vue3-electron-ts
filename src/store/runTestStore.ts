@@ -54,5 +54,15 @@ export const runTestStore = defineStore('runTest', {
         this.runTest.actions[index].disabled = !this.runTest.actions[index].disabled;
       }
     },
+    toggleActionVisible(actionId: string): void {
+      const index = this.runTest.actions.findIndex(action => action.id === actionId);
+      if (index !== -1) {
+        const isVisible =
+          this.runTest.actions[index].isVisible !== undefined
+            ? this.runTest.actions[index].isVisible
+            : true;
+        this.runTest.actions[index].isVisible = !isVisible;
+      }
+    },
   },
 });
