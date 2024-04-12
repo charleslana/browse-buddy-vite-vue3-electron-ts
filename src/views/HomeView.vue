@@ -91,7 +91,7 @@ import NotificationSuccessComponent from '@/components/NotificationSuccessCompon
 import NotificationErrorComponent from '@/components/NotificationErrorComponent.vue';
 import BoxNavigateComponent from '@/components/BoxNavigateComponent.vue';
 import BoxActionsComponent from '@/components/BoxActionsComponent.vue';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import Loading from 'vue-loading-overlay';
 import { navigationResultStore as useNavigationResultStore } from '@/store/navigationResultStore';
@@ -108,6 +108,21 @@ const isNotificationError = ref(false);
 const name = ref('Teste de Exemplo');
 const isConfirmModalActive = ref(false);
 
+onMounted(async () => {
+  const session = await window.electronAPI?.getSession();
+  if (session) {
+    runTestStore.saveRunTest(session);
+  }
+});
+
+watch(
+  () => runTestStore.runTest,
+  async newValue => {
+    await window.electronAPI?.saveSession(JSON.stringify(newValue));
+  },
+  { deep: true }
+);
+
 watch(
   () => name.value,
   newValue => {
@@ -121,7 +136,7 @@ watch(
 
 watch(
   () => runTestStore.runTest.name,
-  newValue => {
+  async newValue => {
     if (newValue && newValue !== '') {
       name.value = newValue;
     } else {
@@ -186,7 +201,7 @@ async function saveFile(): Promise<void> {
   await window.electronAPI?.saveFile(JSON.stringify(runTestStore.runTest, null, 2));
 }
 
-function confirmAction(): void {
+async function confirmAction(): Promise<void> {
   closeNotifications();
   isConfirmModalActive.value = false;
   runTestStore.saveRunTest({
@@ -197,6 +212,7 @@ function confirmAction(): void {
     isHeadless: true,
     actions: [],
   });
+  await window.electronAPI?.deleteSession();
 }
 
 function closeConfirmModal(): void {

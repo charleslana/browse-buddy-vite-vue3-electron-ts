@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { INavigationResult } from '../interface/INavigationResult';
+import { IRunTest } from '../interface/IRunTest';
 import { ThemeModeType } from '../types/ThemeModeType';
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -11,6 +12,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getUrls: (): Promise<string[]> => ipcRenderer.invoke('urls:get'),
   addUrl: (url: string): Promise<void> => ipcRenderer.invoke('urls:add', url),
   deleteUrl: (url: string): Promise<void> => ipcRenderer.invoke('urls:delete', url),
+  getSession: (): Promise<IRunTest> => ipcRenderer.invoke('session:get'),
+  saveSession: (runTestJSON: string): Promise<void> =>
+    ipcRenderer.invoke('session:save', runTestJSON),
+  deleteSession: (): Promise<void> => ipcRenderer.invoke('session:delete'),
 });
 
 function listenForResult(): Promise<INavigationResult[]> {

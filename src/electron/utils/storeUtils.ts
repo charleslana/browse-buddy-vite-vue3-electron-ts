@@ -1,19 +1,24 @@
 import Store from 'electron-store';
+import { IRunTest } from '../interface/IRunTest';
 import { ThemeModeType } from '../types/ThemeModeType';
 
 const store = new Store();
 
+const darkModeKey = 'darkMode';
+const urlsKey = 'urls';
+const sessionKey = 'session';
+
 export function setThemeModePreference(mode: ThemeModeType): void {
-  store.set('darkMode', mode);
+  store.set(darkModeKey, mode);
 }
 
 export function getThemeModePreference(): ThemeModeType {
-  const darkMode = store.get('darkMode') as ThemeModeType;
+  const darkMode = store.get(darkModeKey) as ThemeModeType | undefined;
   return darkMode || 'system';
 }
 
 export function getUrlsPreference(): string[] {
-  const urls = store.get('urls') as string[];
+  const urls = store.get(urlsKey) as string[] | undefined;
   return urls !== undefined ? urls : [];
 }
 
@@ -35,5 +40,19 @@ export function deleteUrlPreference(url: string) {
 }
 
 function setUrlsPreference(urls: string[]) {
-  store.set('urls', urls);
+  store.set(urlsKey, urls);
+}
+
+export function getSessionPreference(): IRunTest | undefined {
+  const session = store.get(sessionKey) as IRunTest | undefined;
+  return session;
+}
+
+export function saveSessionPreference(runTestJSON: string) {
+  const runTest: IRunTest = JSON.parse(runTestJSON);
+  store.set(sessionKey, runTest);
+}
+
+export function deleteSessionPreference() {
+  store.delete(sessionKey);
 }
