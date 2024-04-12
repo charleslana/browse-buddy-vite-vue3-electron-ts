@@ -1,4 +1,5 @@
 import App from './App.vue';
+import i18n from './i18n/i18n';
 import router from './router';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -17,4 +18,5 @@ app.use(createPinia());
 app.directive('tooltip', vTooltip);
 app.component('VTooltip', Tooltip);
 app.use(router);
+app.use(i18n);
 app.mount('#app');

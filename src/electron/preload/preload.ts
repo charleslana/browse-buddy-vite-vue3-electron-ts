@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { INavigationResult } from '../interface/INavigationResult';
 import { IRunTest } from '../interface/IRunTest';
+import { SupportedLanguagesType } from '../types/SupportedLanguagesType';
 import { ThemeModeType } from '../types/ThemeModeType';
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -16,6 +17,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveSession: (runTestJSON: string): Promise<void> =>
     ipcRenderer.invoke('session:save', runTestJSON),
   deleteSession: (): Promise<void> => ipcRenderer.invoke('session:delete'),
+  getLang: (): Promise<SupportedLanguagesType> => ipcRenderer.invoke('lang:get'),
+  setLang: (lang: SupportedLanguagesType): Promise<void> => ipcRenderer.invoke('lang:set', lang),
 });
 
 function listenForResult(): Promise<INavigationResult[]> {

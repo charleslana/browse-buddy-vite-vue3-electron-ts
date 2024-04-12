@@ -1,5 +1,6 @@
 import Store from 'electron-store';
 import { IRunTest } from '../interface/IRunTest';
+import { SupportedLanguagesType } from '../types/SupportedLanguagesType';
 import { ThemeModeType } from '../types/ThemeModeType';
 
 const store = new Store();
@@ -7,6 +8,7 @@ const store = new Store();
 const darkModeKey = 'darkMode';
 const urlsKey = 'urls';
 const sessionKey = 'session';
+const langKey = 'lang';
 
 export function setThemeModePreference(mode: ThemeModeType): void {
   store.set(darkModeKey, mode);
@@ -55,4 +57,13 @@ export function saveSessionPreference(runTestJSON: string) {
 
 export function deleteSessionPreference() {
   store.delete(sessionKey);
+}
+
+export function setLangPreference(lang: SupportedLanguagesType): void {
+  store.set(langKey, lang);
+}
+
+export function getLangPreference(): SupportedLanguagesType | undefined {
+  const lang = store.get(langKey) as SupportedLanguagesType | undefined;
+  return lang;
 }

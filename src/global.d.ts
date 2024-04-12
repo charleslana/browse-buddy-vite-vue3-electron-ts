@@ -1,6 +1,7 @@
 import { INavigationResult } from './electron/interface/INavigationResult';
 import { IRunTest } from './electron/interface/IRunTest';
-import { ThemeMode } from '@/electron/type/ThemeMode';
+import { SupportedLanguagesType } from './types/SupportedLanguagesType';
+import { ThemeMode } from './electron/type/ThemeMode';
 
 export {};
 
@@ -18,6 +19,8 @@ declare global {
       getSession: () => Promise<IRunTest | undefined>;
       saveSession: (runTestJSON: string) => Promise<void>;
       deleteSession: () => Promise<void>;
+      getLang: () => Promise<SupportedLanguagesType>;
+      setLang: (lang: SupportedLanguagesType) => Promise<void>;
     };
   }
 }

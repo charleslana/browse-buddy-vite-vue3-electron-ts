@@ -25,7 +25,7 @@
             <span class="icon is-small">
               <FontAwesomeIcon :icon="faMoon" />
             </span>
-            <span>Temas</span>
+            <span>{{ $t('themes') }}</span>
           </button>
           <div class="navbar-dropdown">
             <a class="navbar-item theme-button">
@@ -33,7 +33,7 @@
                 <span class="icon is-small">
                   <FontAwesomeIcon :icon="faMoon" />
                 </span>
-                <span>Tema escuro</span>
+                <span>{{ $t('darkTheme') }}</span>
               </button>
             </a>
             <a class="navbar-item theme-button">
@@ -41,7 +41,7 @@
                 <span class="icon is-small">
                   <FontAwesomeIcon :icon="faSun" />
                 </span>
-                <span>Tema claro</span>
+                <span>{{ $t('lightTheme') }}</span>
               </button>
             </a>
             <a class="navbar-item theme-button">
@@ -49,9 +49,21 @@
                 <span class="icon is-small">
                   <FontAwesomeIcon :icon="faWindowMaximize" />
                 </span>
-                <span>Tema do sistema</span>
+                <span>{{ $t('systemTheme') }}</span>
               </button>
             </a>
+          </div>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item is-hoverable">
+          <div class="navbar-item has-dropdown">
+            <a class="navbar-link">Idiomas</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" @click="changeLanguage('en')">Inglês</a>
+              <a class="navbar-item" @click="changeLanguage('es')">Espanhol</a>
+              <a class="navbar-item" @click="changeLanguage('pt')">Português</a>
+            </div>
           </div>
         </div>
       </div>
@@ -64,7 +76,16 @@ import images from '@/data/imageData';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faMoon, faSun, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import { ThemeModeType } from '@/electron/types/ThemeModeType';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import i18n from '@/i18n/i18n';
+import { SupportedLanguagesType } from '@/electron/types/SupportedLanguagesType';
+
+onMounted(async () => {
+  const lang = await window.electronAPI?.getLang();
+  if (lang) {
+    i18n.global.locale = lang;
+  }
+});
 
 const isMenuOpen = ref(false);
 
@@ -74,6 +95,11 @@ function toggleMenu(): void {
 
 function changeTheme(theme: ThemeModeType): void {
   window.electronAPI?.changeTheme(theme);
+}
+
+async function changeLanguage(lang: SupportedLanguagesType): Promise<void> {
+  i18n.global.locale = lang;
+  await window.electronAPI?.setLang(lang);
 }
 </script>
 
