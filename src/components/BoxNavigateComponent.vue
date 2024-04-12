@@ -2,14 +2,14 @@
   <div class="box">
     <div class="is-size-4 has-text-weight-bold mb-2">
       <span class="mr-2"><FontAwesomeIcon :icon="faRoute" /></span>
-      <span>Navegar para</span>
+      <span>{{ $t('navigateTo') }}</span>
     </div>
     <div class="is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap">
       <button class="button is-info mb-4" :class="{ 'is-skeleton': isSkeleton }" @click="openModal">
-        Selecione a url
+        {{ $t('selectUrl') }}
       </button>
       <div class="break-words" :class="{ 'is-skeleton': isSkeleton }">
-        {{ inputUrl || 'vazio' }}
+        {{ inputUrl || $t('emptyUrl') }}
       </div>
     </div>
   </div>
@@ -17,7 +17,7 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Digite a url desejada</p>
+        <p class="modal-card-title">{{ $t('enterTheUrl') }}</p>
         <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
       <section class="modal-card-body">
@@ -29,7 +29,7 @@
               urlChecked = '';
             "
           >
-            Usar url's cadastradas
+            {{ $t('useRegisteredUrls') }}
           </button>
         </div>
         <div class="field">
@@ -42,15 +42,15 @@
               placeholder="https://example.com"
             />
           </div>
-          <p class="help is-danger" v-if="!isValidUrl(inputUrl)">Informe uma url válida</p>
+          <p class="help is-danger" v-if="!isValidUrl(inputUrl)">{{ $t('validUrl') }}</p>
         </div>
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
           <button class="button is-success" :disabled="!isValidUrl(inputUrl)" @click="saveURL">
-            Salvar
+            {{ $t('saveButton') }}
           </button>
-          <button class="button" @click="closeModal">Cancelar</button>
+          <button class="button" @click="closeModal">{{ $t('cancelButton') }}</button>
         </div>
       </footer>
     </div>
@@ -59,17 +59,17 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Url's cadastradas</p>
+        <p class="modal-card-title">{{ $t('registeredUrls') }}</p>
         <button class="delete" aria-label="close" @click="closeModalUrl"></button>
       </header>
       <section class="modal-card-body">
-        <button class="button mb-5" @click="toggleUrlRegister">Novo</button>
+        <button class="button mb-5" @click="toggleUrlRegister">{{ $t('newButton') }}</button>
         <div class="control mb-5" v-if="urlRegister">
           <div class="field">
             <input class="input is-small" type="text" placeholder="Url" v-model.trim="newUrl" />
           </div>
           <div class="field">
-            <button class="button is-small" @click="registerUrl">Cadastrar</button>
+            <button class="button is-small" @click="registerUrl">{{ $t('registerButton') }}</button>
           </div>
         </div>
         <div
@@ -100,7 +100,7 @@
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button" @click="closeModalUrl">Fechar</button>
+          <button class="button" @click="closeModalUrl">{{ $t('closeButton') }}</button>
         </div>
       </footer>
     </div>

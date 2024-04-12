@@ -58,11 +58,11 @@
       <div class="navbar-end">
         <div class="navbar-item is-hoverable">
           <div class="navbar-item has-dropdown">
-            <a class="navbar-link">Idiomas</a>
+            <a class="navbar-link">{{ $t('languages') }}</a>
             <div class="navbar-dropdown">
-              <a class="navbar-item" @click="changeLanguage('en')">Inglês</a>
-              <a class="navbar-item" @click="changeLanguage('es')">Espanhol</a>
-              <a class="navbar-item" @click="changeLanguage('pt')">Português</a>
+              <a class="navbar-item" @click="changeLanguage('en')">{{ $t('langEnglish') }}</a>
+              <a class="navbar-item" @click="changeLanguage('es')">{{ $t('langSpanish') }}</a>
+              <a class="navbar-item" @click="changeLanguage('pt')">{{ $t('langPortuguese') }}</a>
             </div>
           </div>
         </div>

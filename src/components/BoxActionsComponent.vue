@@ -4,13 +4,13 @@
       <span class="mr-2">
         <FontAwesomeIcon :icon="faComputerMouse" />
       </span>
-      <span>Ações</span>
+      <span>{{ $t('actions') }}</span>
     </div>
     <button class="button is-info" :disabled="disabled" @click="openModal">
       <span class="icon">
         <FontAwesomeIcon :icon="faPlus" />
       </span>
-      <span>Adicionar ações</span>
+      <span>{{ $t('addActionsButton') }}</span>
     </button>
     <div class="py-4">
       <div :class="{ 'skeleton-block': isSkeleton }"></div>

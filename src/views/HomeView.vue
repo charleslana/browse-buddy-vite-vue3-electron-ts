@@ -37,7 +37,7 @@
                 type="text"
                 v-model.trim="name"
               />
-              <label class="label is-floating-label" for="name">Nome do teste</label>
+              <label class="label is-floating-label" for="name">{{ $t('testName') }}</label>
             </div>
           </div>
         </div>
@@ -51,7 +51,7 @@
                 :disabled="!isInputFilled || name === ''"
                 @click="executeRunTest"
               >
-                Executar
+                {{ $t('executeButton') }}
               </button>
             </p>
           </div>
@@ -62,7 +62,7 @@
                 :disabled="!isInputFilled || name === ''"
                 @click="saveFile"
               >
-                Salvar teste
+                {{ $t('saveTestButton') }}
               </button>
             </p>
           </div>
@@ -98,6 +98,7 @@ import Loading from 'vue-loading-overlay';
 import { navigationResultStore as useNavigationResultStore } from '@/store/navigationResultStore';
 import { IRunTest } from '@/electron/interface/IRunTest';
 import ModalConfirmComponent from '@/components/ModalConfirmComponent.vue';
+import i18n from '@/i18n/i18n';
 
 const notificationErrorMessage = ref('error');
 const isInputFilled = ref(false);
@@ -109,6 +110,12 @@ const isNotificationError = ref(false);
 const name = ref('Teste de Exemplo');
 const isConfirmModalActive = ref(false);
 const isSkeleton = ref(true);
+const t = i18n.global.t;
+const defaultNameValues = [
+  i18n.global.messages.en.inputTestName,
+  i18n.global.messages.es.inputTestName,
+  i18n.global.messages.pt.inputTestName,
+];
 
 onMounted(async () => {
   const session = await window.electronAPI?.getSession();
@@ -117,6 +124,15 @@ onMounted(async () => {
   }
   isSkeleton.value = false;
 });
+
+watch(
+  () => i18n.global.t('inputTestName'),
+  () => {
+    if (defaultNameValues.includes(name.value)) {
+      name.value = t('inputTestName');
+    }
+  }
+);
 
 watch(
   () => runTestStore.runTest,
@@ -208,7 +224,7 @@ async function confirmAction(): Promise<void> {
   closeNotifications();
   isConfirmModalActive.value = false;
   runTestStore.saveRunTest({
-    name: 'Teste de Exemplo',
+    name: t('inputTestName'),
     url: '',
     isSaveLastScreenshot: true,
     isSaveEveryScreenshot: true,
