@@ -1,17 +1,17 @@
 <template>
   <div class="column mx-5">
-    <div class="is-size-4 has-text-weight-bold mb-5">Configurações de execução</div>
+    <div class="is-size-4 has-text-weight-bold mb-5">{{ $t('runSettings') }}</div>
     <label class="checkbox mb-4">
       <input type="checkbox" v-model="saveLastScreenshot" @change="updateSaveLastScreenshot" />
-      Salvar tela de captura no final do teste
+      {{ $t('saveScreenshotEndOfTest') }}
     </label>
     <label class="checkbox mb-4">
       <input type="checkbox" v-model="saveEveryScreenshot" @change="updateSaveEveryScreenshot" />
-      Salvar tela de captura a cada ação
+      {{ $t('saveScreenshotForEachAction') }}
     </label>
     <label class="checkbox mb-4">
       <input type="checkbox" v-model="saveHeadless" @change="updateSaveHeadless" />
-      Modo sem cabeça (Ativado não irá mostrar o processo do teste em tempo real)
+      {{ $t('headlessMode') }}
     </label>
   </div>
 </template>
