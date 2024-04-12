@@ -13,6 +13,7 @@
       <span>Adicionar ações</span>
     </button>
     <div class="py-4">
+      <div :class="{ 'skeleton-block': isSkeleton }"></div>
       <VueDraggableNext :list="store.runTest.actions" @change="handleChangeAction">
         <transition-group type="transition" name="flip-list">
           <div
@@ -207,6 +208,10 @@ import { generateUUID } from '@/electron/utils/utils';
 
 defineProps({
   disabled: {
+    type: Boolean,
+    required: true,
+  },
+  isSkeleton: {
     type: Boolean,
     required: true,
   },

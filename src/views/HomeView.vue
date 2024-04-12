@@ -31,6 +31,7 @@
             <div class="control has-floating-label">
               <input
                 class="input is-medium with-floating-label"
+                :class="{ 'is-skeleton': isSkeleton }"
                 id="name"
                 placeholder=""
                 type="text"
@@ -40,8 +41,8 @@
             </div>
           </div>
         </div>
-        <BoxNavigateComponent @input-filled="handleInputFilled" />
-        <BoxActionsComponent :disabled="!isInputFilled" />
+        <BoxNavigateComponent :is-skeleton="isSkeleton" @input-filled="handleInputFilled" />
+        <BoxActionsComponent :disabled="!isInputFilled" :is-skeleton="isSkeleton" />
         <nav class="level mb-5">
           <div class="level-left">
             <p class="level-item">
@@ -107,12 +108,14 @@ const isNotificationSuccess = ref(false);
 const isNotificationError = ref(false);
 const name = ref('Teste de Exemplo');
 const isConfirmModalActive = ref(false);
+const isSkeleton = ref(true);
 
 onMounted(async () => {
   const session = await window.electronAPI?.getSession();
   if (session) {
     runTestStore.saveRunTest(session);
   }
+  isSkeleton.value = false;
 });
 
 watch(
