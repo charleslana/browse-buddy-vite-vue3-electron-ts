@@ -7,12 +7,12 @@
           <div class="level">
             <div class="level-left">
               <button class="button is-responsive" @click="openFile">
-                Importar um teste já configurado
+                {{ $t('importTest') }}
               </button>
             </div>
             <div class="level-right">
               <button class="button is-ghost" @click="isConfirmModalActive = true">
-                Limpar testes
+                {{ $t('clearTests') }}
               </button>
             </div>
           </div>
