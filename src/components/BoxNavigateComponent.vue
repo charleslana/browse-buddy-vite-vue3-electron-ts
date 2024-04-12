@@ -5,8 +5,12 @@
       <span>Navegar para</span>
     </div>
     <div class="is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap">
-      <button class="button is-info mb-4" @click="openModal">Selecione a url</button>
-      <div class="break-words">{{ inputUrl || 'vazio' }}</div>
+      <button class="button is-info mb-4" :class="{ 'is-skeleton': isSkeleton }" @click="openModal">
+        Selecione a url
+      </button>
+      <div class="break-words" :class="{ 'is-skeleton': isSkeleton }">
+        {{ inputUrl || 'vazio' }}
+      </div>
     </div>
   </div>
   <div class="modal" :class="{ 'is-active': isModalNavigateActive }">
@@ -108,6 +112,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faRoute, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { onMounted, ref, watch } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
+
+defineProps({
+  isSkeleton: {
+    type: Boolean,
+    required: true,
+  },
+});
 
 const emit = defineEmits(['input-filled']);
 
