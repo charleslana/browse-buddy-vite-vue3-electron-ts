@@ -4,6 +4,7 @@ import { getAppIconPath } from './icon';
 import { getMenu } from './menu';
 import { handleOpenTestFile, handleSaveTestToFile } from './dialog';
 import { handleRunTest } from './runTest';
+import { handleSession } from './session';
 import { handleThemeMode } from './theme';
 import { handleUrlActions } from './url';
 
@@ -43,6 +44,7 @@ app.whenReady().then(() => {
   handleSaveTestToFile();
   handleOpenTestFile();
   handleUrlActions();
+  handleSession();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
