@@ -17,14 +17,11 @@
             </div>
           </div>
         </div>
-        <NotificationSuccessComponent
-          @close="handleNotificationSuccess"
-          v-if="isNotificationSuccess"
-        />
-        <NotificationErrorComponent
-          :message="notificationErrorMessage"
-          @close="handleNotificationError"
-          v-if="isNotificationError"
+        <NotificationComponent
+          :type="isNotificationType"
+          :message="isNotificationMessage"
+          @close="handleNotification"
+          v-if="isNotification"
         />
         <div class="box">
           <div class="field">
@@ -88,8 +85,7 @@
 <script setup lang="ts">
 import NavBarComponent from '@/components/NavBarComponent.vue';
 import SettingsComponent from '@/components/SettingsComponent.vue';
-import NotificationSuccessComponent from '@/components/NotificationSuccessComponent.vue';
-import NotificationErrorComponent from '@/components/NotificationErrorComponent.vue';
+import NotificationComponent from '@/components/NotificationComponent.vue';
 import BoxNavigateComponent from '@/components/BoxNavigateComponent.vue';
 import BoxActionsComponent from '@/components/BoxActionsComponent.vue';
 import { onMounted, ref, watch } from 'vue';
@@ -100,13 +96,13 @@ import { IRunTest } from '@/electron/interface/IRunTest';
 import ModalConfirmComponent from '@/components/ModalConfirmComponent.vue';
 import i18n from '@/i18n/i18n';
 
-const notificationErrorMessage = ref('error');
 const isInputFilled = ref(false);
 const runTestStore = useRunTestStore();
 const navigationResultStore = useNavigationResultStore();
 const isLoading = ref(false);
-const isNotificationSuccess = ref(false);
-const isNotificationError = ref(false);
+const isNotification = ref(false);
+const isNotificationType = ref<'is-danger' | 'is-success'>('is-success');
+const isNotificationMessage = ref('O teste foi executado com sucesso.');
 const name = ref('Teste de Exemplo');
 const isConfirmModalActive = ref(false);
 const isSkeleton = ref(true);
@@ -170,32 +166,29 @@ function handleInputFilled(value: boolean): void {
 
 function executeRunTest(): void {
   listenResult();
-  isNotificationSuccess.value = false;
-  isNotificationError.value = false;
+  isNotification.value = false;
   isLoading.value = true;
   window.electronAPI?.runTest(JSON.stringify(runTestStore.filterEnabledActions()));
 }
 
-function handleNotificationSuccess(): void {
-  isNotificationSuccess.value = false;
-}
-
-function handleNotificationError(): void {
-  isNotificationError.value = false;
+function handleNotification(): void {
+  isNotification.value = false;
 }
 
 function listenResult(): void {
   window.electronAPI
     ?.listenForResult()
-    .then(result => {
-      console.log('Resultado:', result);
-      navigationResultStore.save(result);
-      isNotificationSuccess.value = true;
-    })
-    .catch((error: Error) => {
-      console.error('Erro:', error.message);
-      notificationErrorMessage.value = error.message;
-      isNotificationError.value = true;
+    .then(results => {
+      console.log('Resultado:', results);
+      navigationResultStore.save(results);
+      if (results.some(result => result.error)) {
+        isNotificationType.value = 'is-danger';
+        isNotificationMessage.value = 'O teste foi executado com falha.';
+      } else {
+        isNotificationType.value = 'is-success';
+        isNotificationMessage.value = 'O teste foi executado com sucesso.';
+      }
+      isNotification.value = true;
     })
     .finally(() => {
       isLoading.value = false;
@@ -239,8 +232,7 @@ function closeConfirmModal(): void {
 }
 
 function closeNotifications(): void {
-  isNotificationSuccess.value = false;
-  isNotificationError.value = false;
+  isNotification.value = false;
 }
 </script>
 

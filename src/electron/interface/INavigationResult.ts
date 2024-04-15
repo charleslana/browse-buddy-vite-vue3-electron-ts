@@ -6,4 +6,5 @@ export interface INavigationResult {
   message: string;
   screenshot?: string;
   duration?: number;
+  error?: string;
 }
