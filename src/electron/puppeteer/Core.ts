@@ -1,7 +1,7 @@
 import fs from 'fs';
 import logger from '../utils/logger';
 import path from 'path';
-import { ElementHandle, Page, PuppeteerError } from 'puppeteer';
+import { ElementHandle, Page } from 'puppeteer';
 import { generateUUID } from '../utils/utils';
 import { IExecutionResult } from '../interface/IExecutionResult';
 import { PageSingleton } from './PageSingleton';
@@ -20,155 +20,151 @@ export class Core {
 
   public async navigate(url: string, saveScreenshot?: boolean): Promise<IExecutionResult> {
     logger.warn(`Tentando navegar para ${url} ...`);
+    let screenshot: string | undefined;
     const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
       await this.createPage();
       await this.getPage().goto(url, {
         waitUntil: 'domcontentloaded',
       });
       logger.info(`Sucesso ao navegar para ${url}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`navigate-${generateUUID()}`);
+    } catch (e) {
+      error = `Erro ao navegar para ${url}`;
+      logger.error(`Erro ao navegar para ${url}: ${e}`);
+    } finally {
+      if (!error) {
+        screenshot = await this.saveScreenshot(generateUUID(), saveScreenshot);
       }
       const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
-    } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao navegar para ${url}: ${error}`);
-      throw new CoreError(`Erro ao navegar para ${url}: ${error.message}`);
+      duration = (endTime - startTime) / 1000;
     }
+    return { screenshot, duration, error };
   }
 
   public async waitForClick(
     selector: string,
-    id?: string,
+    id: string,
     saveScreenshot?: boolean
   ): Promise<IExecutionResult> {
     logger.warn(`Tentando aguardar e clicar no elemento com seletor ${selector} ...`);
+    let screenshot: string | undefined;
     const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
-      await this.waitForVisible(selector);
+      error = await this.waitForVisible(selector);
       await this.getPage().click(selector);
       logger.info(`Sucesso ao aguardar e clicar no elemento com seletor ${selector}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`wait-click-${id}`);
-      }
-      const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
     } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao aguardar e clicar no elemento com seletor ${selector}: ${error}`);
-      throw new CoreError(
-        `Erro ao aguardar e clicar no elemento com seletor ${selector}: ${error.message}`
-      );
+      error += `Erro ao aguardar e clicar no elemento com seletor ${selector}`;
+      logger.error(`Erro ao aguardar e clicar no elemento com seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
+    return { screenshot, duration, error };
   }
 
   public async click(
     selector: string,
-    id?: string,
+    id: string,
     saveScreenshot?: boolean
   ): Promise<IExecutionResult> {
     logger.warn(`Tentando clicar no elemento com seletor ${selector} ...`);
+    let screenshot: string | undefined;
     const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
       await this.getPage().click(selector);
       logger.info(`Sucesso ao clicar no elemento com seletor ${selector}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`click-${id}`);
-      }
-      const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
     } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao clicar no elemento com seletor ${selector}: ${error}`);
-      throw new CoreError(`Erro ao clicar no elemento com seletor ${selector}: ${error.message}`);
+      error = `Erro ao clicar no elemento com seletor ${selector}`;
+      logger.error(`Erro ao clicar no elemento com seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
+    return { screenshot, duration, error };
   }
 
   public async fill(
     selector: string,
     text: string,
-    id?: string,
+    id: string,
     saveScreenshot?: boolean
   ): Promise<IExecutionResult> {
     logger.warn(`Tentando preencher o texto ${text} no seletor ${selector} ...`);
+    let screenshot: string | undefined;
     const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
       await this.getPage().locator(selector).fill(text);
       logger.info(`Sucesso ao preencher o texto ${text} no seletor ${selector}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`fill-${id}`);
-      }
-      const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
     } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${error}`);
-      throw new CoreError(
-        `Erro ao preencher o texto ${text} no seletor ${selector}: ${error.message}`
-      );
+      error = `Erro ao preencher o texto ${text} no seletor ${selector}`;
+      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
+    return { screenshot, duration, error };
   }
 
   public async type(
     selector: string,
     text: string,
-    id?: string,
+    id: string,
     saveScreenshot?: boolean
   ): Promise<IExecutionResult> {
     logger.warn(`Tentando digitar o texto ${text} no seletor ${selector} ...`);
+    let screenshot: string | undefined;
     const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
       await this.getPage().type(selector, text);
       logger.info(`Sucesso ao digitar o texto ${text} no seletor ${selector}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`type-${id}`);
-      }
-      const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
     } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${error}`);
-      throw new CoreError(
-        `Erro ao preencher o texto ${text} no seletor ${selector}: ${error.message}`
-      );
+      error = `Erro ao preencher o texto ${text} no seletor ${selector}`;
+      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
+    return { screenshot, duration, error };
   }
 
   public async clear(
     selector: string,
-    id?: string,
+    id: string,
     saveScreenshot?: boolean
   ): Promise<IExecutionResult> {
     logger.warn(`Tentando limpar o texto no seletor ${selector} ...`);
+    let screenshot: string | undefined;
     const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
       await this.getPage().click(selector, { count: 3 });
       await this.getPage().keyboard.press('Backspace');
-      logger.info(`Sucesso ao limpar o texto no seletor ${selector} ${selector}`);
-      let screenshot: string | undefined;
-      if (saveScreenshot) {
-        screenshot = await this.screenshot(`clear-${id}`);
-      }
-      const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000;
-      return { screenshot, duration };
+      logger.info(`Sucesso ao limpar o texto no seletor ${selector}`);
     } catch (e) {
-      const error = e as unknown as PuppeteerError;
-      logger.error(`Erro ao limpar o texto no seletor ${selector}: ${error}`);
-      throw new CoreError(`Erro ao limpar o texto no seletor ${selector}: ${error.message}`);
+      error = `Erro ao limpar o texto no seletor ${selector}`;
+      logger.error(`Erro ao limpar o texto no seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
+    return { screenshot, duration, error };
   }
 
   public async getTitle(): Promise<string> {
@@ -180,12 +176,16 @@ export class Core {
     }
   }
 
-  public async waitForVisible(selector: string): Promise<ElementHandle<Element> | null> {
+  public async waitForVisible(selector: string): Promise<string | undefined> {
+    logger.warn(`Tentando aguardar elemento visível com seletor ${selector} ...`);
+    let error: string | undefined;
     try {
-      return await this.getPage().waitForSelector(selector, { visible: true });
-    } catch (error) {
-      throw new CoreError(`Erro ao aguardar elemento visível com seletor ${selector}: ${error}`);
+      await this.getPage().waitForSelector(selector, { visible: true });
+    } catch (e) {
+      error = `Erro ao aguardar elemento visível com seletor ${selector}\n`;
+      logger.error(`Erro ao aguardar elemento visível com seletor ${selector}: ${e}`);
     }
+    return error;
   }
 
   public async waitForNotVisible(selector: string): Promise<ElementHandle<Element> | null> {
@@ -259,6 +259,12 @@ export class Core {
       await this.pageSingleton.closeBrowser();
     } catch (error) {
       throw new CoreError(`Erro ao fechar o navegador: ${error}`);
+    }
+  }
+
+  private async saveScreenshot(id: string, saveScreenshot?: boolean): Promise<string | undefined> {
+    if (saveScreenshot) {
+      return await this.screenshot(id);
     }
   }
 

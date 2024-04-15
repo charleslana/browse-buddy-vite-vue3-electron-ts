@@ -13,18 +13,11 @@ const navigationResults: INavigationResult[] = [];
 export function handleRunTest(): void {
   ipcMain.handle('execute-run-test', async (event, runTestJSON: string) => {
     const runTest: IRunTest = JSON.parse(runTestJSON);
-    try {
-      PageSingleton.setHeadless(runTest.isHeadless);
-      const result = await runTestFunction(runTest);
-      event.sender.send('execute-run-test-result', result);
-      return result;
-    } catch (error) {
-      event.sender.send('execute-run-test-error', error);
-      throw error;
-    } finally {
-      navigationResults.length = 0;
-      await core.closeBrowser();
-    }
+    PageSingleton.setHeadless(runTest.isHeadless);
+    const result = await runTestFunction(runTest);
+    await core.closeBrowser();
+    navigationResults.length = 0;
+    event.sender.send('execute-run-test-result', result);
   });
 }
 
@@ -44,6 +37,7 @@ async function navigate(runTest: IRunTest) {
     message: `Navegação para url: ${runTest.url}`,
     screenshot: navigate.screenshot,
     duration: parseFloat(navigate.duration.toFixed(2)),
+    error: navigate.error,
   });
 }
 
@@ -80,6 +74,7 @@ async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean)
     message: `Aguardar e clicar no elemento: ${element}`,
     screenshot: waitForClick.screenshot,
     duration: parseFloat(waitForClick.duration.toFixed(2)),
+    error: waitForClick.error,
   });
 }
 
@@ -92,6 +87,7 @@ async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Pr
     message: `Clicar no elemento: ${element}`,
     screenshot: click.screenshot,
     duration: parseFloat(click.duration.toFixed(2)),
+    error: click.error,
   });
 }
 
@@ -104,6 +100,7 @@ async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Pro
     message: `Preencher o texto: ${action.text}\nCom o elemento: ${element}`,
     screenshot: fill.screenshot,
     duration: parseFloat(fill.duration.toFixed(2)),
+    error: fill.error,
   });
 }
 
@@ -116,25 +113,27 @@ async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Pro
     message: `Digitar o texto: ${action.text}\nCom o elemento: ${element}`,
     screenshot: type.screenshot,
     duration: parseFloat(type.duration.toFixed(2)),
+    error: type.error,
   });
 }
 
 async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
   const element = `${action.elementType}${action.element}`;
-  const type = await core.clear(element, action.id, isSaveEveryScreenshot);
+  const clear = await core.clear(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'clear',
     title: 'Limpar',
     message: `Limpar o texto com o elemento: ${element}`,
-    screenshot: type.screenshot,
-    duration: parseFloat(type.duration.toFixed(2)),
+    screenshot: clear.screenshot,
+    duration: parseFloat(clear.duration.toFixed(2)),
+    error: clear.error,
   });
 }
 
 async function finish(isSaveLastScreenshot: boolean): Promise<void> {
   let screenshot: string | undefined;
   if (isSaveLastScreenshot) {
-    screenshot = await core.screenshot(`close-${generateUUID()}`);
+    screenshot = await core.screenshot(generateUUID());
   }
   navigationResults.push({
     action: 'end',

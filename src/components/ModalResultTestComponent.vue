@@ -8,19 +8,42 @@
       <section class="modal-card-body">
         <div class="timeline">
           <header class="timeline-header">
-            <span class="tag is-medium is-primary">Início</span>
+            <span class="tag is-medium is-link is-light">Início</span>
           </header>
           <div v-for="(result, index) in store.navigationResult" :key="index">
             <div class="timeline-item">
-              <div class="timeline-marker is-primary is-icon">
+              <div class="timeline-marker is-link is-icon">
                 <FontAwesomeIcon :icon="getIcon(result.action)" />
               </div>
               <div class="timeline-content">
-                <p class="heading">
+                <p
+                  class="heading"
+                  :class="{
+                    'has-text-danger': result.error,
+                    'has-text-success': !result.error,
+                  }"
+                >
                   {{ result.title }}
-                  <span><FontAwesomeIcon :icon="faCheck" class="has-text-success ml-2" /></span>
+                  <span
+                    ><FontAwesomeIcon
+                      :icon="faXmark"
+                      class="has-text-danger ml-2"
+                      v-if="result.error"
+                    />
+                    <FontAwesomeIcon :icon="faCheck" class="has-text-success ml-2" v-else />
+                  </span>
                 </p>
-                <p v-html="formatBreakLines(result.message)"></p>
+                <p
+                  v-html="
+                    formatBreakLines(
+                      result.error ? `${result.message}\n${result.error}` : result.message
+                    )
+                  "
+                  :class="{
+                    'has-text-danger': result.error,
+                    'has-text-success': !result.error,
+                  }"
+                ></p>
               </div>
               <div class="timeline-content" v-if="result.screenshot">
                 <figure class="image is-128x128">
@@ -41,7 +64,7 @@
             <span class="tag is-warning">{{ totalDuration.toFixed(2) }}s</span>
           </header>
           <header class="timeline-header">
-            <span class="tag is-medium is-primary">Fim</span>
+            <span class="tag is-medium is-link is-light">Fim</span>
           </header>
         </div>
       </section>
@@ -61,6 +84,7 @@ import {
   faHourglassEnd,
   IconDefinition,
   faCheck,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { navigationResultStore as useNavigationResultStore } from '@/store/navigationResultStore';
 import { computed, onMounted, ref } from 'vue';

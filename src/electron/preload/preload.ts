@@ -22,12 +22,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
 });
 
 function listenForResult(): Promise<INavigationResult[]> {
-  return new Promise((resolve, reject) => {
+  return new Promise<INavigationResult[]>(resolve => {
     ipcRenderer.on('execute-run-test-result', (_event, result: INavigationResult[]) => {
       resolve(result);
-    });
-    ipcRenderer.on('execute-run-test-error', (_event, error: Error) => {
-      reject(error);
     });
   });
 }
