@@ -29,23 +29,29 @@ async function saveReport(jsonData: string): Promise<void> {
 }
 
 async function generateDocument(results: INavigationResult[]): Promise<jsPDF> {
+  const doc = createPDF();
+  addTestResults(doc, results);
+  addSummaryInfo(doc, results);
+  addFooter(doc);
+  return doc;
+}
+
+function createPDF(): jsPDF {
+  const doc = new jsPDF();
+  doc.setFontSize(18);
+  doc.text('Resultado dos Testes', 14, 22);
+  doc.setFontSize(11);
+  doc.setTextColor(100);
+  return doc;
+}
+
+function addTestResults(doc: jsPDF, results: INavigationResult[]): void {
   const resultsData = results.map(result => [
     result.title,
     result.message,
     result.duration || '',
     result.error || 'Sim',
   ]);
-  const totalDuration = results.reduce((total, result) => {
-    if (typeof result.duration === 'number') {
-      return total + result.duration;
-    }
-    return total;
-  }, 0);
-  const doc = new jsPDF();
-  doc.setFontSize(18);
-  doc.text('Resultado dos Testes', 14, 22);
-  doc.setFontSize(11);
-  doc.setTextColor(100);
   autoTable(doc, {
     startY: 35,
     headStyles: {
@@ -61,9 +67,39 @@ async function generateDocument(results: INavigationResult[]): Promise<jsPDF> {
       }
     },
   });
+}
+
+function addSummaryInfo(doc: jsPDF, results: INavigationResult[]): void {
+  const totalDuration = results.reduce((total, result) => {
+    if (typeof result.duration === 'number') {
+      return total + result.duration;
+    }
+    return total;
+  }, 0);
   const finalY = (doc as any).lastAutoTable.finalY;
   doc.text(`Tempo total: ${totalDuration.toFixed(2)}s`, 14, finalY + 10);
+  const totalTests = results.length;
+  const totalPassedTests = calculatePassedTests(results);
+  const testsPassedColor = totalPassedTests === totalTests ? 'green' : 'red';
+  doc.setTextColor(testsPassedColor);
+  doc.text(`Total de testes passados: ${totalPassedTests}/${totalTests}`, 14, finalY + 20);
+  doc.setTextColor(100);
   const currentDate = new Date().toLocaleString();
-  doc.text(`A exportação foi gerada em: ${currentDate}`, 14, finalY + 20);
-  return doc;
+  doc.text(`A exportação foi gerada em: ${currentDate}`, 14, finalY + 30);
+}
+
+function calculatePassedTests(results: INavigationResult[]): number {
+  return results.filter(result => result.error === undefined).length;
+}
+
+function addFooter(doc: jsPDF): void {
+  const pageCount = (doc as any).internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setFontSize(10);
+    doc.setPage(i);
+    const pageSize = doc.internal.pageSize;
+    const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+    doc.text(`Página ${i} de ${pageCount}`, 10, pageHeight - 8);
+    doc.text(`Browse Buddy ${new Date().getFullYear()}`, pageSize.width - 40, pageHeight - 8);
+  }
 }

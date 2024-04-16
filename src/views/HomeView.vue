@@ -71,6 +71,14 @@
         @confirm-modal="confirmAction"
         @close-modal="closeConfirmModal"
       />
+      <div class="floating-buttons buttons">
+        <button @click="goToTop" class="button is-medium">
+          <FontAwesomeIcon :icon="faHandPointUp" />
+        </button>
+        <button @click="goToBottom" class="button is-medium">
+          <FontAwesomeIcon :icon="faHandPointDown" />
+        </button>
+      </div>
       <Loading
         v-model:active="isLoading"
         :is-full-page="true"
@@ -95,6 +103,8 @@ import { navigationResultStore as useNavigationResultStore } from '@/store/navig
 import { IRunTest } from '@/electron/interface/IRunTest';
 import ModalConfirmComponent from '@/components/ModalConfirmComponent.vue';
 import i18n from '@/i18n/i18n';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faHandPointUp, faHandPointDown } from '@fortawesome/free-solid-svg-icons';
 
 const isInputFilled = ref(false);
 const runTestStore = useRunTestStore();
@@ -234,6 +244,20 @@ function closeConfirmModal(): void {
 function closeNotifications(): void {
   isNotification.value = false;
 }
+
+function goToTop() {
+  window.scrollTo({ top: 0 });
+}
+
+function goToBottom() {
+  window.scrollTo({ top: document.body.scrollHeight });
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+</style>
