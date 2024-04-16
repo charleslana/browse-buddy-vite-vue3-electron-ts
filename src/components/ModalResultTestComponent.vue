@@ -3,7 +3,10 @@
     <div class="modal-content modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Resultados dos testes</p>
-        <button class="modal-button-close delete" aria-label="close" @click="closeModal"></button>
+        <div class="is-flex is-align-items-center">
+          <button class="button is-dark mr-5" @click="exportReport">Exportar relatório</button>
+          <button class="modal-button-close delete" aria-label="close" @click="closeModal"></button>
+        </div>
       </header>
       <section class="modal-card-body">
         <div class="timeline">
@@ -129,6 +132,10 @@ function getIcon(action: ActionType): IconDefinition {
     default:
       return faRoute;
   }
+}
+
+async function exportReport(): Promise<void> {
+  await window.electronAPI?.saveReport(JSON.stringify(store.navigationResult));
 }
 </script>
 

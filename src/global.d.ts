@@ -21,6 +21,7 @@ declare global {
       deleteSession: () => Promise<void>;
       getLang: () => Promise<SupportedLanguagesType>;
       setLang: (lang: SupportedLanguagesType) => Promise<void>;
+      saveReport: (dataJSON: string) => Promise<string | undefined>;
     };
   }
 }

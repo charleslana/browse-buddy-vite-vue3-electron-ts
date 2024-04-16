@@ -5,6 +5,7 @@ import { getMenu } from './menu';
 import { handleLang } from './lang';
 import { handleOpenTestFile, handleSaveTestToFile } from './dialog';
 import { handleRunTest } from './runTest';
+import { handleSaveReport } from './report';
 import { handleSession } from './session';
 import { handleThemeMode } from './theme';
 import { handleUrlActions } from './url';
@@ -47,6 +48,7 @@ app.whenReady().then(() => {
   handleUrlActions();
   handleSession();
   handleLang();
+  handleSaveReport();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

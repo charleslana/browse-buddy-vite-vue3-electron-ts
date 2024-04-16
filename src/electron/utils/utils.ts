@@ -5,3 +5,8 @@ export function generateUUID() {
     return v.toString(16);
   });
 }
+
+export function generateDateTime() {
+  const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, -5);
+  return timestamp;
+}

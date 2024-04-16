@@ -72,6 +72,8 @@
     "dotenv": "^16.4.5",
     "electron-store": "^8.2.0",
     "floating-vue": "^5.2.2",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "puppeteer": "^22.6.1",
     "vue": "^3.4.21",
     "vue-draggable-next": "^2.2.1",

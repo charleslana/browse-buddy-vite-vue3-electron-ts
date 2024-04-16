@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   deleteSession: (): Promise<void> => ipcRenderer.invoke('session:delete'),
   getLang: (): Promise<SupportedLanguagesType> => ipcRenderer.invoke('lang:get'),
   setLang: (lang: SupportedLanguagesType): Promise<void> => ipcRenderer.invoke('lang:set', lang),
+  saveReport: (dataJSON: string) => ipcRenderer.invoke('dialog:save-report', dataJSON),
 });
 
 function listenForResult(): Promise<INavigationResult[]> {
