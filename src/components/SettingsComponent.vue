@@ -15,7 +15,9 @@
     </label>
     <div
       class="field"
-      v-tooltip="'Defina o tempo de espera por padrão que o teste vai aguardar em milissegundos'"
+      v-tooltip="
+        'Defina o tempo de espera por padrão que o teste vai aguardar em milissegundos (min. 1ms , máx 300000ms)'
+      "
     >
       <div class="control has-floating-label">
         <input
