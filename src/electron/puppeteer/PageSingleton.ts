@@ -14,6 +14,7 @@ export class PageSingleton {
 
   private static instance: PageSingleton;
   private static headless = true;
+  private static defaultTimeout = 15;
 
   private page: Page | null = null;
   private browser: Browser | null = null;
@@ -29,6 +30,10 @@ export class PageSingleton {
     this.headless = headless;
   }
 
+  public static setDefaultTimeout(defaultTimeout: number): void {
+    this.defaultTimeout = defaultTimeout;
+  }
+
   public async getPage(): Promise<Page> {
     if (!this.page) {
       this.browser = await puppeteer.launch({
@@ -40,7 +45,7 @@ export class PageSingleton {
       this.page = await this.browser.newPage();
       const getPages = await this.browser.pages();
       await getPages[0].close();
-      this.page.setDefaultTimeout(Number(process.env.TIMEOUT));
+      this.page.setDefaultTimeout(PageSingleton.defaultTimeout);
       await this.page.setViewport({ width: 1920, height: 1080 });
     }
     return this.page;
@@ -59,8 +64,8 @@ export class PageSingleton {
       process.platform === 'linux'
         ? path.join(process.resourcesPath, 'resources', 'chrome-linux', 'chrome')
         : process.platform === 'win32'
-          ? path.join(process.resourcesPath, 'resources', 'chrome-win', 'chrome.exe')
-          : '';
+        ? path.join(process.resourcesPath, 'resources', 'chrome-win', 'chrome.exe')
+        : '';
     return app.isPackaged ? resourcesPackaged : (process.env.EXEC as string);
   }
 }

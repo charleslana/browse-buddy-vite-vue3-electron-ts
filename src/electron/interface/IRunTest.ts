@@ -6,5 +6,6 @@ export interface IRunTest {
   isSaveLastScreenshot: boolean;
   isSaveEveryScreenshot: boolean;
   isHeadless: boolean;
+  defaultTimeout: number;
   actions: IAction[];
 }

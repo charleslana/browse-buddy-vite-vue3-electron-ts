@@ -11,7 +11,7 @@
     height: 3.75rem;
     transition-duration: 0.2s;
     &:placeholder-shown + .label.is-floating-label {
-      color: rgba($color: #ffffff, $alpha: 0.5);
+      color: rgba($color: #808080, $alpha: 1);
       display: block;
       top: 1.375rem;
       left: 0.75rem;
@@ -27,7 +27,7 @@
       padding-top: 1.5rem;
 
       & + .label.is-floating-label {
-        color: rgba($color: #ffffff, $alpha: 0.5);
+        color: rgba($color: #808080, $alpha: 1);
         top: 0.5rem;
         left: 0.75rem;
         z-index: 11;

@@ -14,6 +14,7 @@ export function handleRunTest(): void {
   ipcMain.handle('execute-run-test', async (event, runTestJSON: string) => {
     const runTest: IRunTest = JSON.parse(runTestJSON);
     PageSingleton.setHeadless(runTest.isHeadless);
+    PageSingleton.setDefaultTimeout(runTest.defaultTimeout);
     const result = await runTestFunction(runTest);
     await core.closeBrowser();
     navigationResults.length = 0;
