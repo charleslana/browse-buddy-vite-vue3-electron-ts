@@ -79,20 +79,22 @@
     <div class="modal-card">
       <section class="modal-card-body">
         <article class="panel is-primary">
-          <p class="panel-heading">Escolha ações</p>
+          <p class="panel-heading">{{ $t('chooseActions') }}</p>
           <p class="panel-tabs">
-            <a :class="{ 'is-active': currentCategory === 'all' }" @click="currentCategory = 'all'"
-              >Todas</a
+            <a
+              :class="{ 'is-active': currentCategory === 'all' }"
+              @click="currentCategory = 'all'"
+              >{{ $t('filterAll') }}</a
             >
             <a
               :class="{ 'is-active': currentCategory === 'click' }"
               @click="currentCategory = 'click'"
-              >Clicar</a
+              >{{ $t('actionClick') }}</a
             >
             <a
               :class="{ 'is-active': currentCategory === 'fill' }"
               @click="currentCategory = 'fill'"
-              >Preencher</a
+              >{{ $t('actionFill') }}</a
             >
           </p>
           <div class="panel-block">
@@ -100,7 +102,7 @@
               <input
                 class="input is-primary"
                 type="text"
-                placeholder="Pesquisar"
+                :placeholder="t('inputSearch')"
                 v-model.trim="searchTerm"
               />
               <span class="icon is-left">
@@ -131,7 +133,7 @@
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button" @click="closeModal">Cancelar</button>
+          <button class="button" @click="closeModal">{{ $t('cancelButton') }}</button>
         </div>
       </footer>
     </div>
@@ -205,6 +207,7 @@ import ModalFillComponent from '@/components/ModalFillComponent.vue';
 import ModalTypeComponent from '@/components/ModalTypeComponent.vue';
 import ModalClearComponent from '@/components/ModalClearComponent.vue';
 import { generateUUID } from '@/electron/utils/utils';
+import i18n from '@/i18n/i18n';
 
 defineProps({
   disabled: {
@@ -234,25 +237,29 @@ const clearMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const isConfirmModalActive = ref(false);
 const actionIdToDelete = ref<string>('');
+const t = i18n.global.t;
 
-const actions: IBoxAction[] = [
-  {
-    label: 'Esperar e Clicar',
-    icons: [faClock, faComputerMouse],
-    category: 'click',
-    type: 'wait-click',
-  },
-  { label: 'Clicar', icons: [faComputerMouse], category: 'click', type: 'click' },
-  {
-    label: 'Preencher',
-    icons: [faFill],
-    category: 'fill',
-    type: 'fill',
-    tooltip: 'Preenche o valor do campo ao invés de digitar',
-  },
-  { label: 'Digitar', icons: [faKeyboard], category: 'fill', type: 'type' },
-  { label: 'Limpar', icons: [faEraser], category: 'fill', type: 'clear' },
-];
+const actions = computed<IBoxAction[]>(() => {
+  const translatedActions: IBoxAction[] = [
+    {
+      label: t('actionWaitClick'),
+      icons: [faClock, faComputerMouse],
+      category: 'click',
+      type: 'wait-click',
+    },
+    { label: t('actionClick'), icons: [faComputerMouse], category: 'click', type: 'click' },
+    {
+      label: t('actionFill'),
+      icons: [faFill],
+      category: 'fill',
+      type: 'fill',
+      tooltip: t('fillTooltip'),
+    },
+    { label: t('actionType'), icons: [faKeyboard], category: 'fill', type: 'type' },
+    { label: t('actionClear'), icons: [faEraser], category: 'fill', type: 'clear' },
+  ];
+  return translatedActions;
+});
 
 function openModal(): void {
   waitClickMode.value = undefined;
@@ -269,7 +276,7 @@ function closeModal(): void {
 }
 
 const filteredActions = computed(() => {
-  return actions.filter(action => {
+  return actions.value.filter(action => {
     if (currentCategory.value !== 'all' && action.category !== currentCategory.value) {
       return false;
     }
