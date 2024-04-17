@@ -65,7 +65,7 @@
           </div>
         </nav>
       </div>
-      <SettingsComponent />
+      <SettingsComponent :is-skeleton="isSkeleton" />
       <ModalConfirmComponent
         v-if="isConfirmModalActive"
         @confirm-modal="confirmAction"
@@ -215,7 +215,7 @@ async function openFile(): Promise<void> {
   if (file) {
     const runTest: IRunTest = JSON.parse(file);
     runTestStore.saveRunTest(runTest);
-    closeNotifications();
+    closeNotification();
   }
 }
 
@@ -224,7 +224,7 @@ async function saveFile(): Promise<void> {
 }
 
 async function confirmAction(): Promise<void> {
-  closeNotifications();
+  closeNotification();
   isConfirmModalActive.value = false;
   runTestStore.saveRunTest({
     name: t('inputTestName'),
@@ -232,6 +232,7 @@ async function confirmAction(): Promise<void> {
     isSaveLastScreenshot: true,
     isSaveEveryScreenshot: true,
     isHeadless: true,
+    defaultTimeout: 15000,
     actions: [],
   });
   await window.electronAPI?.deleteSession();
@@ -241,7 +242,7 @@ function closeConfirmModal(): void {
   isConfirmModalActive.value = false;
 }
 
-function closeNotifications(): void {
+function closeNotification(): void {
   isNotification.value = false;
 }
 

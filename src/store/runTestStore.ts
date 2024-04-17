@@ -10,6 +10,7 @@ export const runTestStore = defineStore('runTest', {
       isSaveLastScreenshot: true,
       isSaveEveryScreenshot: true,
       isHeadless: true,
+      defaultTimeout: 15000,
       actions: [],
     },
   }),
@@ -63,6 +64,9 @@ export const runTestStore = defineStore('runTest', {
             : true;
         this.runTest.actions[index].isVisible = !isVisible;
       }
+    },
+    setDefaultTimeout(defaultTimeout: number): void {
+      this.runTest.defaultTimeout = defaultTimeout;
     },
   },
 });
