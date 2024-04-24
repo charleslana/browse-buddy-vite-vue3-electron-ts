@@ -54,7 +54,8 @@ export class Core {
     let duration = 0;
     let error: string | undefined;
     try {
-      error = await this.waitForVisible(selector);
+      const result = await this.waitForVisible(selector, id, saveScreenshot);
+      error = result.error;
       await this.getPage().click(selector);
       logger.info(`Sucesso ao aguardar e clicar no elemento com seletor ${selector}`);
     } catch (e) {
@@ -176,16 +177,28 @@ export class Core {
     }
   }
 
-  public async waitForVisible(selector: string): Promise<string | undefined> {
+  public async waitForVisible(
+    selector: string,
+    id: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
     logger.warn(`Tentando aguardar elemento visível com seletor ${selector} ...`);
+    let screenshot: string | undefined;
+    const startTime = Date.now();
+    let duration = 0;
     let error: string | undefined;
     try {
       await this.getPage().waitForSelector(selector, { visible: true });
+      logger.info(`Sucesso ao esperar o seletor ${selector} visível`);
     } catch (e) {
       error = `Erro ao aguardar elemento visível com seletor ${selector}\n`;
       logger.error(`Erro ao aguardar elemento visível com seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
-    return error;
+    return { screenshot, duration, error };
   }
 
   public async waitForNotVisible(selector: string): Promise<ElementHandle<Element> | null> {
