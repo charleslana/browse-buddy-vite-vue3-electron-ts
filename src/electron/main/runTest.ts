@@ -63,6 +63,9 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
       case 'wait-visible':
         await handleWaitVisible(action, isSaveEveryScreenshot);
         break;
+      case 'wait-hidden':
+        await handleWaitHidden(action, isSaveEveryScreenshot);
+        break;
       default:
         break;
     }
@@ -140,7 +143,20 @@ async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolea
   navigationResults.push({
     action: 'wait-visible',
     title: 'Esperar visibilidade',
-    message: `Esperar o texto com o elemento: ${element}`,
+    message: `Esperar o elemento visível: ${element}`,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
+  });
+}
+
+async function handleWaitHidden(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const executionResult = await core.waitForHidden(element, action.id, isSaveEveryScreenshot);
+  navigationResults.push({
+    action: 'wait-hidden',
+    title: 'Esperar ocultar',
+    message: `Esperar o elemento oculto: ${element}`,
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,

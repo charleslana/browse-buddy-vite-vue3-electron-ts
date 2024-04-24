@@ -6,4 +6,5 @@ export type ActionType =
   | 'type'
   | 'end'
   | 'clear'
-  | 'wait-visible';
+  | 'wait-visible'
+  | 'wait-hidden';

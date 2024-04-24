@@ -179,6 +179,12 @@
     @save-action="handleWaitVisibleSaveAction"
     v-if="waitVisibleIsActive"
   />
+  <ModalWaitHiddenComponent
+    :action="waitHiddenMode"
+    @close-modal="handleWaitHiddenCloseModal"
+    @save-action="handleWaitHiddenSaveAction"
+    v-if="waitHiddenIsActive"
+  />
   <ModalConfirmComponent
     v-if="isConfirmModalActive"
     @confirm-modal="confirmDeleteAction"
@@ -220,6 +226,7 @@ import ModalClearComponent from '@/components/ModalClearComponent.vue';
 import { generateUUID } from '@/electron/utils/utils';
 import i18n from '@/i18n/i18n';
 import ModalWaitVisibleComponent from '@/components/ModalWaitVisibleComponent.vue';
+import ModalWaitHiddenComponent from '@/components/ModalWaitHiddenComponent.vue';
 
 defineProps({
   disabled: {
@@ -243,11 +250,13 @@ const fillIsActive = ref(false);
 const typeIsActive = ref(false);
 const clearIsActive = ref(false);
 const waitVisibleIsActive = ref(false);
+const waitHiddenIsActive = ref(false);
 const clickMode = ref<IAction | undefined>(undefined);
 const fillMode = ref<IAction | undefined>(undefined);
 const typeMode = ref<IAction | undefined>(undefined);
 const clearMode = ref<IAction | undefined>(undefined);
 const waitVisibleMode = ref<IAction | undefined>(undefined);
+const waitHiddenMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const isConfirmModalActive = ref(false);
 const actionIdToDelete = ref<string>('');
@@ -272,6 +281,14 @@ const actions = computed<IBoxAction[]>(() => {
     { label: t('actionType'), icons: [faKeyboard], category: 'fill', type: 'type' },
     { label: t('actionClear'), icons: [faEraser], category: 'fill', type: 'clear' },
     { label: 'Esperar visibilidade', icons: [faEye], category: 'wait', type: 'wait-visible' },
+    {
+      label: 'Esperar ocultar',
+      icons: [faEyeSlash],
+      category: 'wait',
+      type: 'wait-hidden',
+      tooltip:
+        'Aguarde até que o elemento não esteja presente no DOM (documento) ou com display none',
+    },
   ];
   return translatedActions;
 });
@@ -281,6 +298,9 @@ function openModal(): void {
   clickMode.value = undefined;
   fillMode.value = undefined;
   typeMode.value = undefined;
+  clearMode.value = undefined;
+  waitVisibleMode.value = undefined;
+  waitHiddenMode.value = undefined;
   isActive.value = true;
 }
 
@@ -322,6 +342,9 @@ function handleActionClick(action: IBoxAction): void {
     case 'wait-visible':
       waitVisibleIsActive.value = true;
       break;
+    case 'wait-hidden':
+      waitHiddenIsActive.value = true;
+      break;
     default:
       break;
   }
@@ -341,6 +364,8 @@ function getTitleBoxAction(action: ActionBoxType): string {
       return 'Limpar';
     case 'wait-visible':
       return 'Esperar visibilidade';
+    case 'wait-hidden':
+      return 'Esperar ocultar';
     default:
       return '';
   }
@@ -365,6 +390,9 @@ function handleActionUpdate(action: IAction): void {
       break;
     case 'wait-visible':
       updateWaitVisibleAction(action);
+      break;
+    case 'wait-hidden':
+      updateWaitHiddenAction(action);
       break;
     default:
       break;
@@ -453,6 +481,20 @@ function handleWaitVisibleSaveAction(): void {
 function updateWaitVisibleAction(action: IAction): void {
   waitVisibleMode.value = action;
   waitVisibleIsActive.value = true;
+}
+
+function handleWaitHiddenCloseModal(): void {
+  waitHiddenIsActive.value = false;
+}
+
+function handleWaitHiddenSaveAction(): void {
+  waitHiddenIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateWaitHiddenAction(action: IAction): void {
+  waitHiddenMode.value = action;
+  waitHiddenIsActive.value = true;
 }
 
 function toggleCard(actionId: string): void {
