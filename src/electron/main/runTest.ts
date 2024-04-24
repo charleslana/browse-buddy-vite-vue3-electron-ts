@@ -31,14 +31,14 @@ async function runTestFunction(runTest: IRunTest): Promise<INavigationResult[]> 
 }
 
 async function navigate(runTest: IRunTest) {
-  const navigate = await core.navigate(runTest.url, runTest.isSaveEveryScreenshot);
+  const executionResult = await core.navigate(runTest.url, runTest.isSaveEveryScreenshot);
   navigationResults.push({
     action: 'navigate',
     title: 'Navegar para',
     message: `Navegação para url: ${runTest.url}`,
-    screenshot: navigate.screenshot,
-    duration: parseFloat(navigate.duration.toFixed(2)),
-    error: navigate.error,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
   });
 }
 
@@ -60,6 +60,9 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
       case 'clear':
         await handleClear(action, isSaveEveryScreenshot);
         break;
+      case 'wait-visible':
+        await handleWaitVisible(action, isSaveEveryScreenshot);
+        break;
       default:
         break;
     }
@@ -68,66 +71,79 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
 
 async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
   const element = `${action.elementType}${action.element}`;
-  const waitForClick = await core.waitForClick(element, action.id, isSaveEveryScreenshot);
+  const executionResult = await core.waitForClick(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-click',
     title: 'Esperar e Clicar',
     message: `Aguardar e clicar no elemento: ${element}`,
-    screenshot: waitForClick.screenshot,
-    duration: parseFloat(waitForClick.duration.toFixed(2)),
-    error: waitForClick.error,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
   });
 }
 
 async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
   const element = `${action.elementType}${action.element}`;
-  const click = await core.click(element, action.id, isSaveEveryScreenshot);
+  const executionResult = await core.click(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'click',
     title: 'Clicar',
     message: `Clicar no elemento: ${element}`,
-    screenshot: click.screenshot,
-    duration: parseFloat(click.duration.toFixed(2)),
-    error: click.error,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
   });
 }
 
 async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
   const element = `${action.elementType}${action.element}`;
-  const fill = await core.fill(element, action.text!, action.id, isSaveEveryScreenshot);
+  const executionResult = await core.fill(element, action.text!, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'fill',
     title: 'Preencher',
     message: `Preencher o texto: ${action.text}\nCom o elemento: ${element}`,
-    screenshot: fill.screenshot,
-    duration: parseFloat(fill.duration.toFixed(2)),
-    error: fill.error,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
   });
 }
 
 async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
   const element = `${action.elementType}${action.element}`;
-  const type = await core.type(element, action.text!, action.id, isSaveEveryScreenshot);
+  const executionResult = await core.type(element, action.text!, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'type',
     title: 'Digitar',
     message: `Digitar o texto: ${action.text}\nCom o elemento: ${element}`,
-    screenshot: type.screenshot,
-    duration: parseFloat(type.duration.toFixed(2)),
-    error: type.error,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
   });
 }
 
 async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
   const element = `${action.elementType}${action.element}`;
-  const clear = await core.clear(element, action.id, isSaveEveryScreenshot);
+  const executionResult = await core.clear(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'clear',
     title: 'Limpar',
     message: `Limpar o texto com o elemento: ${element}`,
-    screenshot: clear.screenshot,
-    duration: parseFloat(clear.duration.toFixed(2)),
-    error: clear.error,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
+  });
+}
+
+async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const executionResult = await core.waitForVisible(element, action.id, isSaveEveryScreenshot);
+  navigationResults.push({
+    action: 'wait-visible',
+    title: 'Esperar visibilidade',
+    message: `Esperar o texto com o elemento: ${element}`,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
   });
 }
 

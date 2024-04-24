@@ -96,6 +96,11 @@
               @click="currentCategory = 'fill'"
               >{{ $t('actionFill') }}</a
             >
+            <a
+              :class="{ 'is-active': currentCategory === 'wait' }"
+              @click="currentCategory = 'wait'"
+              >Esperar</a
+            >
           </p>
           <div class="panel-block">
             <p class="control has-icons-left">
@@ -168,6 +173,12 @@
     @save-action="handleClearSaveAction"
     v-if="clearIsActive"
   />
+  <ModalWaitVisibleComponent
+    :action="waitVisibleMode"
+    @close-modal="handleWaitVisibleCloseModal"
+    @save-action="handleWaitVisibleSaveAction"
+    v-if="waitVisibleIsActive"
+  />
   <ModalConfirmComponent
     v-if="isConfirmModalActive"
     @confirm-modal="confirmDeleteAction"
@@ -208,6 +219,7 @@ import ModalTypeComponent from '@/components/ModalTypeComponent.vue';
 import ModalClearComponent from '@/components/ModalClearComponent.vue';
 import { generateUUID } from '@/electron/utils/utils';
 import i18n from '@/i18n/i18n';
+import ModalWaitVisibleComponent from '@/components/ModalWaitVisibleComponent.vue';
 
 defineProps({
   disabled: {
@@ -230,10 +242,12 @@ const clickIsActive = ref(false);
 const fillIsActive = ref(false);
 const typeIsActive = ref(false);
 const clearIsActive = ref(false);
+const waitVisibleIsActive = ref(false);
 const clickMode = ref<IAction | undefined>(undefined);
 const fillMode = ref<IAction | undefined>(undefined);
 const typeMode = ref<IAction | undefined>(undefined);
 const clearMode = ref<IAction | undefined>(undefined);
+const waitVisibleMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const isConfirmModalActive = ref(false);
 const actionIdToDelete = ref<string>('');
@@ -257,6 +271,7 @@ const actions = computed<IBoxAction[]>(() => {
     },
     { label: t('actionType'), icons: [faKeyboard], category: 'fill', type: 'type' },
     { label: t('actionClear'), icons: [faEraser], category: 'fill', type: 'clear' },
+    { label: 'Esperar visibilidade', icons: [faEye], category: 'wait', type: 'wait-visible' },
   ];
   return translatedActions;
 });
@@ -304,6 +319,9 @@ function handleActionClick(action: IBoxAction): void {
     case 'clear':
       clearIsActive.value = true;
       break;
+    case 'wait-visible':
+      waitVisibleIsActive.value = true;
+      break;
     default:
       break;
   }
@@ -321,6 +339,8 @@ function getTitleBoxAction(action: ActionBoxType): string {
       return 'Digitar';
     case 'clear':
       return 'Limpar';
+    case 'wait-visible':
+      return 'Esperar visibilidade';
     default:
       return '';
   }
@@ -342,6 +362,9 @@ function handleActionUpdate(action: IAction): void {
       break;
     case 'clear':
       updateClearAction(action);
+      break;
+    case 'wait-visible':
+      updateWaitVisibleAction(action);
       break;
     default:
       break;
@@ -416,6 +439,20 @@ function handleClearSaveAction(): void {
 function updateClearAction(action: IAction): void {
   clearMode.value = action;
   clearIsActive.value = true;
+}
+
+function handleWaitVisibleCloseModal(): void {
+  waitVisibleIsActive.value = false;
+}
+
+function handleWaitVisibleSaveAction(): void {
+  waitVisibleIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateWaitVisibleAction(action: IAction): void {
+  waitVisibleMode.value = action;
+  waitVisibleIsActive.value = true;
 }
 
 function toggleCard(actionId: string): void {

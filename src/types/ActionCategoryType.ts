@@ -1,1 +1,1 @@
-export type ActionCategoryType = 'all' | 'click' | 'fill';
+export type ActionCategoryType = 'all' | 'click' | 'fill' | 'wait';
