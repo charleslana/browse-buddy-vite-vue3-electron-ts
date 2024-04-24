@@ -201,22 +201,28 @@ export class Core {
     return { screenshot, duration, error };
   }
 
-  public async waitForNotVisible(selector: string): Promise<ElementHandle<Element> | null> {
+  public async waitForHidden(
+    selector: string,
+    id: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
+    logger.warn(`Tentando aguardar elemento oculto com seletor ${selector} ...`);
+    let screenshot: string | undefined;
+    const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
-      return await this.getPage().waitForSelector(selector, { visible: false });
-    } catch (error) {
-      throw new CoreError(
-        `Erro ao aguardar elemento não visível com seletor ${selector}: ${error}`
-      );
+      await this.getPage().waitForSelector(selector, { hidden: true });
+      logger.info(`Sucesso ao esperar o seletor ${selector} oculto`);
+    } catch (e) {
+      error = `Erro ao aguardar elemento oculto com seletor ${selector}`;
+      logger.error(`Erro ao aguardar elemento oculto com seletor ${selector}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
-  }
-
-  public async waitForHidden(selector: string): Promise<ElementHandle<Element> | null> {
-    try {
-      return await this.getPage().waitForSelector(selector, { hidden: true });
-    } catch (error) {
-      throw new CoreError(`Erro ao aguardar elemento oculto com seletor ${selector}: ${error}`);
-    }
+    return { screenshot, duration, error };
   }
 
   public async sleep(ms: number): Promise<void> {
