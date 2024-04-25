@@ -5,4 +5,5 @@ export type ActionBoxType =
   | 'type'
   | 'clear'
   | 'wait-visible'
-  | 'wait-hidden';
+  | 'wait-hidden'
+  | 'click-wait-response';

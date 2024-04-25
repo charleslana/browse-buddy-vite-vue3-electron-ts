@@ -225,31 +225,34 @@ export class Core {
     return { screenshot, duration, error };
   }
 
-  public async sleep(ms: number): Promise<void> {
+  public async clickWaitForResponse(
+    selector: string,
+    urlPattern: string,
+    id: string,
+    saveScreenshot?: boolean
+  ): Promise<IExecutionResult> {
+    logger.warn(`Tentando aguardar a resposta com a url ${urlPattern} ...`);
+    let screenshot: string | undefined;
+    const startTime = Date.now();
+    let duration = 0;
+    let error: string | undefined;
     try {
-      await new Promise(resolve => setTimeout(resolve, ms));
-    } catch (error) {
-      throw new CoreError(`Erro ao aguardar ${ms} milissegundos: ${error}`);
-    }
-  }
-
-  public async waitForRequest(url: string): Promise<boolean | undefined> {
-    try {
-      const finalRequest = await this.getPage().waitForRequest(request =>
-        request.url().includes(url)
+      const regexPattern = new RegExp(urlPattern.replace(/\*\*/g, '.*?'));
+      const finalResponsePromise = this.getPage().waitForResponse(response =>
+        regexPattern.test(response.url())
       );
-      return finalRequest.response()?.ok();
-    } catch (error) {
-      throw new CoreError(`Erro ao aguardar requisição URL: ${url}, ${error}`);
+      await this.click(selector, id, saveScreenshot);
+      const finalResponse = await finalResponsePromise;
+      logger.info(`Sucesso aguardar a resposta com a url ${urlPattern}: ${finalResponse.ok()}`);
+    } catch (e) {
+      error = `Erro ao aguardar a resposta com a url ${urlPattern}`;
+      logger.error(`Erro ao aguardar a resposta com a url ${urlPattern}: ${e}`);
+    } finally {
+      screenshot = await this.saveScreenshot(id, saveScreenshot);
+      const endTime = Date.now();
+      duration = (endTime - startTime) / 1000;
     }
-  }
-
-  public async findElements(selector: string): Promise<ElementHandle<Element>[]> {
-    try {
-      return await this.getPage().$$(selector);
-    } catch (error) {
-      throw new CoreError(`Erro ao encontrar elementos com seletor ${selector}: ${error}`);
-    }
+    return { screenshot, duration, error };
   }
 
   public async screenshot(name: string): Promise<string> {
@@ -306,5 +309,21 @@ export class Core {
 
   private bufferToBase64(buffer: Buffer): string {
     return buffer.toString('base64');
+  }
+
+  private async findElements(selector: string): Promise<ElementHandle<Element>[]> {
+    try {
+      return await this.getPage().$$(selector);
+    } catch (error) {
+      throw new CoreError(`Erro ao encontrar elementos com seletor ${selector}: ${error}`);
+    }
+  }
+
+  private async sleep(ms: number): Promise<void> {
+    try {
+      await new Promise(resolve => setTimeout(resolve, ms));
+    } catch (error) {
+      throw new CoreError(`Erro ao aguardar ${ms} milissegundos: ${error}`);
+    }
   }
 }

@@ -4,8 +4,8 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
-          <span class="mr-4"><FontAwesomeIcon :icon="faEye" /></span>
-          <span>Esperar visibilidade</span>
+          <span class="mr-4"><FontAwesomeIcon :icon="faReply" /></span>
+          <span>Esperar resposta com clique</span>
         </p>
         <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
@@ -28,13 +28,17 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">O texto do seletor do elemento</label>
+          <label class="label">O texto do seletor do elemento do clique</label>
           <input
             class="input is-medium"
             type="text"
             placeholder="elemento"
             v-model.trim="elementText"
           />
+        </div>
+        <div class="field">
+          <label class="label">URL (pode usar expressão regular exemplo: **/api/**/filter)</label>
+          <input class="input is-medium" type="text" placeholder="url" v-model.trim="url" />
         </div>
       </section>
       <footer class="modal-card-foot">
@@ -53,15 +57,16 @@
 import { computed, onMounted, ref } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 import { IAction } from '@/electron/interface/IAction';
-import { SelectOptionType } from '@/electron/types/SelectOptionType';
 import { generateUUID } from '@/electron/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faClock, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faReply } from '@fortawesome/free-solid-svg-icons';
+import { SelectOptionType } from '@/electron/types/SelectOptionType';
 
 onMounted(() => {
   if (props.action) {
     selectedType.value = props.action.elementType;
     elementText.value = props.action.element;
+    url.value = props.action.text!;
   }
 });
 
@@ -75,6 +80,7 @@ const emit = defineEmits(['close-modal', 'save-action']);
 
 const selectedType = ref<SelectOptionType | undefined>('#');
 const elementText = ref<string | undefined>('');
+const url = ref<string>('');
 const store = useRunTestStore();
 
 const selectOptions: { value: SelectOptionType; text: string }[] = [
@@ -84,7 +90,7 @@ const selectOptions: { value: SelectOptionType; text: string }[] = [
 ];
 
 const isSaveButtonDisabled = computed(() => {
-  return elementText.value === '';
+  return url.value === '';
 });
 
 function closeModal(): void {
@@ -99,14 +105,16 @@ function saveAction(): void {
       action: props.action.action,
       elementType: selectedType.value,
       element: elementText.value,
+      text: url.value,
     });
     return;
   }
   store.addAction({
     id: generateUUID(),
-    action: 'wait-visible',
+    action: 'click-wait-response',
     elementType: selectedType.value,
     element: elementText.value,
+    text: url.value,
   });
 }
 </script>

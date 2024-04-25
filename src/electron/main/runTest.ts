@@ -66,6 +66,9 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
       case 'wait-hidden':
         await handleWaitHidden(action, isSaveEveryScreenshot);
         break;
+      case 'click-wait-response':
+        await handleClickWaitResponse(action, isSaveEveryScreenshot);
+        break;
       default:
         break;
     }
@@ -157,6 +160,28 @@ async function handleWaitHidden(action: IAction, isSaveEveryScreenshot?: boolean
     action: 'wait-hidden',
     title: 'Esperar ocultar',
     message: `Esperar o elemento oculto: ${element}`,
+    screenshot: executionResult.screenshot,
+    duration: parseFloat(executionResult.duration.toFixed(2)),
+    error: executionResult.error,
+  });
+}
+
+async function handleClickWaitResponse(
+  action: IAction,
+  isSaveEveryScreenshot?: boolean
+): Promise<void> {
+  const element = `${action.elementType}${action.element}`;
+  const urlPattern = `${action.text}`;
+  const executionResult = await core.clickWaitForResponse(
+    element,
+    urlPattern,
+    action.id,
+    isSaveEveryScreenshot
+  );
+  navigationResults.push({
+    action: 'click-wait-response',
+    title: 'Esperar resposta com clique',
+    message: `Clicar no elemento: ${element} e esperar a resposta com a url: ${urlPattern}`,
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,

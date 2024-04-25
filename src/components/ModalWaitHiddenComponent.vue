@@ -14,7 +14,7 @@
           <FontAwesomeIcon :icon="faClock" />
           <template #popper>
             <span class="is-block">Este ícone indica:</span>
-            <span>Que está ação vai aguardar automaticamente o elemento ocultar</span>
+            <span>Aguardar automaticamente a ação</span>
           </template>
         </VTooltip>
         <div class="field">
@@ -73,8 +73,8 @@ const props = defineProps({
 
 const emit = defineEmits(['close-modal', 'save-action']);
 
-const selectedType = ref<SelectOptionType>('#');
-const elementText = ref<string>('');
+const selectedType = ref<SelectOptionType | undefined>('#');
+const elementText = ref<string | undefined>('');
 const store = useRunTestStore();
 
 const selectOptions: { value: SelectOptionType; text: string }[] = [
