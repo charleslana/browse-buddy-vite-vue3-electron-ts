@@ -45,7 +45,7 @@
               </div>
             </header>
             <div class="card-content" :class="{ 'is-hidden': !isCardVisible(action.isVisible) }">
-              <div class="content break-words">
+              <div class="content break-words" v-if="action.elementType && action.element">
                 {{ `${action.elementType}${action.element}` }}
               </div>
               <div class="content break-words" v-if="action.text">
@@ -185,6 +185,12 @@
     @save-action="handleWaitHiddenSaveAction"
     v-if="waitHiddenIsActive"
   />
+  <ModalClickWaitResponseComponent
+    :action="clickWaitResponseMode"
+    @close-modal="handleClickWaitResponseCloseModal"
+    @save-action="handleClickWaitResponseSaveAction"
+    v-if="clickWaitResponseIsActive"
+  />
   <ModalConfirmComponent
     v-if="isConfirmModalActive"
     @confirm-modal="confirmDeleteAction"
@@ -209,6 +215,7 @@ import {
   faCopy,
   faEye,
   faEyeSlash,
+  faReply,
 } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 import IBoxAction from '@/interface/IBoxAction';
@@ -227,6 +234,7 @@ import { generateUUID } from '@/electron/utils/utils';
 import i18n from '@/i18n/i18n';
 import ModalWaitVisibleComponent from '@/components/ModalWaitVisibleComponent.vue';
 import ModalWaitHiddenComponent from '@/components/ModalWaitHiddenComponent.vue';
+import ModalClickWaitResponseComponent from '@/components/ModalClickWaitResponseComponent.vue';
 
 defineProps({
   disabled: {
@@ -251,12 +259,14 @@ const typeIsActive = ref(false);
 const clearIsActive = ref(false);
 const waitVisibleIsActive = ref(false);
 const waitHiddenIsActive = ref(false);
+const clickWaitResponseIsActive = ref(false);
 const clickMode = ref<IAction | undefined>(undefined);
 const fillMode = ref<IAction | undefined>(undefined);
 const typeMode = ref<IAction | undefined>(undefined);
 const clearMode = ref<IAction | undefined>(undefined);
 const waitVisibleMode = ref<IAction | undefined>(undefined);
 const waitHiddenMode = ref<IAction | undefined>(undefined);
+const clickWaitResponseMode = ref<IAction | undefined>(undefined);
 const store = useRunTestStore();
 const isConfirmModalActive = ref(false);
 const actionIdToDelete = ref<string>('');
@@ -289,6 +299,12 @@ const actions = computed<IBoxAction[]>(() => {
       tooltip:
         'Aguarde até que o elemento não esteja presente no DOM (documento) ou com display none',
     },
+    {
+      label: 'Esperar resposta por clique',
+      icons: [faReply],
+      category: 'wait',
+      type: 'click-wait-response',
+    },
   ];
   return translatedActions;
 });
@@ -301,6 +317,7 @@ function openModal(): void {
   clearMode.value = undefined;
   waitVisibleMode.value = undefined;
   waitHiddenMode.value = undefined;
+  clickWaitResponseMode.value = undefined;
   isActive.value = true;
 }
 
@@ -345,6 +362,9 @@ function handleActionClick(action: IBoxAction): void {
     case 'wait-hidden':
       waitHiddenIsActive.value = true;
       break;
+    case 'click-wait-response':
+      clickWaitResponseIsActive.value = true;
+      break;
     default:
       break;
   }
@@ -366,6 +386,8 @@ function getTitleBoxAction(action: ActionBoxType): string {
       return 'Esperar visibilidade';
     case 'wait-hidden':
       return 'Esperar ocultar';
+    case 'click-wait-response':
+      return 'Esperar resposta por clique';
     default:
       return '';
   }
@@ -393,6 +415,9 @@ function handleActionUpdate(action: IAction): void {
       break;
     case 'wait-hidden':
       updateWaitHiddenAction(action);
+      break;
+    case 'click-wait-response':
+      updateClickWaitResponseAction(action);
       break;
     default:
       break;
@@ -495,6 +520,20 @@ function handleWaitHiddenSaveAction(): void {
 function updateWaitHiddenAction(action: IAction): void {
   waitHiddenMode.value = action;
   waitHiddenIsActive.value = true;
+}
+
+function handleClickWaitResponseCloseModal(): void {
+  clickWaitResponseIsActive.value = false;
+}
+
+function handleClickWaitResponseSaveAction(): void {
+  clickWaitResponseIsActive.value = false;
+  isActive.value = false;
+}
+
+function updateClickWaitResponseAction(action: IAction): void {
+  clickWaitResponseMode.value = action;
+  clickWaitResponseIsActive.value = true;
 }
 
 function toggleCard(actionId: string): void {

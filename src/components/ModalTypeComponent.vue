@@ -71,8 +71,8 @@ const props = defineProps({
 
 const emit = defineEmits(['close-modal', 'save-action']);
 
-const selectedType = ref<SelectOptionType>('#');
-const elementText = ref<string>('');
+const selectedType = ref<SelectOptionType | undefined>('#');
+const elementText = ref<string | undefined>('');
 const text = ref<string>('');
 const store = useRunTestStore();
 
