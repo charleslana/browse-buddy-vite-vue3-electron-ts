@@ -1,8 +1,9 @@
 <template>
   <nav class="navbar is-fixed-top mb-5" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <span class="navbar-item">
+      <span class="navbar-item is-align-items-end">
         <img :src="images.logo" alt="logo image" />
+        <p class="logo is-size-4 ml-2">Browse Buddy</p>
       </span>
       <a
         role="button"
@@ -19,43 +20,17 @@
       </a>
     </div>
     <div class="navbar-menu" :class="{ 'is-active': isMenuOpen }">
-      <div class="navbar-start">
+      <div class="navbar-end">
         <div class="navbar-item is-hoverable">
-          <button class="button">
-            <span class="icon is-small">
-              <FontAwesomeIcon :icon="faMoon" />
-            </span>
-            <span>{{ $t('themes') }}</span>
-          </button>
-          <div class="navbar-dropdown">
-            <a class="navbar-item theme-button">
-              <button class="button" @click="changeTheme('dark')">
-                <span class="icon is-small">
-                  <FontAwesomeIcon :icon="faMoon" />
-                </span>
-                <span>{{ $t('darkTheme') }}</span>
-              </button>
-            </a>
-            <a class="navbar-item theme-button">
-              <button class="button" @click="changeTheme('light')">
-                <span class="icon is-small">
-                  <FontAwesomeIcon :icon="faSun" />
-                </span>
-                <span>{{ $t('lightTheme') }}</span>
-              </button>
-            </a>
-            <a class="navbar-item theme-button">
-              <button class="button" @click="changeTheme('system')">
-                <span class="icon is-small">
-                  <FontAwesomeIcon :icon="faWindowMaximize" />
-                </span>
-                <span>{{ $t('systemTheme') }}</span>
-              </button>
-            </a>
+          <div class="navbar-item has-dropdown">
+            <a class="navbar-link">{{ $t('themes') }}</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" @click="changeTheme('dark')">{{ $t('darkTheme') }}</a>
+              <a class="navbar-item" @click="changeTheme('light')">{{ $t('lightTheme') }}</a>
+              <a class="navbar-item" @click="changeTheme('system')">{{ $t('systemTheme') }}</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="navbar-end">
         <div class="navbar-item is-hoverable">
           <div class="navbar-item has-dropdown">
             <a class="navbar-link">{{ $t('languages') }}</a>
@@ -73,8 +48,6 @@
 
 <script lang="ts" setup>
 import images from '@/data/imageData';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faMoon, faSun, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import { ThemeModeType } from '@/electron/types/ThemeModeType';
 import { onMounted, ref } from 'vue';
 import i18n from '@/i18n/i18n';
@@ -103,4 +76,8 @@ async function changeLanguage(lang: SupportedLanguagesType): Promise<void> {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.logo {
+  line-height: 0.6;
+}
+</style>

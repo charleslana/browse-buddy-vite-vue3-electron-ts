@@ -166,8 +166,12 @@ function closeModal(): void {
 }
 
 function isValidUrl(url: string): boolean {
-  const pattern = new RegExp('^(https?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?$');
-  return pattern.test(url);
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 function checkInput(): void {

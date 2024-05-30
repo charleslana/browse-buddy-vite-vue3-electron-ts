@@ -1,12 +1,13 @@
 import { ActionBoxType } from '../types/ActionBoxType';
-import { SelectOptionType } from '../types/SelectOptionType';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { IInput } from './IInput';
 
 export interface IAction {
   id: string;
-  action: ActionBoxType;
-  elementType?: SelectOptionType;
-  element?: string;
-  text?: string;
+  title?: string;
+  icons: IconDefinition[];
+  type: ActionBoxType;
+  inputs: IInput[];
   disabled?: boolean;
   isVisible?: boolean;
 }
