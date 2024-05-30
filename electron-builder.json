@@ -17,7 +17,7 @@
       }
     ],
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
-    "icon": "src/assets/images/icon-256x256.ico",
+    "icon": "src/assets/images/icon64x.ico",
     "extraResources": [
       {
         "from": "resources/chrome-win",
@@ -38,7 +38,7 @@
   "linux": {
     "target": ["AppImage"],
     "artifactName": "${productName}-Linux-${version}.${ext}",
-    "icon": "src/assets/images/icon-256x256.png",
+    "icon": "src/assets/images/icon256x.png",
     "extraResources": [
       {
         "from": "resources/chrome-linux",
