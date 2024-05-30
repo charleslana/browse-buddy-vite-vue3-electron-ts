@@ -1,9 +1,10 @@
-import { BrowserWindow, shell } from 'electron';
 import path from 'path';
+import { BrowserWindow, shell } from 'electron';
 
 export function getMenu(mainWindow: BrowserWindow) {
   const template: Electron.MenuItemConstructorOptions[] = [
     browseBuddyMenu(mainWindow),
+    examplesMenu(),
     helpMenu(mainWindow),
   ];
   return template;
@@ -26,6 +27,63 @@ function browseBuddyMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructo
         accelerator: 'CmdOrCtrl+W',
         click: () => {
           mainWindow.close();
+        },
+      },
+    ],
+  };
+  return menu;
+}
+
+function examplesMenu(): Electron.MenuItemConstructorOptions {
+  const menu: Electron.MenuItemConstructorOptions = {
+    label: 'Exemplos',
+    submenu: [
+      {
+        label: 'Wait click',
+        click: () => {
+          console.log('wait-click');
+        },
+      },
+      {
+        label: 'Click',
+        click: () => {
+          console.log('click');
+        },
+      },
+      {
+        label: 'Fill',
+        click: () => {
+          console.log('fill');
+        },
+      },
+      {
+        label: 'Type',
+        click: () => {
+          console.log('type');
+        },
+      },
+      {
+        label: 'Clear',
+        click: () => {
+          console.log('clear');
+        },
+      },
+      {
+        label: 'Wait visible',
+        click: () => {
+          console.log('wait-visible');
+        },
+      },
+      {
+        label: 'Wait hidden',
+        click: () => {
+          console.log('wait-hidden');
+        },
+      },
+      {
+        label: 'Click wait response',
+        click: () => {
+          console.log('click-wait-response');
         },
       },
     ],

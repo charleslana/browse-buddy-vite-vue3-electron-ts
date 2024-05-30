@@ -44,7 +44,7 @@ async function navigate(runTest: IRunTest) {
 
 async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean): Promise<void> {
   for (const action of actions) {
-    switch (action.action) {
+    switch (action.type) {
       case 'wait-click':
         await handleWaitClick(action, isSaveEveryScreenshot);
         break;
@@ -76,7 +76,8 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
 }
 
 async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
+  const input = action.inputs[0];
+  const element = `${input.select}${input.value}`;
   const executionResult = await core.waitForClick(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-click',
@@ -89,7 +90,8 @@ async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean)
 }
 
 async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
+  const input = action.inputs[0];
+  const element = `${input.select}${input.value}`;
   const executionResult = await core.click(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'click',
@@ -102,12 +104,19 @@ async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Pr
 }
 
 async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
-  const executionResult = await core.fill(element, action.text!, action.id, isSaveEveryScreenshot);
+  const input = action.inputs[0];
+  const secondInput = action.inputs[1];
+  const element = `${input.select}${input.value}`;
+  const executionResult = await core.fill(
+    element,
+    secondInput.value!,
+    action.id,
+    isSaveEveryScreenshot
+  );
   navigationResults.push({
     action: 'fill',
     title: 'Preencher',
-    message: `Preencher o texto: ${action.text}\nCom o elemento: ${element}`,
+    message: `Preencher o texto: ${secondInput.value}\nCom o elemento: ${element}`,
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -115,12 +124,19 @@ async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Pro
 }
 
 async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
-  const executionResult = await core.type(element, action.text!, action.id, isSaveEveryScreenshot);
+  const input = action.inputs[0];
+  const secondInput = action.inputs[1];
+  const element = `${input.select}${input.value}`;
+  const executionResult = await core.type(
+    element,
+    secondInput.value!,
+    action.id,
+    isSaveEveryScreenshot
+  );
   navigationResults.push({
     action: 'type',
     title: 'Digitar',
-    message: `Digitar o texto: ${action.text}\nCom o elemento: ${element}`,
+    message: `Digitar o texto: ${secondInput.value}\nCom o elemento: ${element}`,
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -128,7 +144,8 @@ async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Pro
 }
 
 async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
+  const input = action.inputs[0];
+  const element = `${input.select}${input.value}`;
   const executionResult = await core.clear(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'clear',
@@ -141,7 +158,8 @@ async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Pr
 }
 
 async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
+  const input = action.inputs[0];
+  const element = `${input.select}${input.value}`;
   const executionResult = await core.waitForVisible(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-visible',
@@ -154,7 +172,8 @@ async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolea
 }
 
 async function handleWaitHidden(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
+  const input = action.inputs[0];
+  const element = `${input.select}${input.value}`;
   const executionResult = await core.waitForHidden(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-hidden',
@@ -170,8 +189,9 @@ async function handleClickWaitResponse(
   action: IAction,
   isSaveEveryScreenshot?: boolean
 ): Promise<void> {
-  const element = `${action.elementType}${action.element}`;
-  const urlPattern = `${action.text}`;
+  const input = action.inputs[0];
+  const element = `${input.select}${input.value}`;
+  const urlPattern = `${action.inputs[1].value}`;
   const executionResult = await core.clickWaitForResponse(
     element,
     urlPattern,
