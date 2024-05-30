@@ -17,7 +17,7 @@
       }
     ],
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
-    "icon": "src/assets/images/icon64x.ico",
+    "icon": "src/assets/images/icon256x.ico",
     "extraResources": [
       {
         "from": "resources/chrome-win",
