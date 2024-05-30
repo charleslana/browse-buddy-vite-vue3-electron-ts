@@ -8,7 +8,13 @@
     "output": "release/${version}"
   },
   "files": ["dist"],
-  "extraResources": [".env"],
+  "extraResources": [
+    ".env",
+    {
+      "from": "resources/examples/json",
+      "to": "resources/examples/json"
+    }
+  ],
   "win": {
     "target": [
       {

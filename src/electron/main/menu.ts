@@ -1,10 +1,12 @@
+import fs from 'fs';
 import path from 'path';
-import { BrowserWindow, shell } from 'electron';
+import { BrowserWindow, app, shell } from 'electron';
+import { saveSessionPreference } from '../utils/storeUtils';
 
 export function getMenu(mainWindow: BrowserWindow) {
   const template: Electron.MenuItemConstructorOptions[] = [
     browseBuddyMenu(mainWindow),
-    examplesMenu(),
+    examplesMenu(mainWindow),
     helpMenu(mainWindow),
   ];
   return template;
@@ -34,56 +36,72 @@ function browseBuddyMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructo
   return menu;
 }
 
-function examplesMenu(): Electron.MenuItemConstructorOptions {
+function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOptions {
   const menu: Electron.MenuItemConstructorOptions = {
     label: 'Exemplos',
     submenu: [
       {
         label: 'Wait click',
         click: () => {
-          console.log('wait-click');
+          const jsonData = loadJsonSync('1-Wait and click.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Click',
         click: () => {
-          console.log('click');
+          const jsonData = loadJsonSync('2-Click.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Fill',
         click: () => {
-          console.log('fill');
+          const jsonData = loadJsonSync('3-Fill.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Type',
         click: () => {
-          console.log('type');
+          const jsonData = loadJsonSync('4-Type.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Clear',
         click: () => {
-          console.log('clear');
+          const jsonData = loadJsonSync('5-Clear.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Wait visible',
         click: () => {
-          console.log('wait-visible');
+          const jsonData = loadJsonSync('6-Wait visible.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Wait hidden',
         click: () => {
-          console.log('wait-hidden');
+          const jsonData = loadJsonSync('7-Wait hidden.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
       {
         label: 'Click wait response',
         click: () => {
-          console.log('click-wait-response');
+          const jsonData = loadJsonSync('8-Click wait response.json');
+          saveSessionPreference(jsonData);
+          mainWindow.reload();
         },
       },
     ],
@@ -152,4 +170,18 @@ function createAboutWindow(): void {
     minimizable: false,
   });
   aboutWindow.loadURL(`file://${path.join(__dirname, '..', '..', 'index.html#about')}`);
+}
+
+function loadJsonSync(fileName: string): string {
+  const dataPath = path.join(getRootPath(), 'resources', 'examples', 'json', fileName);
+  try {
+    const data = fs.readFileSync(dataPath, 'utf-8');
+    return data;
+  } catch (err) {
+    throw new Error(`Failed to load or parse JSON file: ${err}`);
+  }
+}
+
+function getRootPath() {
+  return app.isPackaged ? process.resourcesPath : '';
 }
