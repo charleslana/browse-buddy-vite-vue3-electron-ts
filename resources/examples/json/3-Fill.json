@@ -7,18 +7,18 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "13f2ecee-eaf0-4025-9d1c-1f41b3c9a6ef",
+      "id": "1fb373f5-fee1-4f3e-8df0-0c5ca59cefba",
       "type": "fill",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "input-text"
         },
         {
-          "label": "O texto a preencher (suporta contenteditable, seletores e inputs)",
-          "placeholder": "texto",
+          "label": "The text to fill (supports contenteditable, selectors and inputs)",
+          "placeholder": "text",
           "value": "text example"
         }
       ],

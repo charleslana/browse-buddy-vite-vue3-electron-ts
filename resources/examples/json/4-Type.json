@@ -7,18 +7,18 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "39da7fb0-c7c4-4e87-b75c-b7e0497d6aa4",
+      "id": "252bf2d1-eee7-4bbb-b364-336a6f21f104",
       "type": "type",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "input-text"
         },
         {
-          "label": "O texto a digitar",
-          "placeholder": "texto",
+          "label": "The text to enter",
+          "placeholder": "text",
           "value": "text example"
         }
       ],

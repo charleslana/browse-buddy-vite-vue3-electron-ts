@@ -7,12 +7,12 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "f9d60047-dc48-404a-9d4c-f97a1e0bf816",
+      "id": "3e6a0370-d068-4e7d-b7ab-68bd9311f54c",
       "type": "click",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "xpath/",
           "value": "//button[contains(@class, \"btn-primary\")]"
         }
@@ -36,17 +36,17 @@
       ]
     },
     {
-      "id": "43fe54b3-d002-41a6-ac7c-0e143e5bcbf9",
+      "id": "1b63015c-39f1-41e2-a32c-b6742a0560dc",
       "type": "wait-visible",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "xpath/",
           "value": "//button[contains(@class, \"added-manuall\")]"
         }
       ],
-      "title": "Esperar visibilidade",
+      "title": "Wait visible",
       "icons": [
         {
           "prefix": "fas",

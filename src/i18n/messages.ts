@@ -76,6 +76,7 @@ export default {
     startReportResult: 'Start',
     endReportResult: 'End',
     screenshotTitle: 'Screenshot',
+    labelTextToType: 'The text to enter',
   },
   es: {
     themes: 'Temas',
@@ -154,6 +155,7 @@ export default {
     startReportResult: 'Comenzar',
     endReportResult: 'Fin',
     screenshotTitle: 'Captura de pantalla',
+    labelTextToType: 'El texto a ingresar',
   },
   pt: {
     themes: 'Temas',
@@ -232,5 +234,6 @@ export default {
     startReportResult: 'Início',
     endReportResult: 'Fim',
     screenshotTitle: 'Tela de captura',
+    labelTextToType: 'O texto a digitar',
   },
 };

@@ -1,10 +1,10 @@
 {
   "name": "browse-buddy",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Charles Lana",
   "description": "Easily set up test automation interface",
-  "homepage": "https://github.com/charleslana",
+  "homepage": "https://github.com/charleslana/browse-buddy-vite-vue3-electron-ts",
   "main": "dist/electron/main/main.js",
   "scripts": {
     "dev": "npm run vite:dev",
@@ -23,7 +23,14 @@
     "release-mac": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -m --config=electron-builder.json"
   },
   "build": {
-    "appId": "YourAppID",
+    "appId": "com.browse.buddy.charleslana",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "charleslana",
+        "repo": "browse-buddy-vite-vue3-electron-ts"
+      }
+    ],
     "asar": true,
     "directories": {
       "buildResources": "assets",
@@ -71,6 +78,7 @@
     "bulma": "^1.0.0",
     "dotenv": "^16.4.5",
     "electron-store": "^8.2.0",
+    "electron-updater": "^6.1.8",
     "floating-vue": "^5.2.2",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",

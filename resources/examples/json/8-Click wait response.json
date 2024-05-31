@@ -7,12 +7,12 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "aedba9aa-c070-4d9e-b5d5-a217dcd6468f",
+      "id": "2f0ce26b-6dd8-4040-965a-e52e820b7fdc",
       "type": "click",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "xpath/",
           "value": "//button[contains(@class, \"try-out__btn\")]"
         }
@@ -36,22 +36,22 @@
       ]
     },
     {
-      "id": "c45bfbec-43e5-431e-9330-56e06f105e1b",
+      "id": "29c0f972-03e5-4709-89c9-a29b16bb643e",
       "type": "click-wait-response",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento do clique",
-          "placeholder": "elemento",
+          "label": "The click element selector text",
+          "placeholder": "element",
           "select": "xpath/",
           "value": "//button[contains(@class, \"execute\")]"
         },
         {
-          "label": "URL (pode usar expressão regular exemplo: **/api/**/filter)",
+          "label": "URL (can use regular expression example: **/api/**/filter)",
           "placeholder": "url",
           "value": "**/api/health-check"
         }
       ],
-      "title": "Esperar resposta por clique",
+      "title": "Wait for click response",
       "icons": [
         {
           "prefix": "fas",

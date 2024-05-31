@@ -1,5 +1,7 @@
+import logger from '../utils/logger';
 import path from 'path';
-import { app, BrowserWindow, globalShortcut, Menu } from 'electron';
+import { app, BrowserWindow, dialog, globalShortcut, Menu } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import { getAppIconPath } from './icon';
 import { getMenu } from './menu';
 import { handleLang } from './lang';
@@ -52,6 +54,7 @@ app.whenReady().then(() => {
   handleLang();
   handleSaveReport();
   createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -63,4 +66,30 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+autoUpdater.on('update-available', () => {
+  logger.info('Update available.');
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update available',
+    message:
+      'A new version of the application is available. It will be downloaded in the background.',
+  });
+});
+
+autoUpdater.on('update-downloaded', () => {
+  logger.info('Update downloaded; will install in 5 seconds');
+  dialog
+    .showMessageBox({
+      type: 'info',
+      title: 'Update ready',
+      message: 'A new version of the application is ready. Quit and install now?',
+      buttons: ['Yes', 'Later'],
+    })
+    .then(result => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall(false, true);
+      }
+    });
 });

@@ -7,12 +7,12 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "89cf3ffd-b55b-475a-9d14-f97279f38e4b",
+      "id": "9b368bc4-7885-4e9f-968c-76dc2cb318ba",
       "type": "wait-click",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "btn-display-inputs"
         }

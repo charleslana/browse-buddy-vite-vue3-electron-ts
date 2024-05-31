@@ -265,7 +265,7 @@ const actions = computed<IBoxAction[]>(() => {
           select: '#',
         },
         {
-          label: 'O texto a digitar',
+          label: t('labelTextToType'),
           placeholder: t('placeholderText'),
         },
       ],

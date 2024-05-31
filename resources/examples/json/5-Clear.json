@@ -7,18 +7,18 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "bf934f78-a4ed-444a-b5e8-359c1e7bc2ba",
+      "id": "14729513-30d8-4adc-8c5b-5ab95db4491e",
       "type": "fill",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "input-text"
         },
         {
-          "label": "O texto a preencher (suporta contenteditable, seletores e inputs)",
-          "placeholder": "texto",
+          "label": "The text to fill (supports contenteditable, selectors and inputs)",
+          "placeholder": "text",
           "value": "text example"
         }
       ],
@@ -38,12 +38,12 @@
       ]
     },
     {
-      "id": "d4280a21-667f-492c-92e6-4ee54dba8595",
+      "id": "73aa0abe-68e0-4c7b-b351-07627511c963",
       "type": "clear",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "input-text"
         }
