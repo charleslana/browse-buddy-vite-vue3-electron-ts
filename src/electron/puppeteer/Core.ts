@@ -1,6 +1,7 @@
 import fs from 'fs';
 import logger from '../utils/logger';
 import path from 'path';
+import { createI18nInstance } from '../i18n/i18n';
 import { ElementHandle, Page } from 'puppeteer';
 import { generateUUID } from '../utils/utils';
 import { IExecutionResult } from '../interface/IExecutionResult';
@@ -17,8 +18,12 @@ export class Core {
   public pageSingleton = PageSingleton.getInstance();
 
   private _page: Page | null = null;
+  private i18n = createI18nInstance();
+  private t = this.i18n.global.t;
 
   public async navigate(url: string, saveScreenshot?: boolean): Promise<IExecutionResult> {
+    this.i18n = createI18nInstance();
+    this.t = this.i18n.global.t;
     logger.warn(`Tentando navegar para ${url} ...`);
     let screenshot: string | undefined;
     const startTime = Date.now();
@@ -31,7 +36,7 @@ export class Core {
       });
       logger.info(`Sucesso ao navegar para ${url}`);
     } catch (e) {
-      error = `Erro ao navegar para ${url}`;
+      error = this.t('navigateError', [url]);
       logger.error(`Erro ao navegar para ${url}: ${e}`);
     } finally {
       if (!error) {
@@ -59,7 +64,7 @@ export class Core {
       await this.getPage().click(selector);
       logger.info(`Sucesso ao aguardar e clicar no elemento com seletor ${selector}`);
     } catch (e) {
-      error += `Erro ao aguardar e clicar no elemento com seletor ${selector}`;
+      error += this.t('waitForClickError', [selector]);
       logger.error(`Erro ao aguardar e clicar no elemento com seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
@@ -83,7 +88,7 @@ export class Core {
       await this.getPage().click(selector);
       logger.info(`Sucesso ao clicar no elemento com seletor ${selector}`);
     } catch (e) {
-      error = `Erro ao clicar no elemento com seletor ${selector}`;
+      error = this.t('clickError', [selector]);
       logger.error(`Erro ao clicar no elemento com seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
@@ -108,7 +113,7 @@ export class Core {
       await this.getPage().locator(selector).fill(text);
       logger.info(`Sucesso ao preencher o texto ${text} no seletor ${selector}`);
     } catch (e) {
-      error = `Erro ao preencher o texto ${text} no seletor ${selector}`;
+      error = this.t('fillError', [text, selector]);
       logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
@@ -133,8 +138,8 @@ export class Core {
       await this.getPage().type(selector, text);
       logger.info(`Sucesso ao digitar o texto ${text} no seletor ${selector}`);
     } catch (e) {
-      error = `Erro ao preencher o texto ${text} no seletor ${selector}`;
-      logger.error(`Erro ao preencher o texto ${text} no seletor ${selector}: ${e}`);
+      error = this.t('typeError', [text, selector]);
+      logger.error(`Erro ao digitar o texto ${text} no seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
       const endTime = Date.now();
@@ -158,7 +163,7 @@ export class Core {
       await this.getPage().keyboard.press('Backspace');
       logger.info(`Sucesso ao limpar o texto no seletor ${selector}`);
     } catch (e) {
-      error = `Erro ao limpar o texto no seletor ${selector}`;
+      error = this.t('clearError', [selector]);
       logger.error(`Erro ao limpar o texto no seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
@@ -191,7 +196,7 @@ export class Core {
       await this.getPage().waitForSelector(selector, { visible: true });
       logger.info(`Sucesso ao esperar o seletor ${selector} visível`);
     } catch (e) {
-      error = `Erro ao aguardar elemento visível com seletor ${selector}\n`;
+      error = this.t('waitVisibleError', [selector]);
       logger.error(`Erro ao aguardar elemento visível com seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
@@ -215,7 +220,7 @@ export class Core {
       await this.getPage().waitForSelector(selector, { hidden: true });
       logger.info(`Sucesso ao esperar o seletor ${selector} oculto`);
     } catch (e) {
-      error = `Erro ao aguardar elemento oculto com seletor ${selector}`;
+      error = this.t('waitHiddenError', [selector]);
       logger.error(`Erro ao aguardar elemento oculto com seletor ${selector}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
@@ -245,7 +250,7 @@ export class Core {
       const finalResponse = await finalResponsePromise;
       logger.info(`Sucesso aguardar a resposta com a url ${urlPattern}: ${finalResponse.ok()}`);
     } catch (e) {
-      error = `Erro ao aguardar a resposta com a url ${urlPattern}`;
+      error = this.t('clickWaitResponseError', [urlPattern]);
       logger.error(`Erro ao aguardar a resposta com a url ${urlPattern}: ${e}`);
     } finally {
       screenshot = await this.saveScreenshot(id, saveScreenshot);
