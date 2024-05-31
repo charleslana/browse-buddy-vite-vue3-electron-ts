@@ -1,0 +1,39 @@
+{
+  "name": "2-Click",
+  "url": "https://practice.expandtesting.com/add-remove-elements",
+  "isSaveLastScreenshot": true,
+  "isSaveEveryScreenshot": true,
+  "isHeadless": true,
+  "defaultTimeout": 15000,
+  "actions": [
+    {
+      "id": "9754e945-c9a0-4cb5-bc91-f3bee73a5541",
+      "type": "click",
+      "inputs": [
+        {
+          "label": "O texto do seletor do elemento",
+          "placeholder": "elemento",
+          "select": "xpath/",
+          "value": "//button[contains(@class, \"btn-primary\")]"
+        }
+      ],
+      "title": "Click",
+      "icons": [
+        {
+          "prefix": "fas",
+          "iconName": "computer-mouse",
+          "icon": [
+            384,
+            512,
+            [
+              128433,
+              "mouse"
+            ],
+            "f8cc",
+            "M0 192H176V0H160C71.6 0 0 71.6 0 160v32zm0 32V352c0 88.4 71.6 160 160 160h64c88.4 0 160-71.6 160-160V224H192 0zm384-32V160C384 71.6 312.4 0 224 0H208V192H384z"
+          ]
+        }
+      ]
+    }
+  ]
+}

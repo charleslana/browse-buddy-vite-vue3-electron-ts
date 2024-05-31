@@ -12,7 +12,8 @@ node_modules
 dist
 dist-ssr
 *.local
-resources
+resources/chrome-linux/
+resources/chrome-win/
 
 # Editor directories and files
 *.vscode
