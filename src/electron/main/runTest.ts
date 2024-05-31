@@ -10,11 +10,12 @@ import { PageSingleton } from '../puppeteer/PageSingleton';
 const core = new Core();
 
 const navigationResults: INavigationResult[] = [];
-const i18n = createI18nInstance();
-const t = i18n.global.t;
+
+let i18n = createI18nInstance();
 
 export function handleRunTest(): void {
   ipcMain.handle('execute-run-test', async (event, runTestJSON: string) => {
+    i18n = createI18nInstance();
     const runTest: IRunTest = JSON.parse(runTestJSON);
     PageSingleton.setHeadless(runTest.isHeadless);
     PageSingleton.setDefaultTimeout(runTest.defaultTimeout);
@@ -34,6 +35,7 @@ async function runTestFunction(runTest: IRunTest): Promise<INavigationResult[]> 
 }
 
 async function navigate(runTest: IRunTest) {
+  const t = i18n.global.t;
   const executionResult = await core.navigate(runTest.url, runTest.isSaveEveryScreenshot);
   navigationResults.push({
     action: 'navigate',
@@ -79,6 +81,7 @@ async function handleActions(actions: IAction[], isSaveEveryScreenshot?: boolean
 }
 
 async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const element = `${input.select}${input.value}`;
   const executionResult = await core.waitForClick(element, action.id, isSaveEveryScreenshot);
@@ -93,6 +96,7 @@ async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean)
 }
 
 async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const element = `${input.select}${input.value}`;
   const executionResult = await core.click(element, action.id, isSaveEveryScreenshot);
@@ -107,6 +111,7 @@ async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Pr
 }
 
 async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const secondInput = action.inputs[1];
   const element = `${input.select}${input.value}`;
@@ -127,6 +132,7 @@ async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Pro
 }
 
 async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const secondInput = action.inputs[1];
   const element = `${input.select}${input.value}`;
@@ -147,6 +153,7 @@ async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Pro
 }
 
 async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const element = `${input.select}${input.value}`;
   const executionResult = await core.clear(element, action.id, isSaveEveryScreenshot);
@@ -161,6 +168,7 @@ async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Pr
 }
 
 async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const element = `${input.select}${input.value}`;
   const executionResult = await core.waitForVisible(element, action.id, isSaveEveryScreenshot);
@@ -175,6 +183,7 @@ async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolea
 }
 
 async function handleWaitHidden(action: IAction, isSaveEveryScreenshot?: boolean): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const element = `${input.select}${input.value}`;
   const executionResult = await core.waitForHidden(element, action.id, isSaveEveryScreenshot);
@@ -192,6 +201,7 @@ async function handleClickWaitResponse(
   action: IAction,
   isSaveEveryScreenshot?: boolean
 ): Promise<void> {
+  const t = i18n.global.t;
   const input = action.inputs[0];
   const element = `${input.select}${input.value}`;
   const urlPattern = `${action.inputs[1].value}`;
@@ -212,6 +222,7 @@ async function handleClickWaitResponse(
 }
 
 async function finish(isSaveLastScreenshot: boolean): Promise<void> {
+  const t = i18n.global.t;
   let screenshot: string | undefined;
   if (isSaveLastScreenshot) {
     screenshot = await core.screenshot(generateUUID());

@@ -7,14 +7,14 @@ import { createI18nInstance } from '../i18n/i18n';
 import { generateDateTime } from '../utils/utils';
 import { INavigationResult } from '../interface/INavigationResult';
 
-const i18n = createI18nInstance();
-const t = i18n.global.t;
+let i18n = createI18nInstance();
 
 export function handleSaveReport(): void {
   ipcMain.handle('dialog:save-report', (_event, data: string) => saveReport(data));
 }
 
 async function saveReport(jsonData: string): Promise<void> {
+  i18n = createI18nInstance();
   const defaultPath = app.getPath('downloads');
   const results: INavigationResult[] = JSON.parse(jsonData);
   const doc = await generateDocument(results);
@@ -41,6 +41,7 @@ async function generateDocument(results: INavigationResult[]): Promise<jsPDF> {
 }
 
 function createPDF(): jsPDF {
+  const t = i18n.global.t;
   const doc = new jsPDF();
   doc.setFontSize(18);
   doc.text(t('resultTestTitle'), 14, 22);
@@ -51,6 +52,7 @@ function createPDF(): jsPDF {
 }
 
 function addTestResults(doc: jsPDF, results: INavigationResult[]): void {
+  const t = i18n.global.t;
   const resultsData = results.map(result => [
     result.title,
     result.message,
@@ -75,6 +77,7 @@ function addTestResults(doc: jsPDF, results: INavigationResult[]): void {
 }
 
 function addSummaryInfo(doc: jsPDF, results: INavigationResult[]): void {
+  const t = i18n.global.t;
   const totalDuration = results.reduce((total, result) => {
     if (typeof result.duration === 'number') {
       return total + result.duration;
@@ -98,6 +101,7 @@ function calculatePassedTests(results: INavigationResult[]): number {
 }
 
 function addFooter(doc: jsPDF): void {
+  const t = i18n.global.t;
   const pageCount = (doc as any).internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setFontSize(10);
