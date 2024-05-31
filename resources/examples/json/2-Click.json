@@ -7,12 +7,12 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "9754e945-c9a0-4cb5-bc91-f3bee73a5541",
+      "id": "aa49d9bc-df8b-48c0-b821-7072dc7f8411",
       "type": "click",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "xpath/",
           "value": "//button[contains(@class, \"btn-primary\")]"
         }

@@ -1,5 +1,12 @@
 {
   "appId": "com.browse.buddy.charleslana",
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "charleslana",
+      "repo": "browse-buddy-vite-vue3-electron-ts"
+    }
+  ],
   "asar": true,
   "productName": "Browse-Buddy",
   "copyright": "Copyright © 2024 ${author}",
@@ -53,6 +60,6 @@
     ]
   },
   "portable": {
-    "artifactName": "${productName}-Portable-${version}.${ext}"
+    "artifactName": "${productName}-Windows-Portable-${version}.${ext}"
   }
 }

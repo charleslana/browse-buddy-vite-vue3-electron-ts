@@ -7,12 +7,12 @@
   "defaultTimeout": 15000,
   "actions": [
     {
-      "id": "75491068-2a2a-4a6f-a312-87a44a6d0a04",
+      "id": "1c72dabb-fbeb-40e9-8af2-0efded1d6951",
       "type": "click",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "xpath/",
           "value": "//button[contains(@class, \"btn-primary\")]"
         }
@@ -36,17 +36,17 @@
       ]
     },
     {
-      "id": "92bf2d8d-a9dd-4864-9034-3142152a2ce2",
+      "id": "93bfa4d9-fd99-42b5-aae0-78f9c9247cef",
       "type": "wait-visible",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "loading"
         }
       ],
-      "title": "Esperar visibilidade",
+      "title": "Wait visible",
       "icons": [
         {
           "prefix": "fas",
@@ -64,17 +64,17 @@
       ]
     },
     {
-      "id": "f8f30466-589c-4e44-924d-2727455d28d5",
+      "id": "9340555a-201b-4697-ab17-c58c695dc02b",
       "type": "wait-hidden",
       "inputs": [
         {
-          "label": "O texto do seletor do elemento",
-          "placeholder": "elemento",
+          "label": "The element selector text",
+          "placeholder": "element",
           "select": "#",
           "value": "loading"
         }
       ],
-      "title": "Esperar ocultar",
+      "title": "Wait hidden",
       "icons": [
         {
           "prefix": "fas",
