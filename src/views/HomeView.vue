@@ -106,17 +106,17 @@ import i18n from '@/i18n/i18n';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faHandPointUp, faHandPointDown } from '@fortawesome/free-solid-svg-icons';
 
+const t = i18n.global.t;
 const isInputFilled = ref(false);
 const runTestStore = useRunTestStore();
 const navigationResultStore = useNavigationResultStore();
 const isLoading = ref(false);
 const isNotification = ref(false);
 const isNotificationType = ref<'is-danger' | 'is-success'>('is-success');
-const isNotificationMessage = ref('O teste foi executado com sucesso.');
-const name = ref('Teste de Exemplo');
+const isNotificationMessage = ref(t('testSuccessNotification'));
+const name = ref(t('inputTestName'));
 const isConfirmModalActive = ref(false);
 const isSkeleton = ref(true);
-const t = i18n.global.t;
 const defaultNameValues = [
   i18n.global.messages.en.inputTestName,
   i18n.global.messages.es.inputTestName,
@@ -193,10 +193,10 @@ function listenResult(): void {
       navigationResultStore.save(results);
       if (results.some(result => result.error)) {
         isNotificationType.value = 'is-danger';
-        isNotificationMessage.value = 'O teste foi executado com falha.';
+        isNotificationMessage.value = t('testFailedNotification');
       } else {
         isNotificationType.value = 'is-success';
-        isNotificationMessage.value = 'O teste foi executado com sucesso.';
+        isNotificationMessage.value = t('testSuccessNotification');
       }
       isNotification.value = true;
     })

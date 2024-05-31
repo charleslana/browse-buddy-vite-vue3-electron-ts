@@ -55,16 +55,16 @@
                   class="button card-footer-item is-primary"
                   @click="handleActionUpdate(action)"
                 >
-                  Editar
+                  {{ $t('editButton') }}
                 </button>
                 <button class="button card-footer-item is-danger" @click="deleteAction(action.id)">
-                  Excluir
+                  {{ $t('deleteButton') }}
                 </button>
                 <button class="button card-footer-item" @click="duplicateAction(action)">
                   <span class="icon is-left">
                     <FontAwesomeIcon :icon="faCopy" />
                   </span>
-                  <span>Duplicar</span>
+                  <span>{{ $t('duplicateButton') }}</span>
                 </button>
               </footer>
             </div>
@@ -98,7 +98,7 @@
             <a
               :class="{ 'is-active': currentCategory === 'wait' }"
               @click="currentCategory = 'wait'"
-              >Esperar</a
+              >{{ $t('actionWait') }}</a
             >
           </p>
           <div class="panel-block">
@@ -216,8 +216,8 @@ const actions = computed<IBoxAction[]>(() => {
       type: 'wait-click',
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
       ],
@@ -229,8 +229,8 @@ const actions = computed<IBoxAction[]>(() => {
       type: 'click',
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
       ],
@@ -243,13 +243,13 @@ const actions = computed<IBoxAction[]>(() => {
       tooltip: t('fillTooltip'),
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
         {
-          label: 'O texto a preencher (suporta contenteditable, seletores e inputs)',
-          placeholder: 'texto',
+          label: t('labelTextToFill'),
+          placeholder: t('placeholderText'),
         },
       ],
     },
@@ -260,13 +260,13 @@ const actions = computed<IBoxAction[]>(() => {
       type: 'type',
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
         {
           label: 'O texto a digitar',
-          placeholder: 'texto',
+          placeholder: t('placeholderText'),
         },
       ],
     },
@@ -277,53 +277,52 @@ const actions = computed<IBoxAction[]>(() => {
       type: 'clear',
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
       ],
     },
     {
-      label: 'Esperar visibilidade',
+      label: t('actionWaitVisible'),
       icons: [faEye],
       category: 'wait',
       type: 'wait-visible',
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
       ],
     },
     {
-      label: 'Esperar ocultar',
+      label: t('actionWaitHidden'),
       icons: [faEyeSlash],
       category: 'wait',
       type: 'wait-hidden',
-      tooltip:
-        'Aguarde até que o elemento não esteja presente no DOM (documento) ou com display none',
+      tooltip: t('waitHiddenTooltip'),
       inputs: [
         {
-          label: 'O texto do seletor do elemento',
-          placeholder: 'elemento',
+          label: t('labelSelectorText'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
       ],
     },
     {
-      label: 'Esperar resposta por clique',
+      label: t('actionClickWaitResponse'),
       icons: [faReply],
       category: 'wait',
       type: 'click-wait-response',
       inputs: [
         {
-          label: 'O texto do seletor do elemento do clique',
-          placeholder: 'elemento',
+          label: t('labelClickElement'),
+          placeholder: t('placeholderElement'),
           select: '#',
         },
         {
-          label: 'URL (pode usar expressão regular exemplo: **/api/**/filter)',
+          label: t('labelURLExpression'),
           placeholder: 'url',
         },
       ],

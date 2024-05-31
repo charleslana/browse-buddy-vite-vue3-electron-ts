@@ -2,11 +2,11 @@
   <div class="modal is-active">
     <div class="modal-background"></div>
     <div class="modal-card">
-      <section class="modal-card-body">Você tem certeza que deseja continuar?</section>
+      <section class="modal-card-body">{{ $t('confirmMessage') }}</section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button is-success" @click="confirmModal">Confirmar</button>
-          <button class="button" @click="closeModal">Cancelar</button>
+          <button class="button is-success" @click="confirmModal">{{ $t('confirmButton') }}</button>
+          <button class="button" @click="closeModal">{{ $t('cancelButton') }}</button>
         </div>
       </footer>
     </div>

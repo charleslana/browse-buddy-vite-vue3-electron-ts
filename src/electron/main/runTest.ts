@@ -1,4 +1,5 @@
 import { Core } from '../puppeteer/Core';
+import { createI18nInstance } from '../i18n/i18n';
 import { generateUUID } from '../utils/utils';
 import { IAction } from '../interface/IAction';
 import { INavigationResult } from '../interface/INavigationResult';
@@ -9,6 +10,8 @@ import { PageSingleton } from '../puppeteer/PageSingleton';
 const core = new Core();
 
 const navigationResults: INavigationResult[] = [];
+const i18n = createI18nInstance();
+const t = i18n.global.t;
 
 export function handleRunTest(): void {
   ipcMain.handle('execute-run-test', async (event, runTestJSON: string) => {
@@ -34,8 +37,8 @@ async function navigate(runTest: IRunTest) {
   const executionResult = await core.navigate(runTest.url, runTest.isSaveEveryScreenshot);
   navigationResults.push({
     action: 'navigate',
-    title: 'Navegar para',
-    message: `Navegação para url: ${runTest.url}`,
+    title: t('navigateTo'),
+    message: t('navigateMessage', [runTest.url]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -81,8 +84,8 @@ async function handleWaitClick(action: IAction, isSaveEveryScreenshot?: boolean)
   const executionResult = await core.waitForClick(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-click',
-    title: 'Esperar e Clicar',
-    message: `Aguardar e clicar no elemento: ${element}`,
+    title: t('actionWaitClick'),
+    message: t('waitClickMessage', [element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -95,8 +98,8 @@ async function handleClick(action: IAction, isSaveEveryScreenshot?: boolean): Pr
   const executionResult = await core.click(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'click',
-    title: 'Clicar',
-    message: `Clicar no elemento: ${element}`,
+    title: t('actionClick'),
+    message: t('clickMessage', [element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -115,8 +118,8 @@ async function handleFill(action: IAction, isSaveEveryScreenshot?: boolean): Pro
   );
   navigationResults.push({
     action: 'fill',
-    title: 'Preencher',
-    message: `Preencher o texto: ${secondInput.value}\nCom o elemento: ${element}`,
+    title: t('actionFill'),
+    message: t('fillMessage', [secondInput.value, element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -135,8 +138,8 @@ async function handleType(action: IAction, isSaveEveryScreenshot?: boolean): Pro
   );
   navigationResults.push({
     action: 'type',
-    title: 'Digitar',
-    message: `Digitar o texto: ${secondInput.value}\nCom o elemento: ${element}`,
+    title: t('actionType'),
+    message: t('typeMessage', [secondInput.value, element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -149,8 +152,8 @@ async function handleClear(action: IAction, isSaveEveryScreenshot?: boolean): Pr
   const executionResult = await core.clear(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'clear',
-    title: 'Limpar',
-    message: `Limpar o texto com o elemento: ${element}`,
+    title: t('actionClear'),
+    message: t('clearMessage', [element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -163,8 +166,8 @@ async function handleWaitVisible(action: IAction, isSaveEveryScreenshot?: boolea
   const executionResult = await core.waitForVisible(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-visible',
-    title: 'Esperar visibilidade',
-    message: `Esperar o elemento visível: ${element}`,
+    title: t('actionWaitVisible'),
+    message: t('waitVisibleMessage', [element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -177,8 +180,8 @@ async function handleWaitHidden(action: IAction, isSaveEveryScreenshot?: boolean
   const executionResult = await core.waitForHidden(element, action.id, isSaveEveryScreenshot);
   navigationResults.push({
     action: 'wait-hidden',
-    title: 'Esperar ocultar',
-    message: `Esperar o elemento oculto: ${element}`,
+    title: t('actionWaitHidden'),
+    message: t('waitHiddenMessage', [element]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -200,8 +203,8 @@ async function handleClickWaitResponse(
   );
   navigationResults.push({
     action: 'click-wait-response',
-    title: 'Esperar resposta com clique',
-    message: `Clicar no elemento: ${element} e esperar a resposta com a url: ${urlPattern}`,
+    title: t('actionClickWaitResponse'),
+    message: t('clickWaitResponseMessage', [element, urlPattern]),
     screenshot: executionResult.screenshot,
     duration: parseFloat(executionResult.duration.toFixed(2)),
     error: executionResult.error,
@@ -215,8 +218,8 @@ async function finish(isSaveLastScreenshot: boolean): Promise<void> {
   }
   navigationResults.push({
     action: 'end',
-    title: 'Ciclo do teste',
-    message: `Fim da execução`,
+    title: t('testCycleTitle'),
+    message: t('testCycleMessage'),
     screenshot: screenshot,
   });
 }

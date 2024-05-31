@@ -10,6 +10,8 @@ import { handleSession } from './session';
 import { handleThemeMode } from './theme';
 import { handleUrlActions } from './url';
 
+export let mainWindow: BrowserWindow;
+
 const isDev = process.env.npm_lifecycle_event === 'app:dev' ? true : false;
 
 function createMenu(mainWindow: BrowserWindow): void {
@@ -22,7 +24,7 @@ function createMenu(mainWindow: BrowserWindow): void {
 }
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     icon: getAppIconPath(),

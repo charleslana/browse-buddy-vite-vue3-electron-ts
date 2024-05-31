@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { BrowserWindow, app, shell } from 'electron';
+import { app, BrowserWindow, Menu, shell } from 'electron';
+import { createI18nInstance } from '../i18n/i18n';
 import { saveSessionPreference } from '../utils/storeUtils';
+
+let i18n = createI18nInstance();
 
 export function getMenu(mainWindow: BrowserWindow) {
   const template: Electron.MenuItemConstructorOptions[] = [
@@ -12,12 +15,20 @@ export function getMenu(mainWindow: BrowserWindow) {
   return template;
 }
 
+export function updateMenu(mainWindow: BrowserWindow) {
+  i18n = createI18nInstance();
+  const menuTemplate = getMenu(mainWindow);
+  const menu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(menu);
+}
+
 function browseBuddyMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOptions {
+  const t = i18n.global.t;
   const menu: Electron.MenuItemConstructorOptions = {
     label: 'Browse Buddy',
     submenu: [
       {
-        label: 'Recarregar',
+        label: t('reloadMenu'),
         accelerator: 'CmdOrCtrl+R',
         click: () => {
           mainWindow.reload();
@@ -25,7 +36,7 @@ function browseBuddyMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructo
       },
       { type: 'separator' },
       {
-        label: 'Fechar',
+        label: t('closeMenu'),
         accelerator: 'CmdOrCtrl+W',
         click: () => {
           mainWindow.close();
@@ -37,11 +48,12 @@ function browseBuddyMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructo
 }
 
 function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOptions {
+  const t = i18n.global.t;
   const menu: Electron.MenuItemConstructorOptions = {
-    label: 'Exemplos',
+    label: t('exampleMenu'),
     submenu: [
       {
-        label: 'Wait click',
+        label: t('actionWaitClick'),
         click: () => {
           const jsonData = loadJsonSync('1-Wait and click.json');
           saveSessionPreference(jsonData);
@@ -49,7 +61,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Click',
+        label: t('actionClick'),
         click: () => {
           const jsonData = loadJsonSync('2-Click.json');
           saveSessionPreference(jsonData);
@@ -57,7 +69,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Fill',
+        label: t('actionFill'),
         click: () => {
           const jsonData = loadJsonSync('3-Fill.json');
           saveSessionPreference(jsonData);
@@ -65,7 +77,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Type',
+        label: t('actionType'),
         click: () => {
           const jsonData = loadJsonSync('4-Type.json');
           saveSessionPreference(jsonData);
@@ -73,7 +85,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Clear',
+        label: t('actionClear'),
         click: () => {
           const jsonData = loadJsonSync('5-Clear.json');
           saveSessionPreference(jsonData);
@@ -81,7 +93,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Wait visible',
+        label: t('actionWaitVisible'),
         click: () => {
           const jsonData = loadJsonSync('6-Wait visible.json');
           saveSessionPreference(jsonData);
@@ -89,7 +101,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Wait hidden',
+        label: t('actionWaitHidden'),
         click: () => {
           const jsonData = loadJsonSync('7-Wait hidden.json');
           saveSessionPreference(jsonData);
@@ -97,7 +109,7 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
         },
       },
       {
-        label: 'Click wait response',
+        label: t('actionClickWaitResponse'),
         click: () => {
           const jsonData = loadJsonSync('8-Click wait response.json');
           saveSessionPreference(jsonData);
@@ -110,36 +122,39 @@ function examplesMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOp
 }
 
 function helpMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOptions {
+  const t = i18n.global.t;
   const menu: Electron.MenuItemConstructorOptions = {
-    label: 'Ajuda',
+    label: t('helpMenu'),
     submenu: [
       {
-        label: 'Documentação',
+        label: t('documentationMenu'),
         click: () => {
-          shell.openExternal('https://example.com');
+          shell.openExternal('https://github.com/charleslana/browse-buddy-vite-vue3-electron-ts');
         },
       },
       {
         label: 'GitHub',
         click: () => {
-          shell.openExternal('https://example.com');
+          shell.openExternal('https://github.com/charleslana/browse-buddy-vite-vue3-electron-ts');
         },
       },
       {
         label: 'Discord',
         click: () => {
-          shell.openExternal('https://example.com');
+          shell.openExternal('https://discord.gg/rWYTH7qNZ3');
         },
       },
       {
-        label: 'Reportar um problema',
+        label: t('issueMenu'),
         click: () => {
-          shell.openExternal('https://example.com');
+          shell.openExternal(
+            'https://github.com/charleslana/browse-buddy-vite-vue3-electron-ts/issues'
+          );
         },
       },
       { type: 'separator' },
       {
-        label: 'Abrir DevTools',
+        label: t('openDevToolsMenu'),
         accelerator: 'CmdOrCtrl+Shift+I',
         click: () => {
           mainWindow.webContents.openDevTools();
@@ -147,7 +162,7 @@ function helpMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOption
       },
       { type: 'separator' },
       {
-        label: 'Sobre',
+        label: t('aboutMenu'),
         click: createAboutWindow,
       },
     ],
@@ -156,10 +171,11 @@ function helpMenu(mainWindow: BrowserWindow): Electron.MenuItemConstructorOption
 }
 
 function createAboutWindow(): void {
+  const t = i18n.global.t;
   const aboutWindow = new BrowserWindow({
     width: 400,
     height: 300,
-    title: 'Sobre',
+    title: t('aboutMenu'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -169,7 +185,14 @@ function createAboutWindow(): void {
     maximizable: false,
     minimizable: false,
   });
-  aboutWindow.loadURL(`file://${path.join(__dirname, '..', '..', 'index.html#about')}`);
+  aboutWindow.loadURL(
+    `file://${path.join(
+      __dirname,
+      '..',
+      '..',
+      `index.html#about?d=${t('developedBy')}&v=${t('version')}`
+    )}`
+  );
 }
 
 function loadJsonSync(fileName: string): string {

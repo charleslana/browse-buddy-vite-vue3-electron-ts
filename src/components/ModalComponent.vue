@@ -15,13 +15,13 @@
         <VTooltip class="is-block is-size-5 has-text-centered" v-if="waitIcon">
           <FontAwesomeIcon :icon="faClock" />
           <template #popper>
-            <span class="is-block">Este ícone indica:</span>
-            <span>Aguardar automaticamente a ação</span>
+            <span class="is-block">{{ $t('iconTitleTooltip') }}</span>
+            <span>{{ $t('iconMessageTooltip') }}</span>
           </template>
         </VTooltip>
         <div class="field" v-for="(input, index) in action.inputs" :key="index">
           <div class="field" v-if="input.select">
-            <label class="label">Selecione o Tipo</label>
+            <label class="label">{{ $t('selectInput') }}</label>
             <div class="select">
               <select v-model="selectedType[index]" @change="handleSelectChange(input, $event)">
                 <option v-for="(option, index) in selectOptions" :key="index" :value="option.value">
@@ -44,9 +44,9 @@
       <footer class="modal-card-foot">
         <div class="buttons">
           <button class="button is-success" @click="saveAction" :disabled="isSaveButtonDisabled">
-            Salvar
+            {{ $t('saveButton') }}
           </button>
-          <button class="button" @click="closeModal">Voltar</button>
+          <button class="button" @click="closeModal">{{ $t('backButton') }}</button>
         </div>
       </footer>
     </div>
@@ -62,6 +62,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { IconDefinition, faClock } from '@fortawesome/free-solid-svg-icons';
 import { SelectOptionType } from '@/electron/types/SelectOptionType';
 import { IInput } from '@/electron/interface/IInput';
+import i18n from '@/i18n/i18n';
 
 onMounted(() => {
   props.action.inputs.forEach((input, index) => {
@@ -92,11 +93,15 @@ const emit = defineEmits(['close-modal', 'save-action']);
 const selectedType = ref<SelectOptionType[]>([]);
 const store = useRunTestStore();
 
-const selectOptions: { value: SelectOptionType; text: string }[] = [
-  { value: '#', text: 'Tipo #id' },
-  { value: '.', text: 'Tipo .classe' },
-  { value: 'xpath/', text: 'Tipo //xPath' },
-];
+const t = i18n.global.t;
+const selectOptions = computed<{ value: SelectOptionType; text: string }[]>(() => {
+  const options: { value: SelectOptionType; text: string }[] = [
+    { value: '#', text: t('optionOne') },
+    { value: '.', text: t('optionTwo') },
+    { value: 'xpath/', text: t('optionThree') },
+  ];
+  return options;
+});
 
 const isSaveButtonDisabled = computed(() => {
   return props.action.inputs.some(input => input.value === undefined || input.value === '');

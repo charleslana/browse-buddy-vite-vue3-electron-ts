@@ -13,12 +13,7 @@
       <input type="checkbox" v-model="saveHeadless" @change="updateSaveHeadless" />
       {{ $t('headlessMode') }}
     </label>
-    <div
-      class="field"
-      v-tooltip="
-        'Defina o tempo de espera por padrão que o teste vai aguardar em milissegundos (min. 1ms , máx 300000ms)'
-      "
-    >
+    <div class="field" v-tooltip="$t('defaultTimeTooltip')">
       <div class="control has-floating-label">
         <input
           class="input is-medium with-floating-label"
@@ -29,9 +24,7 @@
           v-model="saveDefaultTimeout"
           @change="updateSaveDefaultTimeout"
         />
-        <label class="label is-floating-label" for="default-timeout"
-          >Tempo de espera padrão em ms</label
-        >
+        <label class="label is-floating-label" for="default-timeout">{{ $t('defaultTime') }}</label>
       </div>
     </div>
   </div>

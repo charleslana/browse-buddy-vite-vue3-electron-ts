@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { app, dialog, ipcMain } from 'electron';
 import logger from '../utils/logger';
+import { app, dialog, ipcMain } from 'electron';
 import { IRunTest } from '../interface/IRunTest';
 
 export function handleSaveTestToFile(): void {
