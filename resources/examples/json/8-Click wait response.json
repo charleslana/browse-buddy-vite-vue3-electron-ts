@@ -1,0 +1,73 @@
+{
+  "name": "8-Click wait response",
+  "url": "https://practice.expandtesting.com/api/api-docs/#/Monitor%20Health/monitorHealth",
+  "isSaveLastScreenshot": true,
+  "isSaveEveryScreenshot": true,
+  "isHeadless": true,
+  "defaultTimeout": 15000,
+  "actions": [
+    {
+      "id": "aedba9aa-c070-4d9e-b5d5-a217dcd6468f",
+      "type": "click",
+      "inputs": [
+        {
+          "label": "O texto do seletor do elemento",
+          "placeholder": "elemento",
+          "select": "xpath/",
+          "value": "//button[contains(@class, \"try-out__btn\")]"
+        }
+      ],
+      "title": "Click",
+      "icons": [
+        {
+          "prefix": "fas",
+          "iconName": "computer-mouse",
+          "icon": [
+            384,
+            512,
+            [
+              128433,
+              "mouse"
+            ],
+            "f8cc",
+            "M0 192H176V0H160C71.6 0 0 71.6 0 160v32zm0 32V352c0 88.4 71.6 160 160 160h64c88.4 0 160-71.6 160-160V224H192 0zm384-32V160C384 71.6 312.4 0 224 0H208V192H384z"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c45bfbec-43e5-431e-9330-56e06f105e1b",
+      "type": "click-wait-response",
+      "inputs": [
+        {
+          "label": "O texto do seletor do elemento do clique",
+          "placeholder": "elemento",
+          "select": "xpath/",
+          "value": "//button[contains(@class, \"execute\")]"
+        },
+        {
+          "label": "URL (pode usar expressão regular exemplo: **/api/**/filter)",
+          "placeholder": "url",
+          "value": "**/api/health-check"
+        }
+      ],
+      "title": "Esperar resposta por clique",
+      "icons": [
+        {
+          "prefix": "fas",
+          "iconName": "reply",
+          "icon": [
+            512,
+            512,
+            [
+              61714,
+              "mail-reply"
+            ],
+            "f3e5",
+            "M205 34.8c11.5 5.1 19 16.6 19 29.2v64H336c97.2 0 176 78.8 176 176c0 113.3-81.5 163.9-100.2 174.1c-2.5 1.4-5.3 1.9-8.1 1.9c-10.9 0-19.7-8.9-19.7-19.7c0-7.5 4.3-14.4 9.8-19.5c9.4-8.8 22.2-26.4 22.2-56.7c0-53-43-96-96-96H224v64c0 12.6-7.4 24.1-19 29.2s-25 3-34.4-5.4l-160-144C3.9 225.7 0 217.1 0 208s3.9-17.7 10.6-23.8l160-144c9.4-8.5 22.9-10.6 34.4-5.4z"
+          ]
+        }
+      ]
+    }
+  ]
+}
