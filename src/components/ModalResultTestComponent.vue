@@ -2,16 +2,18 @@
   <div class="modal is-active modal-full-screen modal-fx-fadeInScale">
     <div class="modal-content modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Resultados dos testes</p>
+        <p class="modal-card-title">{{ $t('resultTestTitle') }}</p>
         <div class="is-flex is-align-items-center">
-          <button class="button is-dark mr-5" @click="exportReport">Exportar relatório</button>
+          <button class="button is-dark mr-5" @click="exportReport">
+            {{ $t('exportReportButton') }}
+          </button>
           <button class="modal-button-close delete" aria-label="close" @click="closeModal"></button>
         </div>
       </header>
       <section class="modal-card-body">
         <div class="timeline">
           <header class="timeline-header">
-            <span class="tag is-medium is-link is-light">Início</span>
+            <span class="tag is-medium is-link is-light">{{ $t('startReportResult') }}</span>
           </header>
           <div v-for="(result, index) in store.navigationResult" :key="index">
             <div class="timeline-item">
@@ -67,12 +69,14 @@
             <span class="tag is-warning">{{ totalDuration.toFixed(2) }}s</span>
           </header>
           <header class="timeline-header">
-            <span class="tag is-medium is-link is-light">Fim</span>
+            <span class="tag is-medium is-link is-light">{{ $t('endReportResult') }}</span>
           </header>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="modal-button-close button" @click="closeModal">Fechar</button>
+        <button class="modal-button-close button" @click="closeModal">
+          {{ $t('closeButton') }}
+        </button>
       </footer>
     </div>
   </div>
@@ -88,6 +92,12 @@ import {
   IconDefinition,
   faCheck,
   faXmark,
+  faFill,
+  faKeyboard,
+  faEraser,
+  faEye,
+  faEyeSlash,
+  faReply,
 } from '@fortawesome/free-solid-svg-icons';
 import { navigationResultStore as useNavigationResultStore } from '@/store/navigationResultStore';
 import { computed, onMounted, ref } from 'vue';
@@ -127,6 +137,20 @@ function getIcon(action: ActionType): IconDefinition {
       return faRoute;
     case 'wait-click':
       return faComputerMouse;
+    case 'click':
+      return faComputerMouse;
+    case 'fill':
+      return faFill;
+    case 'type':
+      return faKeyboard;
+    case 'clear':
+      return faEraser;
+    case 'wait-visible':
+      return faEye;
+    case 'wait-hidden':
+      return faEyeSlash;
+    case 'click-wait-response':
+      return faReply;
     case 'end':
       return faHourglassEnd;
     default:

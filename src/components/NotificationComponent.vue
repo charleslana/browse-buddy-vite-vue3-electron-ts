@@ -3,7 +3,9 @@
     <button class="delete" @click="closeNotification"></button>
     <div class="buttons">
       <p>{{ message }}</p>
-      <button class="button is-dark is-small" @click="openModalResult">Ver resultados</button>
+      <button class="button is-dark is-small" @click="openModalResult">
+        {{ $t('viewResultsButton') }}
+      </button>
     </div>
   </div>
   <ModalResultTestComponent v-if="isCloseModalResult" @close="closeModalResult" />

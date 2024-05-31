@@ -1,7 +1,9 @@
 import Store from 'electron-store';
 import { IRunTest } from '../interface/IRunTest';
+import { mainWindow } from '../main/main';
 import { SupportedLanguagesType } from '../types/SupportedLanguagesType';
 import { ThemeModeType } from '../types/ThemeModeType';
+import { updateMenu } from '../main/menu';
 
 const store = new Store();
 
@@ -24,7 +26,7 @@ export function getUrlsPreference(): string[] {
   return urls !== undefined ? urls : [];
 }
 
-export function addUrlPreference(url: string) {
+export function addUrlPreference(url: string): void {
   const urls = getUrlsPreference();
   if (!urls.includes(url)) {
     urls.unshift(url);
@@ -32,7 +34,7 @@ export function addUrlPreference(url: string) {
   }
 }
 
-export function deleteUrlPreference(url: string) {
+export function deleteUrlPreference(url: string): void {
   const urls = getUrlsPreference();
   const index = urls.indexOf(url);
   if (index !== -1) {
@@ -50,17 +52,18 @@ export function getSessionPreference(): IRunTest | undefined {
   return session;
 }
 
-export function saveSessionPreference(runTestJSON: string) {
+export function saveSessionPreference(runTestJSON: string): void {
   const runTest: IRunTest = JSON.parse(runTestJSON);
   store.set(sessionKey, runTest);
 }
 
-export function deleteSessionPreference() {
+export function deleteSessionPreference(): void {
   store.delete(sessionKey);
 }
 
 export function setLangPreference(lang: SupportedLanguagesType): void {
   store.set(langKey, lang);
+  updateMenu(mainWindow);
 }
 
 export function getLangPreference(): SupportedLanguagesType | undefined {

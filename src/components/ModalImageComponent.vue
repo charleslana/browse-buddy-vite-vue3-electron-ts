@@ -2,7 +2,7 @@
   <div class="modal is-active modal-full-screen modal-fx-fadeInScale">
     <div class="modal-content modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Tela de captura</p>
+        <p class="modal-card-title">{{ $t('screenshotTitle') }}</p>
         <button class="modal-button-close delete" aria-label="close" @click="closeModal"></button>
       </header>
       <section class="modal-card-body">
@@ -11,7 +11,9 @@
         </figure>
       </section>
       <footer class="modal-card-foot">
-        <button class="modal-button-close button" @click="closeModal">Fechar</button>
+        <button class="modal-button-close button" @click="closeModal">
+          {{ $t('closeButton') }}
+        </button>
       </footer>
     </div>
   </div>

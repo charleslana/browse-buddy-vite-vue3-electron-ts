@@ -3,8 +3,12 @@ import fs from 'fs';
 import jsPDF from 'jspdf';
 import logger from '../utils/logger';
 import { app, dialog, ipcMain } from 'electron';
+import { createI18nInstance } from '../i18n/i18n';
 import { generateDateTime } from '../utils/utils';
 import { INavigationResult } from '../interface/INavigationResult';
+
+const i18n = createI18nInstance();
+const t = i18n.global.t;
 
 export function handleSaveReport(): void {
   ipcMain.handle('dialog:save-report', (_event, data: string) => saveReport(data));
@@ -39,7 +43,7 @@ async function generateDocument(results: INavigationResult[]): Promise<jsPDF> {
 function createPDF(): jsPDF {
   const doc = new jsPDF();
   doc.setFontSize(18);
-  doc.text('Resultado dos Testes', 14, 22);
+  doc.text(t('resultTestTitle'), 14, 22);
   doc.setFontSize(11);
   doc.setTextColor(100);
   doc.addImage(`data:image/png;base64,${icon}`, 'PNG', doc.internal.pageSize.width - 25, 5, 20, 20);
@@ -51,7 +55,7 @@ function addTestResults(doc: jsPDF, results: INavigationResult[]): void {
     result.title,
     result.message,
     result.duration || '',
-    result.error || 'Sim',
+    result.error || t('passedReport'),
   ]);
   autoTable(doc, {
     startY: 35,
@@ -59,12 +63,12 @@ function addTestResults(doc: jsPDF, results: INavigationResult[]): void {
       fillColor: [128, 128, 128],
     },
     columnStyles: { 0: { halign: 'center' } },
-    head: [['Ação', 'Contexto', 'Tempo de duração (segundos)', 'Passou']],
+    head: [[t('actionReport'), t('contextReport'), t('durationTimeReport'), t('statusReport')]],
     body: resultsData,
     didParseCell: data => {
       if (data.section === 'body' && data.column.index === 3) {
         const raw = (data.row.raw as any)[data.column.index];
-        data.cell.styles.textColor = raw === 'Sim' ? 'green' : 'red';
+        data.cell.styles.textColor = raw === t('passedReport') ? 'green' : 'red';
       }
     },
   });
@@ -78,15 +82,15 @@ function addSummaryInfo(doc: jsPDF, results: INavigationResult[]): void {
     return total;
   }, 0);
   const finalY = (doc as any).lastAutoTable.finalY;
-  doc.text(`Tempo total: ${totalDuration.toFixed(2)}s`, 14, finalY + 10);
+  doc.text(t('totalTimeReport', [totalDuration.toFixed(2)]), 14, finalY + 10);
   const totalTests = results.length;
   const totalPassedTests = calculatePassedTests(results);
   const testsPassedColor = totalPassedTests === totalTests ? 'green' : 'red';
   doc.setTextColor(testsPassedColor);
-  doc.text(`Total de testes passados: ${totalPassedTests}/${totalTests}`, 14, finalY + 20);
+  doc.text(t('passedTest', [totalPassedTests, totalTests]), 14, finalY + 20);
   doc.setTextColor(100);
   const currentDate = new Date().toLocaleString();
-  doc.text(`A exportação foi gerada em: ${currentDate}`, 14, finalY + 30);
+  doc.text(t('exportDate', [currentDate]), 14, finalY + 30);
 }
 
 function calculatePassedTests(results: INavigationResult[]): number {
@@ -100,7 +104,7 @@ function addFooter(doc: jsPDF): void {
     doc.setPage(i);
     const pageSize = doc.internal.pageSize;
     const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
-    doc.text(`Página ${i} de ${pageCount}`, 10, pageHeight - 8);
+    doc.text(t('pageReport', [i, pageCount]), 10, pageHeight - 8);
     doc.text(`Browse Buddy ${new Date().getFullYear()}`, pageSize.width - 40, pageHeight - 8);
   }
 }
