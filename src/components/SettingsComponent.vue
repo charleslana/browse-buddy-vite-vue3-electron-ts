@@ -27,11 +27,25 @@
         <label class="label is-floating-label" for="default-timeout">{{ $t('defaultTime') }}</label>
       </div>
     </div>
+    <div class="field" v-tooltip="$t('repeatTooltip')">
+      <div class="control has-floating-label">
+        <input
+          class="input is-medium with-floating-label"
+          :class="{ 'is-skeleton': isSkeleton }"
+          id="repeat-count"
+          placeholder=""
+          type="number"
+          v-model="repeatedTimes"
+          @change="updateRepeatedTimes"
+        />
+        <label class="label is-floating-label" for="repeat-count">{{ $t('repeatInput') }}</label>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { runTestStore as useRunTestStore } from '@/store/runTestStore';
 
 defineProps({
@@ -41,11 +55,16 @@ defineProps({
   },
 });
 
+onMounted(() => {
+  store.setRepeat(1);
+});
+
 const store = useRunTestStore();
 const saveLastScreenshot = ref(store.runTest.isSaveLastScreenshot);
 const saveEveryScreenshot = ref(store.runTest.isSaveEveryScreenshot);
 const saveHeadless = ref(store.runTest.isHeadless);
 const saveDefaultTimeout = ref(store.runTest.defaultTimeout);
+const repeatedTimes = ref(1);
 
 watch(
   [
@@ -77,6 +96,16 @@ watch(saveDefaultTimeout, newValue => {
   }
 });
 
+watch(repeatedTimes, newValue => {
+  if (newValue < 1) {
+    repeatedTimes.value = 1;
+    updateRepeatedTimes();
+  } else if (newValue > 100) {
+    repeatedTimes.value = 100;
+    updateRepeatedTimes();
+  }
+});
+
 function updateSaveLastScreenshot(): void {
   store.setIsSaveLastScreenshot(saveLastScreenshot.value);
 }
@@ -91,6 +120,10 @@ function updateSaveHeadless(): void {
 
 function updateSaveDefaultTimeout(): void {
   store.setDefaultTimeout(saveDefaultTimeout.value);
+}
+
+function updateRepeatedTimes(): void {
+  store.setRepeat(repeatedTimes.value);
 }
 </script>
 

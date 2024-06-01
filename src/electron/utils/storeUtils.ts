@@ -54,6 +54,7 @@ export function getSessionPreference(): IRunTest | undefined {
 
 export function saveSessionPreference(runTestJSON: string): void {
   const runTest: IRunTest = JSON.parse(runTestJSON);
+  delete runTest.repeat;
   store.set(sessionKey, runTest);
 }
 

@@ -77,6 +77,8 @@ export default {
     endReportResult: 'End',
     screenshotTitle: 'Screenshot',
     labelTextToType: 'The text to enter',
+    repeatInput: 'Number of repetitions',
+    repeatTooltip: 'Set the test repetition quantity (min. 1, max. 100)',
   },
   es: {
     themes: 'Temas',
@@ -156,6 +158,8 @@ export default {
     endReportResult: 'Fin',
     screenshotTitle: 'Captura de pantalla',
     labelTextToType: 'El texto a ingresar',
+    repeatInput: 'Cantidad de repetición',
+    repeatTooltip: 'Establezca la cantidad de repetición de la prueba (mín. 1, máx. 100)',
   },
   pt: {
     themes: 'Temas',
@@ -235,5 +239,7 @@ export default {
     endReportResult: 'Fim',
     screenshotTitle: 'Tela de captura',
     labelTextToType: 'O texto a digitar',
+    repeatInput: 'Quantidade de repetição',
+    repeatTooltip: 'Defina a quantidade de repetição do teste (min. 1 , máx 100)',
   },
 };

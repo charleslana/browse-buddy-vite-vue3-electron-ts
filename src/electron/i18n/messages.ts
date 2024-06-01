@@ -50,6 +50,13 @@ export default {
     waitVisibleError: 'Error waiting for visible element with selector {0}\n',
     waitHiddenError: 'Error waiting for hidden element with selector {0}',
     clickWaitResponseError: 'Error waiting for response with url {0}',
+    updateAvailableTitle: 'Update available',
+    updateAvailableMessage:
+      'A new version of the application is available. It will be downloaded in the background.',
+    updateReadyTitle: 'Update ready',
+    updateReadyMessage: 'A new version of the application is ready. Quit and install now?',
+    updateYesButton: 'Yes',
+    updateLaterButton: 'Later',
   },
   es: {
     resultTestTitle: 'Resultados de la prueba',
@@ -101,6 +108,13 @@ export default {
     waitVisibleError: 'Error al esperar el elemento visible con el selector {0}\n',
     waitHiddenError: 'Error al esperar elemento oculto con selector {0}',
     clickWaitResponseError: 'Error esperando respuesta con la URL {0}',
+    updateAvailableTitle: 'Actualización disponible',
+    updateAvailableMessage:
+      'Una nueva versión de la aplicación está disponible. Se descargará en segundo plano.',
+    updateReadyTitle: 'Actualización lista',
+    updateReadyMessage: 'Una nueva versión de la aplicación está lista. ¿Salir e instalar ahora?',
+    updateYesButton: 'Sí',
+    updateLaterButton: 'Más tarde',
   },
   pt: {
     resultTestTitle: 'Resultados dos testes',
@@ -152,5 +166,12 @@ export default {
     waitVisibleError: 'Erro ao aguardar elemento visível com seletor {0}\n',
     waitHiddenError: 'Erro ao aguardar elemento oculto com seletor {0}',
     clickWaitResponseError: 'Erro ao aguardar a resposta com a url {0}',
+    updateAvailableTitle: 'Atualização disponível',
+    updateAvailableMessage:
+      'Uma nova versão do aplicativo está disponível. Ele será baixado em segundo plano.',
+    updateReadyTitle: 'Atualização pronta',
+    updateReadyMessage: 'Uma nova versão do aplicativo está pronta. Sair e instalar agora?',
+    updateYesButton: 'Sim',
+    updateLaterButton: 'Depois',
   },
 };
