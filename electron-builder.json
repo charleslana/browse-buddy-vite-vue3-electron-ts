@@ -29,7 +29,7 @@
         "arch": ["x64"]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "artifactName": "${productName}-Windows-Setup-${version}.${ext}",
     "icon": "src/assets/images/icon256x.ico",
     "extraResources": [
       {
