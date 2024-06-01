@@ -14,7 +14,17 @@ npm run dev
 
 ## Start in Electron mode
 
-### only linux users
+### Linux users
+
+```bash
+npm run app:preview
+```
+
+### Windows users
+
+- Change settings in the .env file
+
+From EXEC=./resources/chrome-linux/chrome to EXEC=./resources/chrome-win/chrome.exe
 
 ```bash
 npm run app:preview
@@ -31,6 +41,12 @@ npm run app:preview
 
 ```bash
 npm run release-win
+```
+
+portable mode
+
+```bash
+npm run release-win-p
 ```
 
 ## Build on Linux

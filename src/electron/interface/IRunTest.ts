@@ -8,4 +8,5 @@ export interface IRunTest {
   isHeadless: boolean;
   defaultTimeout: number;
   actions: IAction[];
+  repeat?: number;
 }

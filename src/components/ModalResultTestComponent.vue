@@ -17,7 +17,10 @@
           </header>
           <div v-for="(result, index) in store.navigationResult" :key="index">
             <div class="timeline-item">
-              <div class="timeline-marker is-link is-icon">
+              <div
+                class="timeline-marker is-link is-icon"
+                :class="{ 'is-warning': result.action === 'end' }"
+              >
                 <FontAwesomeIcon :icon="getIcon(result.action)" />
               </div>
               <div class="timeline-content">

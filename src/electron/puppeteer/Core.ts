@@ -2,9 +2,9 @@ import fs from 'fs';
 import logger from '../utils/logger';
 import path from 'path';
 import { createI18nInstance } from '../i18n/i18n';
-import { ElementHandle, Page } from 'puppeteer';
 import { generateUUID } from '../utils/utils';
 import { IExecutionResult } from '../interface/IExecutionResult';
+import { Page } from 'puppeteer';
 import { PageSingleton } from './PageSingleton';
 
 class CoreError extends Error {
@@ -173,15 +173,6 @@ export class Core {
     return { screenshot, duration, error };
   }
 
-  public async getTitle(): Promise<string> {
-    try {
-      const title = await this.getPage().title();
-      return title;
-    } catch (error) {
-      throw new CoreError(`Erro ao buscar título da página: ${error}`);
-    }
-  }
-
   public async waitForVisible(
     selector: string,
     id: string,
@@ -314,21 +305,5 @@ export class Core {
 
   private bufferToBase64(buffer: Buffer): string {
     return buffer.toString('base64');
-  }
-
-  private async findElements(selector: string): Promise<ElementHandle<Element>[]> {
-    try {
-      return await this.getPage().$$(selector);
-    } catch (error) {
-      throw new CoreError(`Erro ao encontrar elementos com seletor ${selector}: ${error}`);
-    }
-  }
-
-  private async sleep(ms: number): Promise<void> {
-    try {
-      await new Promise(resolve => setTimeout(resolve, ms));
-    } catch (error) {
-      throw new CoreError(`Erro ao aguardar ${ms} milissegundos: ${error}`);
-    }
   }
 }

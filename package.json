@@ -1,8 +1,11 @@
 {
   "name": "browse-buddy",
   "private": true,
-  "version": "0.0.2",
-  "author": "Charles Lana",
+  "version": "0.0.3",
+  "author": {
+    "name": "Charles Lana",
+    "email": "charleslanatester@gmail.com"
+  },
   "description": "Easily set up test automation interface",
   "homepage": "https://github.com/charleslana/browse-buddy-vite-vue3-electron-ts",
   "main": "dist/electron/main/main.js",
@@ -19,7 +22,8 @@
     "start": "npm run app:preview",
     "release": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -mlw portable --config=electron-builder.json",
     "release-linux": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -l --config=electron-builder.json",
-    "release-win": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -w portable --config=electron-builder.json",
+    "release-win-p": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -w portable --config=electron-builder.json",
+    "release-win": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -w --config=electron-builder.json",
     "release-mac": "NODE_ENV=production npm run vite:build && tsc -p tsconfig.build.json && electron-builder -m --config=electron-builder.json"
   },
   "build": {

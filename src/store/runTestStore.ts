@@ -12,6 +12,7 @@ export const runTestStore = defineStore('runTest', {
       isHeadless: true,
       defaultTimeout: 15000,
       actions: [],
+      repeat: 1,
     },
   }),
   actions: {
@@ -67,6 +68,9 @@ export const runTestStore = defineStore('runTest', {
     },
     setDefaultTimeout(defaultTimeout: number): void {
       this.runTest.defaultTimeout = defaultTimeout;
+    },
+    setRepeat(repeatCount: number): void {
+      this.runTest.repeat = repeatCount;
     },
   },
 });

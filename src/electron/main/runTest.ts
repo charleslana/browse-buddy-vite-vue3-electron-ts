@@ -19,8 +19,12 @@ export function handleRunTest(): void {
     const runTest: IRunTest = JSON.parse(runTestJSON);
     PageSingleton.setHeadless(runTest.isHeadless);
     PageSingleton.setDefaultTimeout(runTest.defaultTimeout);
-    const result = await runTestFunction(runTest);
-    await core.closeBrowser();
+    const repeatCount = runTest.repeat ?? 1;
+    let result;
+    for (let i = 0; i < repeatCount; i++) {
+      result = await runTestFunction(runTest);
+      await core.closeBrowser();
+    }
     navigationResults.length = 0;
     event.sender.send('execute-run-test-result', result);
   });
@@ -34,7 +38,7 @@ async function runTestFunction(runTest: IRunTest): Promise<INavigationResult[]> 
   return resultsToReturn;
 }
 
-async function navigate(runTest: IRunTest) {
+async function navigate(runTest: IRunTest): Promise<void> {
   const t = i18n.global.t;
   const executionResult = await core.navigate(runTest.url, runTest.isSaveEveryScreenshot);
   navigationResults.push({

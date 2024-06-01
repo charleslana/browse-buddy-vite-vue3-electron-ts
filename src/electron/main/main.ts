@@ -11,10 +11,14 @@ import { handleSaveReport } from './report';
 import { handleSession } from './session';
 import { handleThemeMode } from './theme';
 import { handleUrlActions } from './url';
+import { createI18nInstance } from '../i18n/i18n';
 
 export let mainWindow: BrowserWindow;
 
 const isDev = process.env.npm_lifecycle_event === 'app:dev' ? true : false;
+
+const i18n = createI18nInstance();
+const t = i18n.global.t;
 
 function createMenu(mainWindow: BrowserWindow): void {
   const template = getMenu(mainWindow);
@@ -72,9 +76,8 @@ autoUpdater.on('update-available', () => {
   logger.info('Update available.');
   dialog.showMessageBox({
     type: 'info',
-    title: 'Update available',
-    message:
-      'A new version of the application is available. It will be downloaded in the background.',
+    title: t('updateAvailableTitle'),
+    message: t('updateAvailableMessage'),
   });
 });
 
@@ -83,9 +86,9 @@ autoUpdater.on('update-downloaded', () => {
   dialog
     .showMessageBox({
       type: 'info',
-      title: 'Update ready',
-      message: 'A new version of the application is ready. Quit and install now?',
-      buttons: ['Yes', 'Later'],
+      title: t('updateReadyTitle'),
+      message: t('updateReadyMessage'),
+      buttons: [t('updateYesButton'), t('updateLaterButton')],
     })
     .then(result => {
       if (result.response === 0) {
